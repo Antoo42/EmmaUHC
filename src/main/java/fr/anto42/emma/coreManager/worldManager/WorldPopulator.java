@@ -29,8 +29,8 @@ public class WorldPopulator {
                 }
                 if (this.progress == 0)
                     Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aDébut du nettoyage du centre de la carte...");
-                for (int x = 0 - radius; x <= 0 + radius; x++) {
-                    for (int z = 0 - radius; z <= 0 + radius; z++) {
+                for (int x = -radius; x <= radius; x++) {
+                    for (int z = -radius; z <= radius; z++) {
                         org.bukkit.block.Block block = WorldPopulator.this.gameWorld.getBlockAt(x, this.YChange, z);
                         if (block.getType() == Material.LEAVES || block.getType() == Material.LEAVES_2 || block.getType() == Material.LOG || block.getType() == Material.LOG_2 || block.getType() == Material.RED_MUSHROOM || block.getType() == Material.BROWN_MUSHROOM) {
                             block.setType(Material.AIR);

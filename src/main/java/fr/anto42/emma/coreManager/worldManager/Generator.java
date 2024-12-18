@@ -70,9 +70,9 @@ public class Generator {
             @Override
             public void run() {
                 double tps = MinecraftServer.getServer().recentTps[0];
-                if (tps < 16) {
+                if (tps < 16D) {
                     if (chunksPerTick > 0) {
-                        if (stableTicks < 50) {
+                        if (stableTicks < 30) {
                             stableTicks++;
                         }
                         else {
@@ -82,15 +82,15 @@ public class Generator {
                     }
                     return;
 
-                } else if (tps > 18 && chunksPerTick < limit) {
-                    if (stableTicks < 100)
+                } else if (tps > 18.5D && chunksPerTick < limit) {
+                    if (stableTicks < 50)
                         stableTicks++;
                     else {
                         stableTicks = 0;
                         setChunksPerTick(chunksPerTick + 5);
                     }
                 }
-                Bukkit.getLogger().info(String.valueOf(chunksPerTick));
+                //Bukkit.getLogger().info(String.valueOf(chunksPerTick));
                 for (int i = 0; i < chunksPerTick && !chunkQueue.isEmpty(); i++) {
                     int[] coords = chunkQueue.poll();
                     if (coords != null) {
@@ -135,7 +135,8 @@ public class Generator {
             Title.sendActionBar(player, "§8§l» §3Prégéneration du monde §a" + world.getName() +
                     "§3: §e" + percentage + "§3%" +
                     " §7(§e" + completedChunks + "§7/§a" + totalChunks + "§7 chunks)" +
-                    " §8§l» §3Temps restant estimé: §a" + minutes + "§3m §a" + seconds + "§3s");
+                    " §8§l» §3Temps restant estimé: §a" + minutes + "§3m §a" + seconds + "§3s" +
+                    " §8§l» §3Chunks/tick: §a" + chunksPerTick);
         }
     }
 

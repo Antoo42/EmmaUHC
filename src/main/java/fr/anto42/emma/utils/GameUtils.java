@@ -3,7 +3,7 @@ package fr.anto42.emma.utils;
 import com.mysql.jdbc.TimeUtil;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
-import fr.anto42.emma.coreManager.roles.Camp;
+import fr.anto42.emma.coreManager.players.roles.Camp;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -56,7 +56,7 @@ public class GameUtils {
                 Bukkit.shutdown();
             }, TimeUtils.minutes(5));
         }else if(object instanceof Camp){
-            ((Camp) object).getAlivePlayers().forEach(uhcPlayer -> {
+            ((Camp) object).getPlayers().forEach(uhcPlayer -> {
                 kills = kills + uhcPlayer.getKills();
             });
             Bukkit.broadcastMessage("§7");
