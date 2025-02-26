@@ -13,7 +13,7 @@ public class SkyHighGUI {
 
 
     public SkyHighGUI(SkyHigh skyHigh) {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lConfiguration de NoCleanUP");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lConfiguration de NoCleanUP");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 3).get());

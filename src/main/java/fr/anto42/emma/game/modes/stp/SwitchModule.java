@@ -73,7 +73,7 @@ public class SwitchModule extends Module {
             if (uhcGame.getUhcData().getUhcPlayerList().size() == 1){
                 uhcGame.setGameState(GameState.FINISH);
                 Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations au joueur " + uhcGame.getUhcData().getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + uhcGame.getUhcData().getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a !");
                 Bukkit.broadcastMessage("§7");
                 for(Player player : Bukkit.getOnlinePlayers()){
                     UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -85,7 +85,7 @@ public class SwitchModule extends Module {
                         player.sendMessage("§8§l» §3Rôle: §e" + uhcPlayer.getRole().getName());
                 }
                 Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
                 Bukkit.broadcastMessage("§7");
                 PlayersUtils.finishToSpawn();
                 Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
@@ -95,7 +95,7 @@ public class SwitchModule extends Module {
                 uhcGame.setGameState(GameState.FINISH);
                 UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
                 Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a !");
                 Bukkit.broadcastMessage("§7");
                 for(Player player : Bukkit.getOnlinePlayers()){
                     UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -108,7 +108,7 @@ public class SwitchModule extends Module {
                 }
 
                 Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
                 Bukkit.broadcastMessage("§7");
             PlayersUtils.finishToSpawn();
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
@@ -118,7 +118,7 @@ public class SwitchModule extends Module {
             uhcGame.setGameState(GameState.FINISH);
             
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -131,7 +131,7 @@ public class SwitchModule extends Module {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             PlayersUtils.finishToSpawn();
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {

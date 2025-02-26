@@ -23,6 +23,6 @@ public class FinalHeal extends UHCScenario implements Listener {
         if (!isActivated())
             return;
         Bukkit.getOnlinePlayers().forEach(player -> player.setHealth(player.getMaxHealth()));
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + "§7 FinalHeal effectué !");
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + "§7 FinalHeal effectué !");
     }
 }

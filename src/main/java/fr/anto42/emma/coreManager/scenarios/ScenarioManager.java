@@ -20,6 +20,7 @@ public class ScenarioManager {
         getActivatedScenarios().clear();
         getInitialScenarioList().add(new BetaZombies(this,1));
         getInitialScenarioList().add(new BigCrack(this,1));
+        getInitialScenarioList().add(new BlockRemover(this,1));
         getInitialScenarioList().add(new BowSwap(this,1));
         getInitialScenarioList().add(new CatEyes(this,1));
         getInitialScenarioList().add(new CutClean(this,1));
@@ -46,7 +47,7 @@ public class ScenarioManager {
         //getInitialScenarioList().add(new NoNameTag(this,1));
         getInitialScenarioList().add(new OnlyStones(this,1));
         getInitialScenarioList().add(new ProgressiveSpeed(this, 1));
-        getInitialScenarioList().add(new RandomCraft(this,1));
+        getInitialScenarioList().add(new RandomCraft(this,2));
         getInitialScenarioList().add(new RandomLoots(this,2));
         getInitialScenarioList().add(new RodLess(this,2));
         getInitialScenarioList().add(new SafeMiners(this,2));
@@ -101,7 +102,7 @@ public class ScenarioManager {
     int l;
     int max;
     public String getFormattedScenarios(){
-        if (activatedScenarios.size() == 0)
+        if (activatedScenarios.isEmpty())
             return "Aucun scénario";
         l = 1;
         max = getActivatedScenarios().size();
@@ -120,7 +121,7 @@ public class ScenarioManager {
 
     public List<String> getMotdScenarios() {
         List<String> motd = new ArrayList<>();
-        if (activatedScenarios.size() == 0) {
+        if (activatedScenarios.isEmpty()) {
             motd.add("§cAucun scénario");
             return motd;
         }
@@ -130,12 +131,12 @@ public class ScenarioManager {
             return motd;
         }
         getActivatedScenarios().forEach(uhcScenario -> {
-            if (i[0] == 5) {
+            if (i[0] == 3) {
                 motd.add(" §8┃ §eet §c" + (activatedScenarios.size() - i[0]) + " autres...");
                 i[0]++;
                 return;
             }
-            if (i[0] > 5)
+            if (i[0] > 3)
                 return;
             motd.add(" §8┃ §e" + uhcScenario.getName());
             i[0]++;

@@ -9,30 +9,179 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bfb0376f-665c-4734-a399-e65268373274" name="Changes" comment="changes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/impl/LGConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/impl/LGData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/listeners/LGListeners.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/LGCamp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/LGRole.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/camps/CupleCamp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/camps/SoloCamp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/camps/VillageCamp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/camps/WereworlfCamp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/roles/roles/villagers/SimpleVillager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/uis/LGConfigGUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/uis/RolesConfigGUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/utils/LGUtils.java" afterDir="false" />
+    <list default="true" id="bfb0376f-665c-4734-a399-e65268373274" name="Changes" comment="a LOT of change">
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/BlockRemover.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/BlockRemoverGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/CavesWorldGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/coldWar/ColdWarUHC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/DeathNoteModule.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/commands/DNCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/commands/InvestCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/commands/KCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/commands/MelloCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/commands/RevealCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/impl/DNRole.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/impl/DeathNoteConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/impl/DeathNoteData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/listeners/DeathNoteListeners.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/listeners/TryStartDeathNoteListeners.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/roles/Investigator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/roles/Kira.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/roles/Mello.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/roles/Near.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/roles/Shinigami.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/roles/camps/KiraCamp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/uis/DeathNoteConfigGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/uis/KiraDeathNoteGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/uis/KiraEyesGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/uis/KiraMainGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/uis/MelloGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/utils/GameUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/utils/InvestTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/utils/InvestigationResultType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/utils/InvestigatorPowers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/utils/MeloType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNote/utils/NearHealthView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/elisa/ElisaScoreboard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/elisa/ElisaUHC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/NetworkUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/PerlinNoise.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/saves/ItemStackToString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/roles/Camp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/roles/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/UHC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/UHC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/UHCManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/UHCManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/DevCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/DevCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/DocCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/DocCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/HCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/HCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/HelpopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/HelpopCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/LagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/LagCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/SaveCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/SaveCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/ScenariosCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/ScenariosCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/SetHostComand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/SetHostComand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/TCCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/TCCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/VoteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/VoteCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/WhitelistCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/commands/WhitelistCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/customListeners/BorderMovementEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/customListeners/DeathEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/customListeners/PvPEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/listeners/customListeners/EpisodeEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/customListeners/StartEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/customListeners/TryStartEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/customListeners/UHCEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/enchants/config/EnchantConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/enchants/config/EnchantConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/enchants/config/EnchantGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/enchants/config/EnchantGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/listeners/CoreListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/listeners/CoreListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/listeners/customListeners/DeathEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/listeners/customListeners/DeathEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/players/UHCPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/players/UHCPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/players/roles/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/players/roles/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/ScenarioManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/ScenarioManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/CutClean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/CutClean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/DragonRush.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/DragonRush.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/FinalHeal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/FinalHeal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/NoBow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/NoBow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/SafeMiners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/SafeMiners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/WeakestLink.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/scFolder/WeakestLink.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/LuckyLeavesGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/LuckyLeavesGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/MasterLevelGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/MasterLevelGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/NoCleanUPGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/NoCleanUPGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/SafeMinersGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/SafeMinersGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/SkyHighGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/SkyHighGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/TimeBombGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/TimeBombGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/VanillaPlusGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/VanillaPlusGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/WeakestLinkGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/WeakestLinkGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/XHealthsGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scenarios/uis/XHealthsGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scoreboard/PersonalScoreboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/scoreboard/PersonalScoreboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/ArrowTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/ArrowTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/NoSpecLagTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/NoSpecLagTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/StarterTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/StarterTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/UHCTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/tasks/UHCTimer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/teams/UHCTeamManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/teams/UHCTeamManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/AdminGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/AdminGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/BorderConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/BorderConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/ConfigMainGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/ConfigMainGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/CreateWorldGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/CreateWorldGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/DeleteFileGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/DeleteFileGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/EnchantsConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/EnchantsConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/GameModeGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/GameModeGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/GenerationGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/GenerationGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/PlayerInvSeeGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/PlayerInvSeeGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/PotionConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/PotionConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/RulesGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/RulesGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SavesGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SavesGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/ScenariosActivatedGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/ScenariosActivatedGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/ScenariosConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/ScenariosConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SelectTeamGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SelectTeamGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SettingsConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SettingsConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SettingsNewWorldGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SettingsNewWorldGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SpecialGenerationGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/SpecialGenerationGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/StarterInvGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/StarterInvGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/StuffConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/StuffConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/TeamsConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/TeamsConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/TimerConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/TimerConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/WorldConfigInRulesGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/WorldConfigInRulesGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/WorldSettingsGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/uis/WorldSettingsGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/votes/VoteSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/votes/VoteSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/Generator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/WorldManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/WorldManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/WorldPopulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/coreManager/worldManager/WorldPopulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/LGModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/LGModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/impl/camps/LGCamp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/impl/roles/LGRole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/impl/roles/RoleManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/UHCGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/UHCGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/StuffConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/UHCConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/UHCData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/UHCData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/config/StarterStuffConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/config/StarterStuffConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/config/UHCConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/impl/config/UHCConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/classic/ClassicListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/classic/ClassicListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/classic/ClassicModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/classic/ClassicModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/DNModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/DNModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/DNGameListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/DNGameListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/DeathNoteListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/DeathNoteListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/TryStartListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/TryStartListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/commands/DNCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/commands/DNCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/commands/DevCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/commands/DevCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/commands/InvestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/commands/InvestCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/commands/KCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/commands/KCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/commands/MelloCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/commands/MelloCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/gameManager/commands/RevealCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/gameManager/commands/RevealCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/impl/DNConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/impl/DNConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/impl/DNData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/impl/DNData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/impl/DNRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/impl/DNRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/Kira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/Kira.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/Mello.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/Mello.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/Near.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/Near.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/Shinigami.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/Shinigami.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/camps/KiraCamp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/camps/KiraCamp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/investigator/Inverstigator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/investigator/Inverstigator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/investigator/InvestPowers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/investigator/InvestPowers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/roles/investigator/InvestTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/roles/investigator/InvestTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/uis/DNConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/uis/DNConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/uis/KiraDnInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/uis/KiraDnInventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/uis/KiraEyesInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/uis/KiraEyesInventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/uis/KiraMainInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/uis/KiraMainInventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/uis/MelloGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/uis/MelloGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/utils/GameUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/utils/GameUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/utils/NearHealthView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/utils/NearHealthView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/deathNoteV4/utils/TimerActionbarTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/oldDN/utils/TimerActionbarTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/uis/LGConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/uis/LGConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/uis/RolesConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/lg/uis/RolesConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/stp/SwitchModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/stp/SwitchModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/stp/listeners/SwitchListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/stp/listeners/SwitchListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/stp/uis/SwitchGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/stp/uis/SwitchGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/TGModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/TGModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/commands/TCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/commands/TCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/listeners/TGListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/listeners/TGListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/roles/Taupe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/roles/Taupe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/uis/TGConfigGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/taupeGun/uis/TGConfigGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/trueLove/TrueLoveListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/trueLove/TrueLoveListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/trueLove/TrueLoveModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/trueLove/TrueLoveModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/trueLove/uis/TrueLoveGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/game/modes/trueLove/uis/TrueLoveGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/GameUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/GameUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/discord/DiscordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/discord/DiscordManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/players/GameUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/players/GameUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/players/InventoryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/players/InventoryUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/players/PlayersUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/players/PlayersUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/saves/SaveSerializationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/saves/SaveSerializationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/skulls/SkullList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/anto42/emma/utils/skulls/SkullList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +192,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -58,7 +208,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Antoo42/EmmaUHC.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/Antoo42/UHC.git&quot;,
     &quot;accountId&quot;: &quot;4b883abb-07e3-4e6b-b26d-71a7fd54fd73&quot;
   }
 }</component>
@@ -91,6 +241,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="fr.anto42.emma.coreManager.worldManager" />
+    </key>
+  </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn package" />
@@ -153,11 +308,20 @@
       <option name="project" value="LOCAL" />
       <updated>1732634374638</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="changes">
+      <option name="closed" value="true" />
+      <created>1734526337888</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734526337888</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes" />
+    <MESSAGE value="a LOT of change" />
+    <option name="LAST_COMMIT_MESSAGE" value="a LOT of change" />
   </component>
 </project>

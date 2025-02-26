@@ -30,7 +30,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with SamaGamesAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PersonalScoreboard {
+public class  PersonalScoreboard {
     private Player player;
     private final UUID uuid;
     private final ObjectiveSign objectiveSign;

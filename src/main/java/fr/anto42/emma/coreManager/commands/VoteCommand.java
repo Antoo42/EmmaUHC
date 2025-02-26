@@ -18,14 +18,14 @@ public class VoteCommand extends Command {
     public boolean execute(CommandSender sender, String s, String[] args) {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(((Player) sender));
         if(voteSystem.getVotedPlayer().contains(uhcPlayer)){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVous avez déjà voté !");
+            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous avez déjà voté !");
             return true;
         }
         if(args.length == 0){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVeuillez indiquer votre vote ! §3(/vote <yes/no>)");
+            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVeuillez indiquer votre vote ! §3(/vote <yes/no>)");
             return true;
         }
-        uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Votre vote a bien été enregistré.");
+        uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §7Votre vote a bien été enregistré.");
         if(args[0].equalsIgnoreCase("yes")){
             voteSystem.addYes();
             voteSystem.getVotedPlayer().add(uhcPlayer);
@@ -34,7 +34,7 @@ public class VoteCommand extends Command {
             voteSystem.getVotedPlayer().add(uhcPlayer);
         }
         else {
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVeuillez indiquer votre vote ! §3(/vote <yes/no>)");
+            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVeuillez indiquer votre vote ! §3(/vote <yes/no>)");
         }
         return false;
     }

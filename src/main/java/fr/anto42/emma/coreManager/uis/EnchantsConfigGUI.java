@@ -22,7 +22,7 @@ public class EnchantsConfigGUI {
     private final EnchantsManager enchantsManager = UHC.getInstance().getEnchantsManager();
 
     public EnchantsConfigGUI(boolean perm) {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lConfiguration des enchantements");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lConfiguration des enchantements");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 9).get());

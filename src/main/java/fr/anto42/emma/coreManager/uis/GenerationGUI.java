@@ -16,13 +16,13 @@ public class GenerationGUI {
 
     String translate (boolean b, World world) {
         if (b) return "§aprégénéré";
-        else if (WorldManager.getInGeneration() == world) return "§6en cours de génération";
+        else if (WorldManager.getInGeneration() == world) return "§6en cours de prégénération";
         else if (WorldManager.getToGenerate().contains(world)) return "§6dans la file d'attente";
         else return "§cpas prégénéré";
     }
 
     public GenerationGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lGénérer un monde");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lGénérer un monde");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 5).get());

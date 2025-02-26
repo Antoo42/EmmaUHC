@@ -13,216 +13,161 @@ import fr.anto42.emma.utils.Cuboid;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
+import fr.anto42.emma.utils.saves.ItemStackToString;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class StarterTask {
     private final UHCGame uhc = UHC.getInstance().getUhcGame();
     private final List<Location> locationList = new ArrayList<>();
-    private final List<UHCTeam> uhcTeamList = new ArrayList<>();
+    private final Random random = new Random();
+    private int playerCount = 0;
 
-    int b = 0;
-    public void startUHC(){
-        int a = uhc.getUhcData().getUhcPlayerList().size();
-        int borderSize = UHC.getInstance().getUhcGame().getUhcConfig().getStartBorderSize();
-        if (UHCTeamManager.getInstance().isActivated()){
-            uhc.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() == null).forEach(uhcPlayer -> uhcPlayer.joinTeam(UHCTeamManager.getInstance().getRandomFreeTeam()));
-            UHCTeamManager.getInstance().getUhcTeams().forEach(uhcTeam -> {
-                if (uhcTeam.isAlive()){
-                    uhcTeamList.add(uhcTeam);
-                }
-            });
-            UHCTeamManager.getInstance().setUhcTeams(uhcTeamList);
-            List<UHCTeam> uhcTeams = new ArrayList<>(UHCTeamManager.getInstance().getUhcTeams());
-            (new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (MinecraftServer.getServer().recentTps[0] <= 17.5D){
-                        return;
-                    }
-                    UHCTeam uhcTeam = uhcTeams.get(0);
-                    Location loc = new Location(WorldManager.getGameWorld(), new Random().nextInt((borderSize-20)*2)-(borderSize-20), 200, new Random().nextInt((borderSize-20)*2)-(borderSize-20));
-                    uhcTeam.setStartLoc(loc);
-                    locationList.add(loc);
-                    Cuboid cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()-5, 200, loc.getBlockZ()-5, loc.getBlockX()+5, 200, loc.getBlockZ()+5);
-                    cuboid.forEach(block -> {
-                        block.setType(new ItemCreator(Material.STAINED_GLASS).get().getType());
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()-5, 201, loc.getBlockZ()+5, loc.getBlockX()-5, 203, loc.getBlockZ()-5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()+5, 201, loc.getBlockZ()+5, loc.getBlockX()+5, 203, loc.getBlockZ()-5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()-5, 201, loc.getBlockZ()+5, loc.getBlockX()+5, 203, loc.getBlockZ()+5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()+5, 201, loc.getBlockZ()-5, loc.getBlockX()-5, 203, loc.getBlockZ()-5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    uhcTeam.getAliveUhcPlayers().stream().filter(uhcPlayer -> uhcPlayer.getBukkitPlayer() != null).forEach(uhcPlayer -> {
-                        uhc.getUhcData().getWhiteListPlayer().add(uhcPlayer.getUuid());
-                        uhcPlayer.getBukkitPlayer().teleport(loc.add(0, 1, 0));
-                        uhcPlayer.getBukkitPlayer().setLevel(0);
-                        uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
-                        uhcPlayer.setEditing(false);
-                        b++;
-                        Bukkit.broadcastMessage("");
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Téléportation de §6" + uhcPlayer.getName() + " §7(" + b + "/" + a + ")");
-                        Bukkit.broadcastMessage("");
-                        uhcPlayer.getBukkitPlayer().getInventory().clear();
-                    });
-                    uhcTeams.remove(uhcTeam);
-                    if (b == a) {
-                        preStart();
-                        this.cancel();
-                    }
-                }
-            }).runTaskTimer(UHC.getInstance(), 5L, 15L);
-        }else{
+    public void startUHC() {
+        List<UHCPlayer> players = new ArrayList<>(uhc.getUhcData().getUhcPlayerList());
+        int totalPlayers = players.size();
+        int borderSize = uhc.getUhcConfig().getStartBorderSize();
+        boolean isTeamMode = UHCTeamManager.getInstance().isActivated();
 
-            List<UHCPlayer> uhcPlayers = new ArrayList<>(uhc.getUhcData().getUhcPlayerList());
-            (new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (MinecraftServer.getServer().recentTps[0] <= 17.5D){
-                        return;
-                    }
-                    UHCPlayer uhcPlayer = uhcPlayers.get(0);
-                    Location loc = new Location(WorldManager.getGameWorld(), new Random().nextInt((borderSize-20)*2)-(borderSize-20), 200, new Random().nextInt((borderSize-20)*2)-(borderSize-20));
-                    locationList.add(loc);
-                    Cuboid cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()-5, 200, loc.getBlockZ()-5, loc.getBlockX()+5, 200, loc.getBlockZ()+5);
-                    cuboid.forEach(block -> {
-                        int r = new Random().nextInt(14);
-                        block.setType(new ItemCreator(Material.STAINED_GLASS, 1, (short) r).get().getType());
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()-5, 201, loc.getBlockZ()+5, loc.getBlockX()-5, 203, loc.getBlockZ()-5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()+5, 201, loc.getBlockZ()+5, loc.getBlockX()+5, 203, loc.getBlockZ()-5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()-5, 201, loc.getBlockZ()+5, loc.getBlockX()+5, 203, loc.getBlockZ()+5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    cuboid = new Cuboid(WorldManager.getGameWorld(), loc.getBlockX()+5, 201, loc.getBlockZ()-5, loc.getBlockX()-5, 203, loc.getBlockZ()-5);
-                    cuboid.forEach(block -> {
-                        block.setType(Material.BARRIER);
-                    });
-                    b++;
-                    if (uhcPlayer.getBukkitPlayer() != null){
-                        uhc.getUhcData().getWhiteListPlayer().add(uhcPlayer.getUuid());
-                        uhcPlayer.getBukkitPlayer().teleport(loc.add(0, 1, 0));
-                        uhcPlayer.getBukkitPlayer().setLevel(0);
-                        uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
-                        uhcPlayer.setEditing(false);
-                        Bukkit.broadcastMessage("");
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Téléportation de §6" + uhcPlayer.getName() + " §7(" + b + "/" + a + ")");
-                        Bukkit.broadcastMessage("");
-                        uhcPlayer.getBukkitPlayer().getInventory().clear();
-                    }
-                    uhcPlayers.remove(uhcPlayer);
-                    if (a == b) {
-                        preStart();
-                        this.cancel();
-                    }
-                };
-            }).runTaskTimer(UHC.getInstance(), 5L, 15L);
+        if (isTeamMode) {
+            prepareTeams(players);
+            teleportEntities(new ArrayList<>(UHCTeamManager.getInstance().getUhcTeams()), totalPlayers, borderSize, true);
+        } else {
+            teleportEntities(players, totalPlayers, borderSize, false);
         }
-
     }
 
-    private void preStart(){
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Stabilisation des §aTPS §7en cours...");
-        (new BukkitRunnable() {
+    private void prepareTeams(List<UHCPlayer> players) {
+        UHCTeamManager teamManager = UHCTeamManager.getInstance();
+
+        players.stream()
+                .filter(p -> p.getUhcTeam() == null)
+                .forEach(p -> Optional.ofNullable(teamManager.getRandomFreeTeam()).ifPresent(p::joinTeam));
+
+        teamManager.setUhcTeams(new ArrayList<>(teamManager.getUhcTeams().stream()
+                .filter(UHCTeam::isAlive)
+                .collect(Collectors.toList())));    }
+
+    private void teleportEntities(List<?> entities, int totalPlayers, int borderSize, boolean isTeamMode) {
+        Collections.shuffle(entities);
+
+        new BukkitRunnable() {
             @Override
             public void run() {
-                if (MinecraftServer.getServer().recentTps[0] >= 17.5D){
-                    start();
-                    this.cancel();
+                if (!checkTPS() || entities.isEmpty()) return;
+
+                Object entity = entities.remove(0);
+                Location loc = generateLocation(borderSize);
+                locationList.add(loc);
+                createSpawnPlatform(loc);
+
+                if (isTeamMode) {
+                    UHCTeam team = (UHCTeam) entity;
+                    team.setStartLoc(loc);
+                    team.getAliveUhcPlayers().stream()
+                            .map(UHCPlayer::getBukkitPlayer)
+                            .filter(Objects::nonNull)
+                            .forEach(p -> teleportPlayer(p, loc, totalPlayers));
+                } else {
+                    teleportPlayer(((UHCPlayer) entity).getBukkitPlayer(), loc, totalPlayers);
+                }
+
+                if (entities.isEmpty()) {
+                    preStart();
+                    cancel();
                 }
             }
-        }).runTaskTimer(UHC.getInstance(), 10L, 10L);
+        }.runTaskTimer(UHC.getInstance(), 5L, 15L);
     }
 
-    int t = 10;
-    private void start(){
-        (new BukkitRunnable() {
+    private boolean checkTPS() {
+        return MinecraftServer.getServer().recentTps[0] > 17.5D;
+    }
+
+    private Location generateLocation(int borderSize) {
+        int x = random.nextInt((borderSize - 20) * 2) - (borderSize - 20);
+        int z = random.nextInt((borderSize - 20) * 2) - (borderSize - 20);
+        return new Location(WorldManager.getGameWorld(), x, 200, z);
+    }
+
+    private void createSpawnPlatform(Location loc) {
+        int y = 200;
+        World world = loc.getWorld();
+        Cuboid platform = new Cuboid(world, loc.getBlockX() - 5, y, loc.getBlockZ() - 5, loc.getBlockX() + 5, y, loc.getBlockZ() + 5);
+        platform.forEach(block -> block.setType(Material.STAINED_GLASS));
+
+        for (int i = -5; i <= 5; i++) {
+            world.getBlockAt(loc.getBlockX() + i, y + 1, loc.getBlockZ() - 5).setType(Material.BARRIER);
+            world.getBlockAt(loc.getBlockX() + i, y + 1, loc.getBlockZ() + 5).setType(Material.BARRIER);
+            world.getBlockAt(loc.getBlockX() - 5, y + 1, loc.getBlockZ() + i).setType(Material.BARRIER);
+            world.getBlockAt(loc.getBlockX() + 5, y + 1, loc.getBlockZ() + i).setType(Material.BARRIER);
+        }
+    }
+
+    private void teleportPlayer(Player player, Location loc, int totalPlayers) {
+        if (player == null) return;
+
+        playerCount++;
+        uhc.getUhcData().getWhiteListPlayer().add(player.getUniqueId());
+        player.teleport(loc.add(0, 1, 0));
+        player.setGameMode(GameMode.SURVIVAL);
+        player.getInventory().clear();
+
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Téléportation de §6" + player.getName() + " §7(" + playerCount + "/" + totalPlayers + ")");
+    }
+
+    private void preStart() {
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Stabilisation des §aTPS §7en cours...");
+
+        new BukkitRunnable() {
             @Override
             public void run() {
-                if (t == 0){
-                    locationList.forEach(location -> {
-                        Cuboid cuboid = new Cuboid(location.getWorld(), location.getBlockX()-5, 200, location.getBlockZ()-5, location.getBlockX()+5, 204, location.getBlockZ()+5);
-                        cuboid.forEach(block -> {
-                            block.setType(Material.AIR);
-                        });
-                    });
-                    Cuboid cuboid = new Cuboid(WorldManager.getGameWorld(), -20, 200, 20, 20, 204, -20);
-                    cuboid.forEach(block -> {
-                        Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-                            block.setType(Material.AIR);
-                        },2L);
-                    });
-                    SoundUtils.playSoundToAll(Sound.ITEM_BREAK);
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aDébut de la partie !");
-                    uhc.getUhcTimer().runTaskTimer(UHC.getInstance(), 0L, 20L);
-                    uhc.getUhcData().getSpecList().forEach(uhcPlayer -> {
-                        if (uhcPlayer.getBukkitPlayer() != null){
-                            uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
-                        }
-                    });
-
-                    uhc.getUhcData().getUhcPlayerList().forEach(uhcPlayer -> {
-                        uhcPlayer.getBukkitPlayer().setLevel(0);
-                        uhcPlayer.setDamageable(false);
-                        if (uhc.getUhcConfig().getStarterStuffConfig().getStartInv().length == 0){
-                            uhcPlayer.getBukkitPlayer().getInventory().setItem(0, new ItemCreator(Material.COOKED_BEEF, 32).get());
-                            uhcPlayer.getBukkitPlayer().getInventory().setItem(1, new ItemCreator(Material.BOOK, 1).get());
-                        }else {
-                            uhcPlayer.getBukkitPlayer().getInventory().setContents(uhc.getUhcConfig().getStarterStuffConfig().getStartInv());
-                            uhcPlayer.getBukkitPlayer().getInventory().setHelmet(uhc.getUhcConfig().getStarterStuffConfig().getHead());
-                            uhcPlayer.getBukkitPlayer().getInventory().setChestplate(uhc.getUhcConfig().getStarterStuffConfig().getBody());
-                            uhcPlayer.getBukkitPlayer().getInventory().setLeggings(uhc.getUhcConfig().getStarterStuffConfig().getLeggins());
-                            uhcPlayer.getBukkitPlayer().getInventory().setBoots(uhc.getUhcConfig().getStarterStuffConfig().getBoots());
-                        }
-                    });
-                    Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Les §cdegâts (PvE) §7sont désormais §cactifs §7!");
-                        uhc.getUhcData().getUhcPlayerList().forEach(uhcPlayer -> {
-                            uhcPlayer.setDamageable(true);
-                            SoundUtils.playSoundToAll(Sound.ORB_PICKUP);
-                        });
-                    }, TimeUtils.seconds(uhc.getUhcConfig().getGodStart()));
-                    WorldManager.getGameWorld().getWorldBorder().setSize(uhc.getUhcConfig().getStartBorderSize()*2);
-                    WorldManager.getNetherWorld().getWorldBorder().setSize(uhc.getUhcConfig().getStartBorderSize()*2);
-                    uhc.getUhcData().setBorderRaduis(((int) WorldManager.getGameWorld().getWorldBorder().getSize())/2);
-                    uhc.setGameState(GameState.PLAYING);
-                    UHC.getInstance().getUhcManager().getGamemode().onStart();
-                    UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().forEach(UHCScenario::onStart);
-                    Bukkit.getServer().getPluginManager().callEvent(new StartEvent());
-                    new ArrowTask().runTaskTimer(UHC.getInstance(), 0L, 3L);
-                    new NoSpecLagTask().runTaskTimer(UHC.getInstance(), 0L, 2L);
-                    this.cancel();
+                if (checkTPS()) {
+                    startGame();
+                    cancel();
                 }
-                if (t == 10 || t == 5 || t <= 3 && t != 0){
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Début de la partie dans §a" + t + " §7seconde" + (t != 1 ? "s" : "") + " !");
-                    SoundUtils.playSoundToAll(Sound.NOTE_PLING);
-                }
-
-                t--;
             }
-        }).runTaskTimer(UHC.getInstance(), 40L, 20L);
+        }.runTaskTimer(UHC.getInstance(), 60L, 10L);
+    }
+
+    private void startGame() {
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aDébut de la partie !");
+        uhc.setGameState(GameState.PLAYING);
+        uhc.getUhcTimer().runTaskTimer(UHC.getInstance(), 0L, 20L);
+
+        locationList.forEach(loc -> new Cuboid(loc.getWorld(), loc.getBlockX() - 5, 200, loc.getBlockZ() - 5, loc.getBlockX() + 5, 204, loc.getBlockZ() + 5)
+                .forEach(block -> block.setType(Material.AIR)));
+
+        uhc.getUhcData().getUhcPlayerList().forEach(p -> {
+            Player player = p.getBukkitPlayer();
+            if (player != null) {
+                player.setLevel(0);
+                p.setDamageable(false);
+                for (String s : uhc.getUhcConfig().getStarterStuffConfig().getStartInv()) {
+                   player.getInventory().addItem(ItemStackToString.ItemStackFromString(s));
+                }
+                for (ItemStack content : player.getInventory().getContents()) {
+                    if (content.getType().equals(Material.BARRIER)) {
+                        player.getInventory().removeItem(content);
+                    }
+                }
+            }
+        });
+
+        Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Les §cdegâts (PvE) §7sont désormais §cactifs §7!");
+            uhc.getUhcData().getUhcPlayerList().forEach(p -> p.setDamageable(true));
+            SoundUtils.playSoundToAll(Sound.ORB_PICKUP);
+        }, TimeUtils.seconds(uhc.getUhcConfig().getGodStart()));
+
+        Bukkit.getServer().getPluginManager().callEvent(new StartEvent());
+        new ArrowTask().runTaskTimer(UHC.getInstance(), 0L, 3L);
+        new NoSpecLagTask().runTaskTimer(UHC.getInstance(), 0L, 2L);
     }
 }

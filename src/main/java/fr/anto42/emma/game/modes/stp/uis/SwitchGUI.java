@@ -13,7 +13,7 @@ public class SwitchGUI {
     private final KInventory kInventory;
 
     public SwitchGUI(SwitchModule switchModule){
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §e§lSwitchThePatrick");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §e§lSwitchThePatrick");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 4).get());
             this.kInventory.setElement(i, glass);

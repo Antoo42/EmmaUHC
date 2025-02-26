@@ -74,8 +74,8 @@ public class UHCGame {
         (new BukkitRunnable() {
             @Override
             public void run() {
-                if (!start){
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cLancement annulé !");
+                if (!start || Bukkit.getOnlinePlayers().isEmpty()){
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cLancement annulé !");
                     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                         onlinePlayer.setLevel(0);
                     }
@@ -85,7 +85,7 @@ public class UHCGame {
                         onlinePlayer.setLevel(timer/20 + 1);
                     }
                     if (timer == 10*20 || timer == 5*20 || timer == 3*20 || timer == 2*20 || timer == 20){
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aDémarrage de la partie dans §b" + timer/20 + "§a seconde" + (timer != 1 ? "s" : "") +  " !");
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aDémarrage de la partie dans §b" + timer/20 + "§a seconde" + (timer != 20 ? "s" : "") +  " !");
                         SoundUtils.playSoundToAll(Sound.ORB_PICKUP);
                     }
                     if (timer == 0){

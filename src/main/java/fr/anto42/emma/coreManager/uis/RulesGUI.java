@@ -13,7 +13,7 @@ import org.bukkit.Sound;
 public class RulesGUI {
     private final KInventory kInventory;
     public RulesGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lMenu des règles");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lMenu des règles");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 3).get());
             this.kInventory.setElement(i, glass);
@@ -35,7 +35,7 @@ public class RulesGUI {
         KItem scenarios = new KItem(new ItemCreator(Material.BOOK).name("§8┃ §fScenarios").lore("", "§8┃ §6Consultez §fles différents scénarios activés dans la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
 
         scenarios.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
-            if (UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().size() == 0){
+            if (UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().isEmpty()){
                 UHC.getUHCPlayer(player).sendClassicMessage("§cAucun scénario n'est activé !");
                 SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
                 return;

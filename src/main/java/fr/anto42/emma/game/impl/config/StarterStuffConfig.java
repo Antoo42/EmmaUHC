@@ -1,7 +1,5 @@
 package fr.anto42.emma.game.impl.config;
 
-import fr.anto42.emma.utils.materials.ItemCreator;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -46,13 +44,14 @@ public class StarterStuffConfig {
         this.boots = boots;
     }
 
-    private ItemStack[] startInv = new ItemStack[0];
+    private String[] startInv = new String[0];
 
-    public ItemStack[] getStartInv() {
+
+    public String[] getStartInv() {
         return startInv;
     }
 
-    public void setStartInv(ItemStack[] startInv) {
+    public void setStartInv(String[] startInv) {
         this.startInv = startInv;
     }
 }

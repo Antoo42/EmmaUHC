@@ -19,7 +19,7 @@ public class AdminGUI {
     }
 
     public AdminGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§lPanel Administrateur");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §c§lPanel Administrateur");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 14).get());
             this.kInventory.setElement(i, glass);

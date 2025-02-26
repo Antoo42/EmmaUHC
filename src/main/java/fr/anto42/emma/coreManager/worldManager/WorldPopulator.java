@@ -22,13 +22,14 @@ public class WorldPopulator {
 
             @Override
             public void run() {
-                int radius = 250;
-                if (WorldManager.isClean()){
+                int radius = 300;
+                WorldManager.setClean(true);
+                /*if (WorldManager.isClean()){
                     this.cancel();
                     addSapling();
-                }
+                }*/
                 if (this.progress == 0)
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aDébut du nettoyage du centre de la carte...");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aDébut du nettoyage du centre de la carte...");
                 for (int x = -radius; x <= radius; x++) {
                     for (int z = -radius; z <= radius; z++) {
                         org.bukkit.block.Block block = WorldPopulator.this.gameWorld.getBlockAt(x, this.YChange, z);
@@ -36,7 +37,10 @@ public class WorldPopulator {
                             block.setType(Material.AIR);
                             if (block.getLocation().add(0.0D, -1.0D, 0.0D).getBlock().getType().equals(Material.DIRT))
                                 block.getLocation().add(0.0D, -1.0D, 0.0D).getBlock().setType(Material.GRASS);
-                        } else if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.ICE || block.getType() == Material.PACKED_ICE) {
+                        } /*else if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.ICE || block.getType() == Material.PACKED_ICE) {
+                            block.setType(Material.GRASS);
+                        }*/
+                        else if (block.getType() == Material.SAND) {
                             block.setType(Material.GRASS);
                         }
                         block.setBiome(Biome.PLAINS);
@@ -50,7 +54,6 @@ public class WorldPopulator {
                 if (this.progress >= 100) {
                     cancel();
                     System.out.println("Finish to clean the center");
-                    WorldManager.setClean(true);
                     if (rooft)
                         addSapling();
                 }
@@ -65,7 +68,7 @@ public class WorldPopulator {
             cleanWorld(true);
             return;
         }
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aDébut de la génération de la forêt noire au centre de la carte...");
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aDébut de la génération de la forêt noire au centre de la carte...");
         System.out.println("Start the creation of the roofed forest");
         (new Thread(() -> (new BukkitRunnable() {
             int yInicial = 50;
@@ -75,7 +78,7 @@ public class WorldPopulator {
             int YChange = this.yInicial;
             @Override
             public void run() {
-                for (int radius = 250, x = 0 - radius; x <= radius; x++) {
+                for (int radius = 300, x = 0 - radius; x <= radius; x++) {
                     for (int z = 0 - radius; z <= radius; z++) {
                         Block block = WorldPopulator.this.gameWorld.getBlockAt(x, this.YChange, z);
                         if (block.getType() == Material.AIR && (WorldPopulator.this.gameWorld.getBlockAt(x, this.YChange - 1, z).getType().equals(Material.DIRT) || WorldPopulator.this.gameWorld.getBlockAt(x, this.YChange - 1, z).getType().equals(Material.GRASS))) {
@@ -83,9 +86,9 @@ public class WorldPopulator {
                             if (i <= 6)
                                 block.getWorld().generateTree(block.getLocation(), TreeType.DARK_OAK);
                             if (i == 90) {
-                                block.getWorld().generateTree(block.getLocation(), TreeType.BROWN_MUSHROOM);
+                                block.getWorld().generateTree(block.getLocation(), TreeType.TREE);
                             } else if (i == 91) {
-                                block.getWorld().generateTree(block.getLocation(), TreeType.RED_MUSHROOM);
+                                block.getWorld().generateTree(block.getLocation(), TreeType.BIRCH);
                             }
                         }
                     }

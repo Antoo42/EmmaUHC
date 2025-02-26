@@ -129,24 +129,30 @@ public class UHCTeamManager {
         return uhcTeams;
     }
 
-    public UHCTeam getRandomFreeTeam(){
+    public UHCTeam getRandomFreeTeam() {
         List<UHCTeam> uhcTeams = new ArrayList<>();
 
-        for(UHCTeam uhcTim : getUhcTeams()){
-            if (uhcTim.getPlayersAmount() > 0 && uhcTim.getPlayersAmount() + 1 < getSlots()){
-                uhcTeams.add(uhcTim);
+        for (UHCTeam uhcTeam : getUhcTeams()) {
+            if (uhcTeam.getPlayersAmount() > 0 && uhcTeam.getPlayersAmount() < getSlots()) {
+                uhcTeams.add(uhcTeam);
             }
         }
 
-        if (uhcTeams.isEmpty()){
-            for(UHCTeam uhcTim : getUhcTeams()){
-                if (uhcTim.getPlayersAmount() == 0){
-                    uhcTeams.add(uhcTim);
+        if (uhcTeams.isEmpty()) {
+            for (UHCTeam uhcTeam : getUhcTeams()) {
+                if (uhcTeam.getPlayersAmount() == 0) {
+                    uhcTeams.add(uhcTeam);
                 }
             }
         }
-        return initialTeams.get(new Random().nextInt(initialTeams.size()));
+
+        if (uhcTeams.isEmpty()) {
+            return null;
+        }
+
+        return uhcTeams.get(new Random().nextInt(uhcTeams.size()));
     }
+
 
     public String getDisplayFormat(){
         if (!isActivated())

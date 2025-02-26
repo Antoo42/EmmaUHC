@@ -186,4 +186,14 @@ public class UHCData {
     public List<UHCPlayer> getSpyList() {
         return spyList;
     }
+
+    private int episode = 1;
+
+    public int getEpisode() {
+        return episode;
+    }
+
+    public void setEpisode(int episode) {
+        this.episode = episode;
+    }
 }

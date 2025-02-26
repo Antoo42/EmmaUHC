@@ -13,7 +13,7 @@ public class TrueLoveGUI {
     private final KInventory kInventory;
 
     public TrueLoveGUI(TrueLoveModule switchModule){
-        this.kInventory = new KInventory(27, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §5§lTrueLove");
+        this.kInventory = new KInventory(27, UHC.getInstance().getPrefix() + " §5§lTrueLove");
         KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 6).get());
         this.kInventory.setElement(0, glass);
         this.kInventory.setElement(1, glass);

@@ -2,11 +2,14 @@ package fr.anto42.emma.coreManager.enchants.config;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
+import fr.anto42.emma.utils.saves.ItemStackToString;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class EnchantConfiguration extends Command {
 
@@ -20,14 +23,15 @@ public class EnchantConfiguration extends Command {
         Player player = ((Player) commandSender);
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
         if (!uhcPlayer.isEditing()){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVous ne pouvez pas faire ça !");
+            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
             return false;
         }
         if (player.getItemInHand().getType() == Material.AIR){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVeuillez prendre un item en main !");
+            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVeuillez prendre un item en main !");
             return false;
         }
         new EnchantGUI(player.getItemInHand()).getkInventory().open(player);
+        //Bukkit.broadcastMessage(ItemStackToString.itemStackToString(player.getItemInHand()));
         return false;
     }
 

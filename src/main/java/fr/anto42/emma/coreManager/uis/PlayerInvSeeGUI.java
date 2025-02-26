@@ -14,7 +14,7 @@ public class PlayerInvSeeGUI {
     private final KInventory kInventory;
 
     public PlayerInvSeeGUI(Player p) {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lInventaire de " + p.getName());
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lInventaire de " + p.getName());
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 14).get());
             this.kInventory.setElement(i, glass);

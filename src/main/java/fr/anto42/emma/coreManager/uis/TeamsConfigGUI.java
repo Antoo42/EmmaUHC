@@ -27,7 +27,7 @@ public class TeamsConfigGUI {
             return "§cdésactivé";
     }
     public TeamsConfigGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lEquipes");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lEquipes");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 4).get());
             this.kInventory.setElement(i, glass);
@@ -100,7 +100,7 @@ public class TeamsConfigGUI {
         KItem reload = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fRecharger les équipes").lore("", "§8┃ §fVous rencontrer un pépin avec les équipes ?", "§8┃ §fCette fonctionnalité est faîte pour vous !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
         reload.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (UHC.getInstance().getUhcGame().getGameState() != GameState.WAITING){
-                player.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVous ne pouvez pas faire ça maintenant !");
+                player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça maintenant !");
                 SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
                 return;
             }

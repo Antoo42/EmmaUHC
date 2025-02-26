@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.worldManager;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.worldManager.customWorld.CustomWorldManager;
 import fr.anto42.emma.utils.Cuboid;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -51,13 +52,14 @@ public class WorldManager {
 
     public void createGameWorld(){
         random = new Random().nextInt(9999);
-        String worldName = "world-" + random;
+        String worldName = "worldUHC-world-" + random;
         World world = new WorldCreator(worldName).createWorld();
+        //world.getPopulators().add(new CavesWorldGenerator());
         gameWorld = world;
         worldList.add(world);
-        netherWorld = new WorldCreator("nether-" + random).environment(World.Environment.NETHER).createWorld();
+        netherWorld = new WorldCreator("worldUHC-nether-" + random).environment(World.Environment.NETHER).createWorld();
         worldList.add(netherWorld);
-        endWorld = new WorldCreator("end-" + random).environment(World.Environment.THE_END).createWorld();
+        endWorld = new WorldCreator("worldUHC-end-" + random).environment(World.Environment.THE_END).createWorld();
         worldList.add(endWorld);
         setInGeneration(null);
         getToGenerate().clear();

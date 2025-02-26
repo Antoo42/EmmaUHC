@@ -19,9 +19,9 @@ public class DocCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, String s, String[] strings) {
         if(UHC.getInstance().getUhcManager().getGamemode().getDocLink() != null)
-            (new InteractiveMessage().add(new InteractiveMessageBuilder(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Veuillez cliquer §eici §7pour ouvrir le document du mode de jeu.").setHoverMessage("§8§l» §6Cliquez§f pour ouvrir.").setClickAction(ClickEvent.Action.OPEN_URL, UHC.getInstance().getUhcManager().getGamemode().getDocLink()).build())).sendMessage(((Player) sender));
+            (new InteractiveMessage().add(new InteractiveMessageBuilder(UHC.getInstance().getPrefix() + " §7Veuillez cliquer §eici §7pour ouvrir le document du mode de jeu.").setHoverMessage("§8§l» §6Cliquez§f pour ouvrir.").setClickAction(ClickEvent.Action.OPEN_URL, UHC.getInstance().getUhcManager().getGamemode().getDocLink()).build())).sendMessage(((Player) sender));
         else {
-            sender.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cAucun document n'est renseigné à propos de ce mode de jeu...");
+            sender.sendMessage(UHC.getInstance().getPrefix() + " §cAucun document n'est renseigné à propos de ce mode de jeu...");
             SoundUtils.playSoundToPlayer(Bukkit.getPlayer(sender.getName()), Sound.VILLAGER_NO);
         }
         return false;

@@ -4,6 +4,7 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.materials.ItemCreator;
+import fr.anto42.emma.utils.saves.ItemStackToString;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -56,7 +57,9 @@ public class InventoryUtils {
                 uhcPlayer.getBukkitPlayer().getInventory().setItem(0, new ItemCreator(Material.COOKED_BEEF, 32).get());
                 uhcPlayer.getBukkitPlayer().getInventory().setItem(1, new ItemCreator(Material.BOOK, 1).get());
             }else {
-                uhcPlayer.getBukkitPlayer().getInventory().setContents(uhc.getUhcConfig().getStarterStuffConfig().getStartInv());
+                for (String s : uhc.getUhcConfig().getStarterStuffConfig().getStartInv()) {
+                    uhcPlayer.getBukkitPlayer().getInventory().addItem(ItemStackToString.ItemStackFromString(s));
+                }
                 uhcPlayer.getBukkitPlayer().getInventory().setHelmet(uhc.getUhcConfig().getStarterStuffConfig().getHead());
                 uhcPlayer.getBukkitPlayer().getInventory().setChestplate(uhc.getUhcConfig().getStarterStuffConfig().getBody());
                 uhcPlayer.getBukkitPlayer().getInventory().setLeggings(uhc.getUhcConfig().getStarterStuffConfig().getLeggins());

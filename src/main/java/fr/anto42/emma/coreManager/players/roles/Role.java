@@ -45,4 +45,7 @@ public abstract class Role {
     public void setRole(){
     }
     public void onDeath() {}
+
+    public void onEpisode() {
+    }
 }

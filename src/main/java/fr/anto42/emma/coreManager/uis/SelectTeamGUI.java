@@ -18,7 +18,7 @@ public class SelectTeamGUI {
     private final UHCTeamManager uhcTeamManager = UHCTeamManager.getInstance();
 
     public SelectTeamGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lSéléction de l'équipe");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lSéléction de l'équipe");
 
         KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 4).get());
         this.kInventory.setElement(0, glass);

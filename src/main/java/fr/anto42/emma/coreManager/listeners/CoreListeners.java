@@ -2,9 +2,7 @@ package fr.anto42.emma.coreManager.listeners;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.enchants.EnchantsManager;
-import fr.anto42.emma.coreManager.listeners.customListeners.DeathEvent;
-import fr.anto42.emma.coreManager.listeners.customListeners.LateEvent;
-import fr.anto42.emma.coreManager.listeners.customListeners.RolesEvent;
+import fr.anto42.emma.coreManager.listeners.customListeners.*;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
@@ -16,11 +14,14 @@ import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.impl.config.StuffConfig;
 import fr.anto42.emma.utils.Cuboid;
+import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.GameUtils;
 import fr.anto42.emma.utils.players.InventoryUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.anto42.emma.utils.saves.ItemStackToString;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -41,6 +42,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -62,7 +64,39 @@ public class CoreListeners implements Listener {
         UHCTeamManager.getInstance().getUhcTeams().remove(waitingTeam);
     }
 
+    private String formatTPS(double tps) {
+        return ( ( tps > 18.0 ) ? ChatColor.GREEN : ( tps > 16.0 ) ? ChatColor.YELLOW : ChatColor.RED ).toString()
+                + ( ( tps > 20.0 ) ? "*" : "" ) + Math.min( Math.round( tps * 100.0 ) / 100.0, 20.0 );
+    }
 
+    String formatPing(int ping){
+        return ( ( ping < 50 ) ? ChatColor.GREEN : ( ping < 100 ) ? ChatColor.YELLOW : ChatColor.RED ).toString() + ping;
+    }
+
+    @EventHandler
+    public void onStart(StartEvent event) {
+        Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
+            uhc.getUhcData().setEpisode(uhc.getUhcData().getEpisode() + 1);
+            Bukkit.getPluginManager().callEvent(new EpisodeEvent());
+        }, 0L, TimeUtils.minutes(uhc.getUhcConfig().getEpisode()));
+    }
+
+    @EventHandler
+    public void onPreJoin(AsyncPlayerPreLoginEvent event) {
+        if (uhcCore.getUhcGame().getUhcData().isWhiteList()) {
+            if (event.getName().equals("Anto42_"))
+                return;
+            if (uhcCore.getUhcGame().getUhcData().getWhiteListPlayer().contains(event.getUniqueId()) || uhcCore.getUhcGame().getUhcData().getPreWhitelist().contains(event.getName()))
+                return;
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST);
+            event.setKickMessage("§cLa whitelist est active !");
+        }
+    }
+
+    @EventHandler
+    public void onEpisode(EpisodeEvent event) {
+        uhc.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getRole() != null).forEach(uhcPlayer -> uhcPlayer.getRole().onEpisode());
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
@@ -77,20 +111,27 @@ public class CoreListeners implements Listener {
             uhcPlayer.joinTeam(waitingTeam);
             uhcPlayer.leaveTeam();
         }
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        try {
-            Field a = packet.getClass().getDeclaredField("a");
-            a.setAccessible(true);
-            Field b = packet.getClass().getDeclaredField("b");
-            b.setAccessible(true);
-            Object header1 = new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n" + "  §6/helpop §8┃ §6/rules §8┃ §6/lag \n");
-            a.set(packet, header1);
-            Object footer = new ChatComponentText(" \n  §7Par §b@Anto42_ §7pour §6§l" + UHC.getInstance().getConfig().getString("ip") + "  \n");
-            b.set(packet, footer);
-        } catch (NoSuchFieldException | IllegalAccessException ee) {
-                System.out.println("UHC » Error on the TabList loading, contact Anto42_#0001 for help.");
-        }
-        ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.sendPacket(packet);
+        (new BukkitRunnable() {
+            @Override
+            public void run() {
+                PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+                try {
+                    Field a = packet.getClass().getDeclaredField("a");
+                    a.setAccessible(true);
+                    Field b = packet.getClass().getDeclaredField("b");
+                    b.setAccessible(true);
+                    Object header1 = new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n" + "  §6/helpop §8┃ §6/rules §8┃ §6/lag \n");
+                    a.set(packet, header1);
+                    Object footer = new ChatComponentText(" \n  §8┃ §7Ping: §a" + formatPing(((CraftPlayer) event.getPlayer()).getHandle().ping) +  "  §8┃ §7TPS: §a" + formatTPS(MinecraftServer.getServer().recentTps[0]) + "  \n");
+                    b.set(packet, footer);
+                } catch (NoSuchFieldException | IllegalAccessException ee) {
+                    System.out.println("UHC » Error on the TabList loading, contact Anto42_");
+                }
+                ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.sendPacket(packet);
+            }
+        }).runTaskTimer(UHC.getInstance(), 1L, 1L);
+
+
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
             if (uhc.getGameState().equals(GameState.WAITING)){
                 uhc.getUhcData().getUhcPlayerList().add(uhcPlayer);
@@ -108,7 +149,7 @@ public class CoreListeners implements Listener {
                 uhcPlayer.getBukkitPlayer().getInventory().clear();
                 Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                     if (uhc.getUhcData().getHostPlayer() == null) {
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Le nouvel Host de la partie est désormais §a" + uhcPlayer.getName());
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouvel Host de la partie est désormais §a" + uhcPlayer.getName());
                         uhc.getUhcData().setHostPlayer(uhcPlayer);
                         PlayersUtils.giveWaitingStuff(uhcPlayer.getBukkitPlayer());
                         if (UHC.getInstance().getUhcGame().getUhcConfig().getUHCName().equalsIgnoreCase("UHCHost"))
@@ -137,7 +178,7 @@ public class CoreListeners implements Listener {
                     }
                 }
                 if (uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer)) {
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §fLe joueur §a" + uhcPlayer.getName() + "§f est revenu dans la partie !");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §fLe joueur §a" + uhcPlayer.getName() + "§f est revenu dans la partie !");
                     uhcPlayer.getPotionEffects().forEach(potionEffect -> {
                         uhcPlayer.getBukkitPlayer().addPotionEffect(potionEffect);
                         uhcPlayer.getPotionEffects().remove(potionEffect);
@@ -162,15 +203,25 @@ public class CoreListeners implements Listener {
     @EventHandler
     public void onLate(LateEvent event){
         UHCPlayer uhctarget = event.getUhcPlayer();
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §a" + uhctarget.getName() + "§7 a été ajouté à la partie !");
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §a" + uhctarget.getName() + "§7 a été ajouté à la partie !");
         uhc.getUhcData().getUhcPlayerList().add(uhctarget);
         uhctarget.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
         PlayersUtils.randomTp(uhctarget.getBukkitPlayer(), WorldManager.getGameWorld());
         if (uhc.getUhcConfig().getStarterStuffConfig().getStartInv().length == 0){
             uhctarget.getBukkitPlayer().getInventory().setItem(0, new ItemCreator(Material.COOKED_BEEF, 32).get());
             uhctarget.getBukkitPlayer().getInventory().setItem(1, new ItemCreator(Material.BOOK, 1).get());
-        }else
-            uhctarget.getBukkitPlayer().getInventory().setContents(uhc.getUhcConfig().getStarterStuffConfig().getStartInv());
+            //TODO fix late stuff cf ci dessous
+        } else {
+            Player player = uhctarget.getBukkitPlayer();
+            for (String s : uhc.getUhcConfig().getStarterStuffConfig().getStartInv()) {
+                player.getInventory().addItem(ItemStackToString.ItemStackFromString(s));
+            }
+            for (ItemStack content : player.getInventory().getContents()) {
+                if (content.getType().equals(Material.BARRIER)) {
+                    player.getInventory().removeItem(content);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -198,7 +249,7 @@ public class CoreListeners implements Listener {
                     public void run() {
                         if (Bukkit.getPlayer(playerName) != null) cancel();
                         if (timer >= uhc.getUhcConfig().getAfkTime()) {
-                            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c" + uhcPlayer.getName() + "§7 a été éliminée dû à son inactivité !");
+                            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §c" + uhcPlayer.getName() + "§7 a été éliminée dû à son inactivité !");
                             uhc.getUhcData().getUhcPlayerList().remove(uhcPlayer);
                             if (uhcPlayer.getUhcTeam() != null) {
                                 UHCTeam uhcTeam = uhcPlayer.getUhcTeam();
@@ -357,31 +408,32 @@ public class CoreListeners implements Listener {
             event.setCancelled(true);
             return;
         }
+        UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
         if (uhc.getGameState().equals(GameState.PLAYING) && UHCTeamManager.getInstance().isActivated()){
-            UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
             if (!event.getMessage().startsWith("!")) {
                 uhcPlayer.getUhcTeam().getUhcPlayerList().forEach(uhcPlayer1 -> {
-                    uhcPlayer1.sendMessage(uhcPlayer.getUhcTeam().getName() + " " + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
+                    uhcPlayer1.sendMessage( uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " " + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
                 });
                 event.setCancelled(true);
             }
             else {
                 if (uhc.getUhcData().getCoHostList().contains(uhcPlayer) || uhc.getUhcData().getHostPlayer() == uhcPlayer) {
-                    event.setFormat("§6§lHOST §8┃ §6" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getName() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
+                    event.setFormat("§7(ALL) §8┃ §6§lHOST §8┃ §6" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
                 } else if (uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
-                    event.setFormat("§c§lSPEC  §8┃ §c" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getName() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
+                    event.setFormat("§7(ALL) §8┃ §c§lSPEC  §8┃ §c" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
                 } else {
-                    event.setFormat("§7" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getName() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
+                    event.setFormat("§7(ALL) §8┃ §7" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
                 }
             }
+        } else if (uhc.getGameState().equals(GameState.PLAYING) && !uhcPlayer.getPlayerState().equals(UHCPlayerStates.ALIVE) && !uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
+            event.setCancelled(true);
         }
-        else{
-            UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
-            if (uhc.getUhcData().getCoHostList().contains(uhcPlayer) || uhc.getUhcData().getHostPlayer() == uhcPlayer){
+        else {
+            if (uhc.getUhcData().getCoHostList().contains(uhcPlayer) || uhc.getUhcData().getHostPlayer() == uhcPlayer) {
                 event.setFormat("§6§lHOST §8┃ §6" + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
-            }else if (uhc.getUhcData().getSpecList().contains(uhcPlayer)){
+            } else if (uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
                 event.setFormat("§c§lSPEC  §8┃ §c" + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
-            }else{
+            } else {
                 event.setFormat("§7" + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
             }
         }
@@ -416,10 +468,10 @@ public class CoreListeners implements Listener {
     public void onPortal(PlayerPortalEvent event){
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL && !uhc.getUhcConfig().isNether()){
             event.setCancelled(true);
-            event.getPlayer().sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cLe Nether est désactivé dans cette partie !");
+            event.getPlayer().sendMessage(UHC.getInstance().getPrefix() + " §cLe Nether est désactivé dans cette partie !");
         }else if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL && !uhc.getUhcConfig().isEnd()){
             event.setCancelled(true);
-            event.getPlayer().sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cL'End est désactivé dans cette partie !");
+            event.getPlayer().sendMessage(UHC.getInstance().getPrefix() + " §cL'End est désactivé dans cette partie !");
         }
         if(event.getFrom().getWorld().getEnvironment() == World.Environment.NORMAL){
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL){
@@ -668,9 +720,12 @@ public class CoreListeners implements Listener {
                 entityDamageByEntityEvent.setCancelled(true);
             }
             else if (uhc.getUhcConfig().isBowLife()){
-                Player player = ((Player) ((Arrow) entityDamageByEntityEvent.getDamager()).getShooter());
-                Player victim = ((Player) entityDamageByEntityEvent.getEntity());
-                player.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + "§e " + victim.getName() + " §8§l» " + makePercentColor(victim.getHealth()) + "%");
+                Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
+                    Player player = ((Player) ((Arrow) entityDamageByEntityEvent.getDamager()).getShooter());
+                    Player victim = ((Player) entityDamageByEntityEvent.getEntity());
+                    player.sendMessage(UHC.getInstance().getPrefix() + "§e " + victim.getName() + " §8§l» " + makePercentColor(victim.getHealth()) + "%");
+                }, 1L);
+
             }
         }
 
@@ -691,7 +746,7 @@ public class CoreListeners implements Listener {
         }
     }
 
-    public boolean peutPrendreItem(ItemStack item, Player player,Inventory inventaire) {
+    public boolean canTakeItem(ItemStack item, Player player,Inventory inventaire) {
         if (inventaire.contains(item) && inventaire.getTitle().contains(player.getName()) && inventaire.getViewers().contains(player)) {
             return true;
         }
@@ -705,12 +760,12 @@ public class CoreListeners implements Listener {
         ItemStack current = event.getCurrentItem();
         if (event.getInventory().equals(inventaire)) {
             event.setCancelled(true);
-            if (event.getCurrentItem() != null && peutPrendreItem(event.getCurrentItem(), (Player) event.getWhoClicked(),inventaire)) {
+            if (event.getCurrentItem() != null && canTakeItem(event.getCurrentItem(), (Player) event.getWhoClicked(),inventaire)) {
                 if(uhcPlayer.getBukkitPlayer().getInventory().firstEmpty() != -1){
                     inventaire.remove(current);
                     uhcPlayer.getBukkitPlayer().getInventory().addItem(current);
                 }else{
-                    uhcPlayer.getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, vous ne pouvez pas récupérer des items dans votre inventaire de backup !");
+                    uhcPlayer.getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, vous ne pouvez pas récupérer des items dans votre inventaire de backup !");
                 }
             }
         }

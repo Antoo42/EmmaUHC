@@ -19,7 +19,7 @@ public class GameUtils {
     public static void onWin(Object object){
         if (object == null){
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -32,7 +32,7 @@ public class GameUtils {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
                 
@@ -40,7 +40,7 @@ public class GameUtils {
             }, TimeUtils.minutes(5));
         }else if (object instanceof Player){
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations au joueur " + ((Player) object).getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + UHC.getUHCPlayer(((Player) object).getPlayer()).getKills() + "§a !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + ((Player) object).getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + UHC.getUHCPlayer(((Player) object).getPlayer()).getKills() + "§a !");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -53,7 +53,7 @@ public class GameUtils {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
                 
@@ -64,7 +64,7 @@ public class GameUtils {
                 kills = kills + uhcPlayer.getKills();
             });
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations au camp des §e" + ((Camp) object).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + kills + "§a !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au camp des §e" + ((Camp) object).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + kills + "§a !");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -77,7 +77,7 @@ public class GameUtils {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
                 
@@ -85,7 +85,7 @@ public class GameUtils {
             }, TimeUtils.minutes(5));
         }else if (object instanceof UHCTeam){
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations à l'équipe " + ((UHCTeam) object).getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + ((UHCTeam) object).getKillsTeam() + "§a !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + ((UHCTeam) object).getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + ((UHCTeam) object).getKillsTeam() + "§a !");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -98,7 +98,7 @@ public class GameUtils {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
                 
@@ -122,7 +122,7 @@ public class GameUtils {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             Title.sendFullTitle(onlinePlayer, 0, TimeUtils.seconds(2), 20, "§4Groupes de " + getGroupsLimit() + "", "§c§o⚠Veuillez à respecter les limites de groupes !");
         }
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cPensez à respecter les groupes ! §3(" + getGroupsLimit() + ")");
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cPensez à respecter les groupes ! §3(" + getGroupsLimit() + ")");
         SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
     }
 

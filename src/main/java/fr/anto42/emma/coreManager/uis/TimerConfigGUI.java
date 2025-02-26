@@ -16,7 +16,7 @@ public class TimerConfigGUI {
 
     public TimerConfigGUI(boolean perm) {
         this.perm = perm;
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lGestion des timers");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lGestion des timers");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 6).get());
@@ -42,7 +42,7 @@ public class TimerConfigGUI {
                     return;
                 uhcConfig.setGodStart(uhcConfig.getGodStart() + 5);
             }else if (kInventoryClickContext.getClickType().isRightClick()){
-                if (uhcConfig.getGodStart() == 0)
+                if (uhcConfig.getGodStart() == 20)
                     return;
                 uhcConfig.setGodStart(uhcConfig.getGodStart()- 5);
             }
@@ -82,6 +82,22 @@ public class TimerConfigGUI {
             roles.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fRôles").lore("", "§8§l» §fStatut: §c" + uhcConfig.getRoles() + "§f minutes", "", "§8┃ §6Séléctionnez §fle moment de séléction des rôles ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         });
         this.kInventory.setElement(23, roles);
+
+        KItem episodes = new KItem(new ItemCreator(SkullList.SUN.getItemStack()).name("§8┃ §fEpisodes").lore("", "§8§l» §fStatut: §c" + uhcConfig.getEpisode() + "§f minutes", "", "§8┃ §6Séléctionnez §fla durée des épisodes ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        episodes.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
+            if (!perm) return;
+            if (kInventoryClickContext.getClickType().isLeftClick()){
+                if (uhcConfig.getEpisode() == 120)
+                    return;
+                uhcConfig.setEpisode(uhcConfig.getEpisode() + 1);
+            }else if (kInventoryClickContext.getClickType().isRightClick()){
+                if (uhcConfig.getEpisode() == 1)
+                    return;
+                uhcConfig.setEpisode(uhcConfig.getEpisode() - 1);
+            }
+            episodes.setItem(new ItemCreator(SkullList.SUN.getItemStack()).name("§8┃ §fEpisodes").lore("", "§8§l» §fStatut: §c" + uhcConfig.getEpisode() + "§f minutes", "", "§8┃ §6Séléctionnez §fla durée des épisodes ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        });
+        this.kInventory.setElement(22, episodes);
 
         KItem borderTime = new KItem(new ItemCreator(SkullList.BEDROCK.getItemStack()).name("§8┃ §fBordure").lore("", "§8§l» §fStatut:§c "+ uhcConfig.getTimerBorder() + "§f minutes", "", "§8┃ §6Séléctionnez §fà partir de quand la", "§8┃ §cbordure §fsera §amise en mouvement", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         borderTime.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {

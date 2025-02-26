@@ -21,7 +21,7 @@ public class TGConfigGUI {
 
     public TGConfigGUI(TGModule module) {
         this.module = module;
-        kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§lTaupe§7-§e§lGun");
+        kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §c§lTaupe§7-§e§lGun");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 14).get());

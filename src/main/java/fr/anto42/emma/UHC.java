@@ -1,10 +1,5 @@
 package fr.anto42.emma;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
 import fr.anto42.emma.coreManager.UHCManager;
 import fr.anto42.emma.coreManager.commands.*;
 import fr.anto42.emma.coreManager.enchants.EnchantsManager;
@@ -19,7 +14,6 @@ import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.CommandUtils;
 import fr.anto42.emma.utils.FileUtils;
-import fr.anto42.emma.utils.data.FirebaseUtils;
 import fr.anto42.emma.utils.discord.DiscordManager;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import fr.blendman974.kinventory.KInventoryManager;
@@ -28,8 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -56,7 +49,7 @@ public final class UHC extends JavaPlugin {
     private ScheduledExecutorService scheduledExecutorService;
 
     private SaveSerializationManager saveSerializationManager;
-
+    private String prefix;
 
     @Override
     public void onEnable() {
@@ -66,7 +59,6 @@ public final class UHC extends JavaPlugin {
 
         saveDefaultConfig();
         instance = this;
-
 
         KInventoryManager.init(this);
         BiomeChanger.init();
@@ -105,6 +97,7 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new WhitelistCommand());
         CommandUtils.registerCommand("uhc", new SpawnCommand());
         CommandUtils.registerCommand("uhc", new BackupCommand());
+        CommandUtils.registerCommand("uhc", new WinTest());
 
         scheduledExecutorService = Executors.newScheduledThreadPool(16);
         executorMonoThread = Executors.newScheduledThreadPool(1);
@@ -113,13 +106,15 @@ public final class UHC extends JavaPlugin {
         UHCTeamManager.getInstance().createTeams();
 
         loadServerVersion();
-
-
+        prefix = getConfig().getString("generalPrefix").replace("&", "§");
+        getUhcGame().getUhcData().setWhiteList(getConfig().getBoolean("whiteListOnTheStart"));
+        getDiscordManager().sendStarterAnounce();
 
         getLogger().info("");
         getLogger().info("§a§lSuccessfuly initialize UHCCore");
         getLogger().info("");
     }
+
 
 
     private void loadServerVersion() {
@@ -134,7 +129,7 @@ public final class UHC extends JavaPlugin {
 
         if (version == 0) {
             version = MIN_VERSION;
-            Bukkit.getLogger().warning("UHC: Failed to detect server version! " + versionString + "? For support contact Anto42_#0001 or @Antooooo42 !");
+            Bukkit.getLogger().warning("UHC: Failed to detect server version! " + versionString + "? For support contact Anto42_ or @Antooooo42 !");
         } else {
             Bukkit.getLogger().info("UHC: 1." + version + " Server detected!");
         }
@@ -226,5 +221,13 @@ public final class UHC extends JavaPlugin {
 
     public SaveSerializationManager getSaveSerializationManager() {
         return saveSerializationManager;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 }

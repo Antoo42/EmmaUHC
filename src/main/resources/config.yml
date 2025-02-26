@@ -19,7 +19,7 @@ pitch: 0
 yaw: 180
 
 #Choose to activate or not the privates messages (true or false)
-privatemessages: false
+privatemessages: true
 
 #Prefixs
 generalPrefix: "&6&lUHC &8&l»"

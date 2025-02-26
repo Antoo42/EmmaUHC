@@ -44,17 +44,17 @@ public class Taupe extends TRole {
     public void reveal() {
         UHCTeam uhcTeam = getUhcPlayer().getUhcTeam();
         if(GameUtils.getModule().getData().getRevealPlayers().contains(getUhcPlayer())){
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous avez déjà révélé votre identité !");
+            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous avez déjà révélé votre identité !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
         if (getUhcPlayer().getPlayerState() != UHCPlayerStates.ALIVE) {
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous ne pouvez pas faire ça en étant mort !");
+            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous ne pouvez pas faire ça en étant mort !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
         if (UHC.getInstance().getUhcGame().getGameState() != GameState.PLAYING) {
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous ne pouvez pas faire ça maintenant !");
+            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous ne pouvez pas faire ça maintenant !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
@@ -77,7 +77,7 @@ public class Taupe extends TRole {
             return;
         }
         if (UHC.getInstance().getUhcGame().getGameState() != GameState.PLAYING) {
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous ne pouvez pas faire ça maintenant !");
+            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous ne pouvez pas faire ça maintenant !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }

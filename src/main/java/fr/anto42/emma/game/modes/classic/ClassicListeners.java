@@ -29,16 +29,16 @@ public class ClassicListeners implements Listener {
 
         if (!UHCTeamManager.getInstance().isActivated()) {
             if (deathEvent.getKiller() != null)
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c" + victim.getName() + "§7 est mort des mains de §a" + deathEvent.getKiller().getName() + "§7 !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §c" + victim.getName() + "§7 est mort des mains de §a" + deathEvent.getKiller().getName() + "§7 !");
             else
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c" + victim.getName() + "§7 est mort seul !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §c" + victim.getName() + "§7 est mort seul !");
         } else {
             if (victim.getUhcTeam() != null) {
                 UHCTeam uhcTeam = victim.getUhcTeam();
                 if (deathEvent.getKiller() != null)
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + uhcTeam.getPrefix() + victim.getName() + "§7 est mort des mains de §a" + deathEvent.getKiller().getUhcTeam().getPrefix() + deathEvent.getKiller().getName() + "§7 !");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " " + uhcTeam.getPrefix() + victim.getName() + "§7 est mort des mains de §a" + deathEvent.getKiller().getUhcTeam().getPrefix() + deathEvent.getKiller().getName() + "§7 !");
                 else
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + uhcTeam.getPrefix() + victim.getName() + "§7 est mort !");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " " + uhcTeam.getPrefix() + victim.getName() + "§7 est mort !");
                 UHCTeam uhcTeam1 = victim.getUhcTeam();
                 victim.leaveTeam();
                 Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
@@ -48,9 +48,9 @@ public class ClassicListeners implements Listener {
                 }, 15);
             }else{
                 if (deathEvent.getKiller() != null)
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + victim.getName() + "§7 est mort des mains de §a" + deathEvent.getKiller().getUhcTeam().getPrefix() + deathEvent.getKiller().getName() + "§7 !");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " " + victim.getName() + "§7 est mort des mains de §a" + deathEvent.getKiller().getUhcTeam().getPrefix() + deathEvent.getKiller().getName() + "§7 !");
                 else
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + victim.getName() + "§7 est mort !");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " " + victim.getName() + "§7 est mort !");
             }
 
         }
@@ -65,7 +65,7 @@ public class ClassicListeners implements Listener {
                 player.setGameMode(GameMode.SPECTATOR);
                 player.teleport(WorldManager.getCenterLoc());
             } else {
-                player.kickPlayer(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Je suis navré de devoir vous expulser car les spectateurs sont désactivés dans cette partie, néanmoins je vous attend pour revenir dès la prochaine partie !");
+                player.kickPlayer(UHC.getInstance().getPrefix() + " §7Je suis navré de devoir vous expulser car les spectateurs sont désactivés dans cette partie, néanmoins je vous attend pour revenir dès la prochaine partie !");
             }
         }, 5);
     }

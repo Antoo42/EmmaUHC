@@ -46,7 +46,7 @@ public class WeakestLink extends UHCScenario {
                 }
             });
             uhcPlayer.get().getBukkitPlayer().setHealth(0);
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §9WeakestLink: " + " §c" + uhcPlayer.get().getName() + "§7 est mort car il avait le moins de vie !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §9WeakestLink: " + " §c" + uhcPlayer.get().getName() + "§7 est mort car il avait le moins de vie !");
         }, TimeUtils.minutes(timer), TimeUtils.minutes(timer));
     }
 }

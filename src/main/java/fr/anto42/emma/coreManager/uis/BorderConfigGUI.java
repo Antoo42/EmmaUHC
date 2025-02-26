@@ -13,7 +13,7 @@ public class BorderConfigGUI {
     private final UHCConfig config = UHC.getInstance().getUhcGame().getUhcConfig();
 
     public BorderConfigGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lGestion de la bordure");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lGestion de la bordure");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 5).get());
             this.kInventory.setElement(i, glass);

@@ -12,7 +12,7 @@ import org.bukkit.Material;
 public class LGConfigGUI {
     private final KInventory kInventory;
     public LGConfigGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§lParamètres du mode Loup Garou");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §c§lParamètres du mode Loup Garou");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 14).get());
             this.kInventory.setElement(i, glass);

@@ -21,7 +21,7 @@ public class DevCommand extends Command {
             TryStartEvent tryStartEvent = new TryStartEvent();
             Bukkit.getServer().getPluginManager().callEvent(tryStartEvent);
             if (!tryStartEvent.isCancelled()){
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aLancement en démarage forcé!");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aLancement en démarage forcé!");
                 uhc.startGame();
             }
         }

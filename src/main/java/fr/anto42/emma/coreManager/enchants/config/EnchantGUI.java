@@ -14,7 +14,7 @@ public class EnchantGUI {
     private final KInventory kInventory;
 
     public EnchantGUI(ItemStack itemStack) {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lEnchanter un item");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lEnchanter un item");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 9).get());
             this.kInventory.setElement(i, glass);
@@ -28,12 +28,12 @@ public class EnchantGUI {
         back.addCallback((kInventoryRepresentation, itemStack1, player, kInventoryClickContext) -> player.closeInventory());
         this.kInventory.setElement(49, back);
 
-        /*KItem unbreakable = new KItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem unbreakable = new KItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour séléctionner.").get());
         unbreakable.addCallback((kInventoryRepresentation, itemStack1, player, kInventoryClickContext) -> {
-            itemStack.getItemMeta().spigot().setUnbreakable((!itemStack.getItemMeta().spigot().isUnbreakable()));
+            itemStack.setItemMeta(new ItemCreator(itemStack.getType()).unbreakable(!itemStack.getItemMeta().spigot().isUnbreakable()).get().getItemMeta());
             unbreakable.setItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour séléctionner.").get());
         });
-        this.kInventory.setElement(4, unbreakable);*/
+        this.kInventory.setElement(4, unbreakable);
 
         final int[] slot = {9};
         int level;

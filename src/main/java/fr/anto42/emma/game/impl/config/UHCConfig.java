@@ -110,6 +110,16 @@ public class UHCConfig {
         return roles;
     }
 
+    private int episode = 20;
+
+    public int getEpisode() {
+        return episode;
+    }
+
+    public void setEpisode(int episode) {
+        this.episode = episode;
+    }
+
     public void setRoles(int roles) {
         this.roles = roles;
     }

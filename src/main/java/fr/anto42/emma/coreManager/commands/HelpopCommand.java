@@ -30,14 +30,14 @@ public class HelpopCommand extends Command {
         for(String l : args){
             sb.append(l + " ");
         }
-        uhc.getUhcData().getSpecList().forEach(uhcPlayer1 -> {
+        uhc.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer1 -> uhc.getUhcData().getSpecList().contains(uhcPlayer1) || uhc.getUhcData().getCoHostList().contains(uhcPlayer1) || uhc.getUhcData().getHostPlayer() == uhcPlayer1).forEach(uhcPlayer1 -> {
             uhcPlayer1.sendMessage(UHC.getInstance().getConfig().getString("helpopPrefix").replace("&", "§") + " §3" + uhcPlayer.getName() + "§7: " + sb.toString());
             (new InteractiveMessage().add(new InteractiveMessageBuilder("§e§l[SE TELEPORTER]")
                     .setHoverMessage("§8§l» §6Cliquez§f pour vous téléporter à " + uhcPlayer.getName()).setClickAction(ClickEvent.Action.RUN_COMMAND, "/spec tp " + uhcPlayer.getBukkitPlayer().getName())
                     .build()))
                     .add("   ")
                     .add(new InteractiveMessageBuilder("§c§l[ENVOYER UN MESSAGE]")
-                            .setHoverMessage("§8§l» §6Cliquez §fpour envoyer un message privé à " + uhcPlayer.getBukkitPlayer().getDisplayName()).setClickAction(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + uhcPlayer + " ").build()).sendMessage(uhcPlayer1.getBukkitPlayer());
+                            .setHoverMessage("§8§l» §6Cliquez §fpour envoyer un message privé à " + uhcPlayer.getBukkitPlayer().getDisplayName()).setClickAction(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + uhcPlayer.getName() + " ").build()).sendMessage(uhcPlayer1.getBukkitPlayer());
         });
         uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("helpopPrefix").replace("&", "§") + " §aVotre demande a été transmise avec succés !");
         return false;

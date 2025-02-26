@@ -39,7 +39,7 @@ public class Generator {
             }
         }
     }
-    int chunksPerTick = 10;
+    int chunksPerTick = 20;
     int limit = 50;
 
     public void setChunksPerTick(int chunksPerTick) {
@@ -60,47 +60,42 @@ public class Generator {
             return;
         }
 
-        PlayersUtils.broadcastMessage("§7Lancement de la génération du monde §a" + world.getName() + "§7. §cLe serveur peut subir des ralentissements ! Par précaution, ne lancez pas la partie durant la prégénération.");
+        PlayersUtils.broadcastMessage("§8§l» §7Lancement de la prégénération du monde §a" + world.getName() + "§7...");
+        PlayersUtils.broadcastMessage("§8§l» §cLe serveur peut subir des ralentissements ! Évitez de lancer la partie durant ce processus.");
+
         WorldManager.setInGeneration(world);
         this.startTime = System.currentTimeMillis();
 
-        this.task = Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), new Runnable() {
+        this.task = Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
+            double tps = MinecraftServer.getServer().recentTps[0];
 
-
-            @Override
-            public void run() {
-                double tps = MinecraftServer.getServer().recentTps[0];
-                if (tps < 16D) {
-                    if (chunksPerTick > 0) {
-                        if (stableTicks < 30) {
-                            stableTicks++;
-                        }
-                        else {
-                           setChunksPerTick(chunksPerTick-5);
-                           stableTicks = 0;
-                        }
-                    }
-                    return;
-
-                } else if (tps > 18.5D && chunksPerTick < limit) {
-                    if (stableTicks < 50)
-                        stableTicks++;
-                    else {
-                        stableTicks = 0;
-                        setChunksPerTick(chunksPerTick + 5);
-                    }
+            if (tps < 16D && chunksPerTick > 0) {
+                if (stableTicks < 30) {
+                    stableTicks++;
+                } else {
+                    setChunksPerTick(chunksPerTick - 5);
+                    stableTicks = 0;
+                    PlayersUtils.broadcastMessage("§8§l» §e⚠ Réduction du rythme de génération pour préserver les performances.");
                 }
-                //Bukkit.getLogger().info(String.valueOf(chunksPerTick));
-                for (int i = 0; i < chunksPerTick && !chunkQueue.isEmpty(); i++) {
-                    int[] coords = chunkQueue.poll();
-                    if (coords != null) {
-                        generateChunk(coords[0], coords[1]);
-                    }
+            } else if (tps > 18.5D && chunksPerTick < limit) {
+                if (stableTicks < 50) {
+                    stableTicks++;
+                } else {
+                    stableTicks = 0;
+                    setChunksPerTick(chunksPerTick + 5);
+                    PlayersUtils.broadcastMessage("§8§l» §a✔ Augmentation du rythme de génération, serveur stable !");
                 }
+            }
 
-                if (chunkQueue.isEmpty()) {
-                    completeGeneration();
+            for (int i = 0; i < chunksPerTick && !chunkQueue.isEmpty(); i++) {
+                int[] coords = chunkQueue.poll();
+                if (coords != null) {
+                    generateChunk(coords[0], coords[1]);
                 }
+            }
+
+            if (chunkQueue.isEmpty()) {
+                completeGeneration();
             }
         }, 0L, 1L);
     }
@@ -117,7 +112,7 @@ public class Generator {
                     updateProgress();
                 }
             } catch (Exception e) {
-                Bukkit.getLogger().severe("Erreur lors de la génération du chunk (" + x + ", " + z + "): " + e.getMessage());
+                Bukkit.getLogger().severe("§cErreur lors de la génération du chunk (" + x + ", " + z + "): " + e.getMessage());
             }
         });
     }
@@ -136,7 +131,8 @@ public class Generator {
                     "§3: §e" + percentage + "§3%" +
                     " §7(§e" + completedChunks + "§7/§a" + totalChunks + "§7 chunks)" +
                     " §8§l» §3Temps restant estimé: §a" + minutes + "§3m §a" + seconds + "§3s" +
-                    " §8§l» §3Chunks/tick: §a" + chunksPerTick);
+                    " §8§l» §3Chunks/tick: §a" + chunksPerTick +
+                    " §8§l» " + getServerHealthMessage());
         }
     }
 
@@ -145,9 +141,10 @@ public class Generator {
         WorldManager.setInGeneration(null);
 
         long totalTime = (System.currentTimeMillis() - startTime) / 1000L;
-        System.out.println("Finished the preload of world " + world.getName() + " after " + totalTime + " seconds.");
-        PlayersUtils.broadcastMessage("§7Prégénération du monde §a" + world.getName() + "§7 terminée après §c" + totalTime + " §7secondes.");
-        if (totalTime < 120) Bukkit.broadcastMessage("§7§o(wow c'est rapide)");
+        PlayersUtils.broadcastMessage("§8§l» §7Prégénération du monde §a" + world.getName() + "§7 terminée après §c" + totalTime + " §7secondes.");
+        if (totalTime < 120) {
+            Bukkit.broadcastMessage("§7§o(wow c'était rapide !)");
+        }
 
         if (world.getEnvironment() == World.Environment.NORMAL) {
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(true);
@@ -162,4 +159,22 @@ public class Generator {
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> new Generator(nextWorld), TimeUtils.seconds(5));
         }
     }
+
+    private String getServerHealthMessage() {
+        double tps = MinecraftServer.getServer().recentTps[0];
+        long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        double usagePercent = (double) usedMemory / maxMemory * 100;
+
+        String tpsStatus = (tps >= 18.5) ? "§a✔ TPS stables !" :
+                (tps >= 16) ? "§e⚠ Légères baisses de performances." :
+                        "§c❌ Risque de lag important !";
+
+        String memoryStatus = (usagePercent < 50) ? "§a✔ Mémoire suffisante." :
+                (usagePercent < 80) ? "§e⚠ Utilisation élevée, attention." :
+                        "§c❌ Mémoire saturée, risque de crash !";
+
+        return " " + tpsStatus + " §8§l» " + memoryStatus;
+    }
+
 }

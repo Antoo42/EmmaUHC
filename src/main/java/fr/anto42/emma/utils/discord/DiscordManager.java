@@ -4,6 +4,7 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.UHCGame;
+import fr.anto42.emma.utils.NetworkUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 
@@ -39,7 +40,7 @@ public class DiscordManager {
                 .addField(" 🧨Bordure:", uhc.getUhcConfig().getTimerBorder() + " minute(s)", false)
                 .addField(" Équipes:", UHCTeamManager.getInstance().getDisplayFormat(), false)
                 .addField(" 📖Scénarios: ", scenarioManager.getFormattedScenarios(), true)
-                .addField(" » IP: ", "", false)
+                .addField(" » IP: ", UHC.getInstance().getConfig().getString("ip"), false)
                 .setFooter("Provient du serveur: " + Bukkit.getServerName(), null));
         try {
             webhook.execute();
@@ -49,12 +50,13 @@ public class DiscordManager {
     }
     private final UHCGame uhc = UHC.getInstance().getUhcGame();
     public void sendStarterAnounce(){
-        DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1055240376992153702/r5XR_7_VeBXoE7Kz9dpZs6FtBkF2pfJbmwC0QL_1SpITo1KTeDiV_dVbvzbhYlJX_A-2");
+        DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1079167585955889293/VICN3qvQmwv3d4NMZJWx-5cVbN2whSG1462eDST9G1rbr9nvP91NIdq8FhxZQLhYlLJM");
         webhook.setUsername("EmmaUHC");
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
                 .setTitle(uhc.getUhcConfig().getUHCName())
                 .setColor(Color.BLUE)
                 .setDescription("» Un serveur UHC vient de se démarrer")
+                .addField("IP: ", NetworkUtils.getLocalIPAddress(), false)
                 .setFooter("Provient du serveur: " + Bukkit.getServerName(), null));
         try {
             webhook.execute();

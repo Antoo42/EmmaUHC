@@ -51,6 +51,9 @@ public class SafeMiners extends UHCScenario implements Listener {
         if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)){
             return;
         }
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.CUSTOM)){
+            return;
+        }
 
         if (event.getEntity() instanceof Player){
             int y1 = event.getEntity().getLocation().getBlockY();

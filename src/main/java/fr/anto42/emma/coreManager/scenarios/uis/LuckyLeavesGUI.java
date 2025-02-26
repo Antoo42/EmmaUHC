@@ -12,7 +12,7 @@ public class LuckyLeavesGUI {
     private KInventory kInventory;
 
     public LuckyLeavesGUI (LuckyLeaves luckyLeaves){
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lConfiguration de LuckyLeaves");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lConfiguration de LuckyLeaves");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 3).get());

@@ -11,7 +11,7 @@ public class PotionConfigGUI {
     private final KInventory kInventory;
 
     public PotionConfigGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lGestion de la bordure");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lGestion de la bordure");
 
         KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 3).get());
         this.kInventory.setElement(0, glass);

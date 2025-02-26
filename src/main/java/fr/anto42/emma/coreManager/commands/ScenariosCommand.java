@@ -2,6 +2,7 @@ package fr.anto42.emma.coreManager.commands;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
+import fr.anto42.emma.coreManager.uis.ScenariosActivatedGUI;
 import fr.anto42.emma.utils.SoundUtils;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -17,10 +18,10 @@ public class ScenariosCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, String s, String[] strings) {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(((Player) sender));
-        if(UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().isEmpty()){
+        /*if(UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().isEmpty()){
             uhcPlayer.sendMessage("§aAucun scénario n'est activé !");
             return true;
-        }
+        }*/
 
         if(UHC.getInstance().getUhcGame().getUhcConfig().isHideScenarios()){
             uhcPlayer.sendClassicMessage("§cZut ! Vous ne pouvez pas voir les scénarios activés !");
@@ -28,10 +29,13 @@ public class ScenariosCommand extends Command {
             return true;
         }
 
-        uhcPlayer.sendClassicMessage("§7Voici la liste des scénarios §aactivés§7:");
+        /*uhcPlayer.sendClassicMessage("§7Voici la liste des scénarios §aactivés§7:");
         UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().forEach(uhcScenario -> {
             uhcPlayer.sendMessage("§7- §e" + uhcScenario.getName());
-        });
+        });*/
+
+        new ScenariosActivatedGUI().getkInventory().open(uhcPlayer.getBukkitPlayer());
+
 
 
         return false;

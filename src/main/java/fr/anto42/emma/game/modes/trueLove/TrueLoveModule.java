@@ -67,7 +67,7 @@ public class TrueLoveModule extends Module {
             
             UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
             Bukkit.broadcastMessage("§7");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
@@ -80,7 +80,7 @@ public class TrueLoveModule extends Module {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             PlayersUtils.finishToSpawn();
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
@@ -91,7 +91,7 @@ public class TrueLoveModule extends Module {
             uhcGame.setGameState(GameState.FINISH);
             
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
             Bukkit.broadcastMessage("§7");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
@@ -104,7 +104,7 @@ public class TrueLoveModule extends Module {
             }
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             PlayersUtils.finishToSpawn();
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {

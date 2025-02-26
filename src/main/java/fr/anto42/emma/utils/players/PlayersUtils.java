@@ -102,9 +102,9 @@ public class PlayersUtils {
         z = z-((int) world.getWorldBorder().getSize() - 20);
         player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z, 0F, 0F));
         UHC.getUHCPlayer(player).setDamageable(false);
-        player.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aVous êtes invincible pour les 30 prochaines secondes.");
+        player.sendMessage(UHC.getInstance().getPrefix() + " §aVous êtes invincible pour les 30 prochaines secondes.");
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-            player.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVous pouvez de nouveau subir des dégâts !");
+            player.sendMessage(UHC.getInstance().getPrefix() + " §cVous pouvez de nouveau subir des dégâts !");
             SoundUtils.playSoundToPlayer(player, Sound.ANVIL_LAND);
             UHC.getUHCPlayer(player).setDamageable(true);
         }, TimeUtils.seconds(30));
@@ -132,7 +132,7 @@ public class PlayersUtils {
     }
 
     public static void broadcastMessage(String message){
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + message);
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " " + message);
     }
 
 }

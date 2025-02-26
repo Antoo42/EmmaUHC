@@ -18,7 +18,7 @@ public class GameModeGUI {
     private final UHCManager uhcManager = UHC.getInstance().getUhcManager();
 
     public GameModeGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lModes de jeu");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lModes de jeu");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1).get());
@@ -62,7 +62,7 @@ public class GameModeGUI {
                         uhcManager.getGamemode().onUnLoad();
                         uhcManager.setGamemode(module);
                         uhcManager.getGamemode().onLoad();
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Le nouveau mode de jeu séléctionné par l'Host est " + module.getName() + "§7 !");
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu séléctionné par l'Host est " + module.getName() + "§7 !");
                         new GameModeGUI().getkInventory().open(player);
                     }
                     else if (kInventoryClickContext.getClickType().isRightClick())
@@ -77,7 +77,7 @@ public class GameModeGUI {
                         uhcManager.getGamemode().onUnLoad();
                         uhcManager.setGamemode(module);
                         uhcManager.getGamemode().onLoad();
-                        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Le nouveau mode de jeu séléctionné par l'Host est " + module.getName() + "§7 !");
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu séléctionné par l'Host est " + module.getName() + "§7 !");
                         new GameModeGUI().getkInventory().open(player);
                     }
                 });

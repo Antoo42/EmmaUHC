@@ -47,7 +47,7 @@ public class WhitelistCommand extends Command {
 
         }
         if (args[0].equalsIgnoreCase("list")){
-            if (UHC.getInstance().getUhcGame().getUhcData().getPreWhitelist().size() == 0){
+            if (UHC.getInstance().getUhcGame().getUhcData().getPreWhitelist().isEmpty()){
                 System.out.println("UHC: Aucun joueur n'est présent dans la whitelist.");
             }
             else {

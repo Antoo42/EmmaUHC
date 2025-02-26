@@ -116,7 +116,7 @@ public class UHCPlayer {
     public void sendClassicMessage(String string){
         if (getBukkitPlayer() == null)
             return;
-        getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + string);
+        getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " " + string);
     }
 
     public void sendModMessage(String string) {
@@ -156,9 +156,9 @@ public class UHCPlayer {
         }
         if (getBukkitPlayer().getInventory().firstEmpty() == -1){
             //getBukkitPlayer().getLocation().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), itemStack);
-            //sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés au sol !");
+            //sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés au sol !");
             //SoundUtils.playSoundToPlayer(getBukkitPlayer(), Sound.VILLAGER_NO);
-            getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés dans l'inventaire de backup (/backup) !");
+            getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés dans l'inventaire de backup (/backup) !");
             this.backupInventory.addItem(itemStack);
         }else{
             getBukkitPlayer().getInventory().addItem(itemStack);
@@ -168,12 +168,13 @@ public class UHCPlayer {
     public void safeGiveOrDrop(ItemStack itemStack){
         if (getBukkitPlayer() == null)
             return;
-        if (getBukkitPlayer().getInventory().getSize() == getBukkitPlayer().getInventory().getContents().length) {
-            getBukkitPlayer().getLocation().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), itemStack);
-            sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés au sol !");
+        if (getBukkitPlayer().getInventory().firstEmpty() == -1) { // -1 signifie que l'inventaire est plein
+            getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), itemStack);
+            sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Les items ont été déposés au sol !");
             SoundUtils.playSoundToPlayer(getBukkitPlayer(), Sound.VILLAGER_NO);
-        }else
-            getBukkitPlayer().getInventory().addItem(itemStack);
+        } else {
+            getBukkitPlayer().getInventory().addItem(itemStack); // Ajoute l'item si l'inventaire n'est pas plein
+        }
     }
 
     List<ItemStack> toremove = new ArrayList<>();
@@ -259,7 +260,7 @@ public class UHCPlayer {
     }
 
     public void kickPlayer(String reason){
-        player.kickPlayer(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " " + reason);
+        player.kickPlayer(UHC.getInstance().getPrefix() + " " + reason);
     }
 
     public Location getQuitLoc() {

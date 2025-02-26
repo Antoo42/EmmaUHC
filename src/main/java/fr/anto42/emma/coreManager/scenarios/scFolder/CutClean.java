@@ -49,7 +49,7 @@ public class CutClean extends UHCScenario implements Listener {
             e.setCancelled(true);
             block.setType(Material.AIR);
             uhcPlayer.safeGiveOrDrop(new ItemStack(Material.COAL, 1));
-            player.giveExp(1 * uhcGame.getUhcConfig().getXpBoost());
+            player.giveExp(uhcGame.getUhcConfig().getXpBoost());
         }
         else if (block.getType() == Material.GOLD_ORE) {
             e.setCancelled(true);

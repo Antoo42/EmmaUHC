@@ -20,7 +20,7 @@ public class WorldConfigInRulesGUI {
     private final UHCGame uhc = UHC.getInstance().getUhcGame();
 
     public WorldConfigInRulesGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §a§lParamètres du monde");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §a§lParamètres du monde");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 5).get());

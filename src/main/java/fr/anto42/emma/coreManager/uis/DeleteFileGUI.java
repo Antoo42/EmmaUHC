@@ -7,11 +7,13 @@ import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
 
+import java.io.File;
+
 public class DeleteFileGUI {
 
     private final KInventory kInventory;
-    public DeleteFileGUI(int id, KInventory previousKinv) {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lSupprimer le fichier " + id);
+    public DeleteFileGUI(File file, KInventory previousKinv) {
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lSupprimer le fichier " + file.getName());
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 7).get());
             this.kInventory.setElement(i, glass);
@@ -35,19 +37,9 @@ public class DeleteFileGUI {
 
         KItem delete = new KItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §aEcraser le fichier").lore("", "§8§l» §6Cliquez §fpour §csupprimer définitivement ce fichier§f.").get());
         delete.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
-            UHC.getUHCPlayer(player).sendClassicMessage("§cIndisponible dans cette version !");
-            return;
-            /*try (Connection conn = HikariConnector.get().getConnection()) {
-                try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM saves WHERE id = '" + id + "'")) {
-                    stmt.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            UHC.getUHCPlayer(player).sendClassicMessage("§aVous avez supprimé le fichier " + id + " avec succès.");
-            player.closeInventory();*/
+            file.delete();
+            previousKinv.open(player);
+            UHC.getUHCPlayer(player).sendClassicMessage("§aSauvegarde supprimée !");
         });
         this.kInventory.setElement(20, delete);
 

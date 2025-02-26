@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoteSystem {
-    private static final VoteSystem voteSystem = new VoteSystem();
     private static VoteSystem instance;
 
     public VoteSystem() {
@@ -33,13 +32,13 @@ public class VoteSystem {
         t = 0;
         vote = true;
         SoundUtils.playSoundToAll(Sound.LEVEL_UP);
-        Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §eUn nouveau vote est en cours sur le sujet suivant: §3" + message + " §e! §b(/vote)");
+        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §eUn nouveau vote est en cours sur le sujet suivant: §3" + message + " §e! §b(/vote)");
         (new BukkitRunnable() {
             @Override
             public void run() {
                 Title.sendActionBar("§8§l» §6" + message + " §8┃ §aoui: §e" + yes + " §8┃ §cnon: §e" + no + " §7(Temps restant: §b" + (30-t) + " secondes§7)");
                 if (t == 30){
-                    Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") +  " §7Voici le résultat au vote §3" + message +"§7:");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() +  " §7Voici le résultat au vote §3" + message +"§7:");
                     Bukkit.broadcastMessage("");
                     Bukkit.broadcastMessage("§8§l» §aoui: §e" + yes);
                     Bukkit.broadcastMessage("§8§l» §cnon: §e" + no);

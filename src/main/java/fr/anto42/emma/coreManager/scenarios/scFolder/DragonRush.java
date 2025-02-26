@@ -41,7 +41,7 @@ public class DragonRush extends UHCScenario {
     @Override
     public void onEnable(){
         if (!getUhcGame().getUhcConfig().isEnd()){
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + "§c Veuillez à activer l'end pour pouvoir jouer dans ce mode de jeu !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + "§c Veuillez à activer l'end pour pouvoir jouer dans ce mode de jeu !");
             getScenarioManager().disableScenario(this);
             return;
         }
@@ -127,7 +127,7 @@ public class DragonRush extends UHCScenario {
             getUhcGame().setGameState(GameState.FINISH);
             
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations au joueur " + uhcKiller.getName() + "§a pour sa victoire en §6" + UHC.getInstance().getUhcManager().getGamemode().getName() + " §3(DragonRush) §aavec §b" + uhcKiller.getKills() + "§a !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + uhcKiller.getName() + "§a pour sa victoire en §6" + UHC.getInstance().getUhcManager().getGamemode().getName() + " §3(DragonRush) §aavec §b" + uhcKiller.getKills() + "§a !");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -141,7 +141,7 @@ public class DragonRush extends UHCScenario {
             PlayersUtils.finishToSpawn();
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
                 Bukkit.shutdown();
@@ -152,7 +152,7 @@ public class DragonRush extends UHCScenario {
             
             UHCTeam uhcTeam = uhcKiller.getUhcTeam();
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + " §3(DragonRush)§a avec §b" + uhcTeam.getKillsTeam() + "§a !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + " §3(DragonRush)§a avec §b" + uhcTeam.getKillsTeam() + "§a !");
             Bukkit.broadcastMessage("§7");
             for(Player player : Bukkit.getOnlinePlayers()){
                 UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
@@ -166,7 +166,7 @@ public class DragonRush extends UHCScenario {
             PlayersUtils.finishToSpawn();
 
             Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
                 

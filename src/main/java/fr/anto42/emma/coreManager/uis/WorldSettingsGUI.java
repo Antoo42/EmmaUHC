@@ -23,7 +23,7 @@ public class WorldSettingsGUI {
     }
 
     public WorldSettingsGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lParamètres du monde");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lParamètres du monde");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 5).get());
@@ -67,7 +67,7 @@ public class WorldSettingsGUI {
         KItem cleanCenter = new KItem(new ItemCreator(SkullList.CYAN_BALL.getItemStack()).name("§8┃ §fNettoyer le centre").lore("", "§8┃ §fNettoyer le centre afin que ce dernier", "§8┃ §fsoit §asans eau","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
         cleanCenter.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (WorldManager.isClean()){
-                player.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVous ne pouvez pas faire ça !");
+                player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
                 SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
                 return;
             }
@@ -79,7 +79,7 @@ public class WorldSettingsGUI {
         KItem roofed = new KItem(new ItemCreator(Material.SAPLING, 1, (short) 5).name("§8┃ §fForêt noir").lore( "", "§8┃ §fGénérez une §cforêt §fartificielle §aau centre de la carte","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
         roofed.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (WorldManager.isRoofed()){
-                player.sendMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §cVous ne pouvez pas faire ça !");
+                player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
                 SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
                 return;
             }

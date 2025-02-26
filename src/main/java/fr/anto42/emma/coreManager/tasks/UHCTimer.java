@@ -27,7 +27,7 @@ public class UHCTimer extends BukkitRunnable {
         if (uhc.getUhcConfig().getPvp()*60 == uhc.getUhcData().getTimer() && !uhc.getUhcData().isPvp()){
             if (!uhc.getUhcData().isPvp()){
                 uhc.getUhcData().setPvp(true);
-                Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7Le PvP est désormais §aactif§7 !");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le PvP est désormais §aactif§7 !");
                 SoundUtils.playSoundToAll(Sound.WOLF_GROWL);
                 Bukkit.getServer().getPluginManager().callEvent(new PvPEvent());
             }
@@ -42,7 +42,7 @@ public class UHCTimer extends BukkitRunnable {
             a = (long) (a/uhc.getUhcConfig().getBlockPerS());
             WorldManager.getGameWorld().getWorldBorder().setSize(uhc.getUhcConfig().getFinalBorderSize()*2, a);
             WorldManager.getNetherWorld().getWorldBorder().setSize(uhc.getUhcConfig().getFinalBorderSize()*2, a);
-            Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §7La bordure est en §amouvement§7 !");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7La bordure est en §amouvement§7 !");
             
             Bukkit.getServer().getPluginManager().callEvent(new BorderMovementEvent());
         }

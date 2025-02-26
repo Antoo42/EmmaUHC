@@ -12,7 +12,7 @@ public class XHealthsGUI {
     private KInventory kInventory;
 
     public XHealthsGUI (XHealths xHealths){
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lConfiguration de XHealths");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lConfiguration de XHealths");
 
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 6).get());

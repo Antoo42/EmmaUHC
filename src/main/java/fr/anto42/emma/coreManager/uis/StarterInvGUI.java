@@ -3,6 +3,7 @@ package fr.anto42.emma.coreManager.uis;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.game.impl.config.StarterStuffConfig;
 import fr.anto42.emma.utils.materials.ItemCreator;
+import fr.anto42.emma.utils.saves.ItemStackToString;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
@@ -14,7 +15,7 @@ public class StarterInvGUI {
     private final StarterStuffConfig stuffConfig = UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig();
 
     public StarterInvGUI() {
-        this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lInventaire de départ");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lInventaire de départ");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 4).get());
             this.kInventory.setElement(i, glass);
@@ -50,11 +51,11 @@ public class StarterInvGUI {
             kInventory.setElement(22, new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §cInventaire manquant").lore("", "§8┃ §fL'inventaire de départ §cn'a pas été configuré", "§8┃ §fpar l'Host de la partie").get()));
         } else {
             final int[] slot = {9};
-            for (ItemStack itemStack : stuffConfig.getStartInv()) {
-                if (itemStack == null) {
+            for (String itemStack : stuffConfig.getStartInv()) {
+                if (itemStack == null || itemStack.contains("BARRIER")) {
                     slot[0]++;
                 } else {
-                    this.kInventory.setElement(slot[0], new KItem(itemStack));
+                    this.kInventory.setElement(slot[0], new KItem(ItemStackToString.ItemStackFromString(itemStack)));
                     slot[0]++;
                 }
             }
