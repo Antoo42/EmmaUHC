@@ -2,7 +2,6 @@ package fr.anto42.emma.coreManager;
 
 import fr.anto42.emma.coreManager.scoreboard.UHCScoreboard;
 import fr.blendman974.kinventory.inventories.KInventory;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -18,7 +17,8 @@ public abstract class Module {
     private List<String> desc = new ArrayList<>();
     private String dev;
     private UHCScoreboard uhcScoreboard;
-    private boolean avaible = true;
+    private boolean available = true;
+    private String version = "V1.0";
 
 
 
@@ -100,11 +100,19 @@ public abstract class Module {
         this.dev = dev;
     }
 
-    public boolean isAvaible() {
-        return avaible;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setAvaible(boolean avaible) {
-        this.avaible = avaible;
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

@@ -25,12 +25,10 @@ public class UHCTimer extends BukkitRunnable {
             this.cancel();
         uhc.getUhcData().setTimer(uhc.getUhcData().getTimer() + 1);
         if (uhc.getUhcConfig().getPvp()*60 == uhc.getUhcData().getTimer() && !uhc.getUhcData().isPvp()){
-            if (!uhc.getUhcData().isPvp()){
-                uhc.getUhcData().setPvp(true);
-                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le PvP est désormais §aactif§7 !");
-                SoundUtils.playSoundToAll(Sound.WOLF_GROWL);
-                Bukkit.getServer().getPluginManager().callEvent(new PvPEvent());
-            }
+            uhc.getUhcData().setPvp(true);
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le PvP est désormais §aactif§7 !");
+            SoundUtils.playSoundToAll(Sound.WOLF_GROWL);
+            Bukkit.getServer().getPluginManager().callEvent(new PvPEvent());
         }
         if (uhc.getUhcConfig().getRoles()*60 == uhc.getUhcData().getTimer() && !uhc.getUhcData().isRoles()) {
             uhc.getUhcData().setRoles(true);

@@ -9,15 +9,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 
 public class NoBreak extends UHCScenario {
-    public NoBreak(ScenarioManager scenarioManager, int page) {
-        super("NoBreak", new ItemCreator(Material.BLAZE_ROD).get(), scenarioManager, page);
+    public NoBreak(ScenarioManager scenarioManager) {
+        super("NoBreak", new ItemCreator(Material.BLAZE_ROD).get(), scenarioManager);
         setDesc("§8┃ §fLes outils et les armes sont désormais incassables");
         setScenarioType(ScenarioType.STUFF);
+        setAvaible(false);
     }
 
     @EventHandler
     public void onDamage(PlayerItemDamageEvent event){
-        if (!getScenarioManager().isEnabled("NoBreak"))
+        if (!isActivated())
             return;
         event.setCancelled(true);
     }

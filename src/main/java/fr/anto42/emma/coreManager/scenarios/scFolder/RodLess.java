@@ -12,8 +12,8 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class RodLess extends UHCScenario implements Listener {
-    public RodLess(ScenarioManager scenarioManager, int page) {
-        super("RodLess", new ItemCreator(Material.FISHING_ROD).get(), scenarioManager, page);
+    public RodLess(ScenarioManager scenarioManager) {
+        super("RodLess", new ItemCreator(Material.FISHING_ROD).get(), scenarioManager);
         super.setDesc("§8┃ §fIl est maintenant §cimpossible §fde craft des cannes à pêche");
         setScenarioType(ScenarioType.PVP);
     }

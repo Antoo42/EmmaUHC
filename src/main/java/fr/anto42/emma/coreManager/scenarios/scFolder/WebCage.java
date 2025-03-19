@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WebCage extends UHCScenario {
-    public WebCage(ScenarioManager scenarioManager, int i) {
-        super("WebCage", new ItemStack(Material.WEB), scenarioManager, i);
+    public WebCage(ScenarioManager scenarioManager) {
+        super("WebCage", new ItemStack(Material.WEB), scenarioManager);
         setDesc("§8┃ §fA la mort d'un joueur, une cage de toiles d'araignée apparaîtra autour de ce dernier");
         setScenarioType(ScenarioType.PVP);
     }

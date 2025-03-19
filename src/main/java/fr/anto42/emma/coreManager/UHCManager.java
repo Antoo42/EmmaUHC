@@ -4,6 +4,10 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.ScenarioType;
 import fr.anto42.emma.coreManager.uis.*;
+import fr.anto42.emma.coreManager.uis.config.*;
+import fr.anto42.emma.coreManager.uis.config.worlds.BorderConfigGUI;
+import fr.anto42.emma.coreManager.uis.config.worlds.WorldSettingsGUI;
+import fr.anto42.emma.coreManager.votes.VoteSystem;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.modes.classic.ClassicModule;
 import fr.anto42.emma.game.modes.coldWar.ColdWarUHC;
@@ -39,6 +43,8 @@ public class UHCManager {
         return scenarioManager;
     }
 
+    private final VoteSystem voteSystem;
+
     public UHCManager() {
         ClassicModule module = new ClassicModule();
         this.moduleList.add(module);
@@ -50,6 +56,11 @@ public class UHCManager {
         moduleList.add(new SwitchModule());
         moduleList.add(new TGModule());
         moduleList.add(new TrueLoveModule());
+        voteSystem = new VoteSystem();
+    }
+
+    public VoteSystem getVoteSystem() {
+        return voteSystem;
     }
 
     public WorldManager getWorldManager() {
@@ -75,7 +86,7 @@ public class UHCManager {
     }
 
     public KInventory getScenariosConfigGUI() {
-        return new ScenariosConfigGUI(scenarioManager, 1, ScenarioType.ALL).getkInventory();
+        return new ScenariosConfigGUI(scenarioManager, ScenarioType.ALL, 0).getkInventory();
     }
 
     public KInventory getBorderConfigGUI() {

@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class DiamondBlood extends UHCScenario {
 
-    public DiamondBlood(ScenarioManager scenarioManager, int page) {
-        super("DiamondBlood", new ItemStack(Material.DIAMOND), scenarioManager, page);
+    public DiamondBlood(ScenarioManager scenarioManager) {
+        super("DiamondBlood", new ItemStack(Material.DIAMOND), scenarioManager);
         super.setDesc("§8┃ §fMiné des diamants fait perdre un demi-coeur");
         setScenarioType(ScenarioType.MINNING);
     }

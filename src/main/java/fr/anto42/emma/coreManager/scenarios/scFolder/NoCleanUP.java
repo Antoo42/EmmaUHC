@@ -13,8 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class NoCleanUP extends UHCScenario implements Listener {
-    public NoCleanUP(ScenarioManager scenarioManager, int page) {
-        super("NoCleanUP", new ItemCreator(SkullList.HEART.getItemStack()).get(), scenarioManager, page);
+    public NoCleanUP(ScenarioManager scenarioManager) {
+        super("NoCleanUP", new ItemCreator(SkullList.HEART.getItemStack()).get(), scenarioManager);
         super.setDesc("§8┃ §fLors d'un kill, le tueur récupère x coeurs");
         super.setConfigurable(true);
         super.setkInventory(new NoCleanUPGUI(this).getkInventory());

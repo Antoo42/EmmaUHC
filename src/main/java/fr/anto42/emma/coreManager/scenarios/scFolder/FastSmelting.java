@@ -13,8 +13,8 @@ import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class FastSmelting extends UHCScenario implements Listener {
-    public FastSmelting(ScenarioManager scenarioManager, int page) {
-        super("FastSmelting", new ItemCreator(Material.FURNACE).get(), scenarioManager, page);
+    public FastSmelting(ScenarioManager scenarioManager) {
+        super("FastSmelting", new ItemCreator(Material.FURNACE).get(), scenarioManager);
         super.setDesc("§8┃ §fLes minérais cuissent beaucoup plus vites");
         setScenarioType(ScenarioType.MINNING);
     }

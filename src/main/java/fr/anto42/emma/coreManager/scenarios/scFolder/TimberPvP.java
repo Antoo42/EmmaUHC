@@ -14,8 +14,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class TimberPvP extends UHCScenario implements Listener{
-    public TimberPvP(ScenarioManager scenarioManager, int page) {
-        super("TimberPvP", new ItemCreator(Material.IRON_AXE).get(), scenarioManager, page);
+    public TimberPvP(ScenarioManager scenarioManager) {
+        super("TimberPvP", new ItemCreator(Material.IRON_AXE).get(), scenarioManager);
         setDesc("§8┃ §fLes arbres sont coupés au premier coup de poing jusqu'au PvP");
         setScenarioType(ScenarioType.MINNING);
     }

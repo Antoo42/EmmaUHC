@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.commands;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.utils.SoundUtils;
 import org.bukkit.GameMode;
@@ -25,7 +26,7 @@ public class SpawnCommand extends Command {
         SoundUtils.playSoundToPlayer(((Player) sender).getPlayer(), Sound.VILLAGER_NO);
         return true;
     }
-        ((Player) sender).teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
+        ((Player) sender).teleport(WorldManager.getSpawnLocation());
         ((Player) sender).setGameMode(GameMode.SURVIVAL);
         return false;
     }

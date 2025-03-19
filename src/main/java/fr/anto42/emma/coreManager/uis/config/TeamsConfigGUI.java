@@ -1,4 +1,4 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
@@ -50,13 +51,13 @@ public class TeamsConfigGUI {
             if (uhcTeamManager.getSlots() == 2 && kInventoryClickContext.getClickType() == ClickType.RIGHT && uhcTeamManager.isActivated()){
                 uhcTeamManager.setActivated(false);
                 UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() != null).forEach(UHCPlayer::leaveTeam);
-            }else if (uhcTeamManager.isActivated() && uhcTeamManager.getSlots() == 15 && kInventoryClickContext.getClickType() == ClickType.LEFT){
+            }else if (uhcTeamManager.isActivated() && uhcTeamManager.getSlots() == 30 && kInventoryClickContext.getClickType() == ClickType.LEFT){
                 uhcTeamManager.setActivated(false);
                 UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() != null).forEach(UHCPlayer::leaveTeam);
             }
             else if (!uhcTeamManager.isActivated() && kInventoryClickContext.getClickType() == ClickType.RIGHT){
                 uhcTeamManager.setActivated(true);
-                uhcTeamManager.setSlots(15);
+                uhcTeamManager.setSlots(30);
             }else if (!uhcTeamManager.isActivated() && kInventoryClickContext.getClickType() == ClickType.LEFT){
                 uhcTeamManager.setSlots(2);
                 uhcTeamManager.setActivated(true);
@@ -71,19 +72,71 @@ public class TeamsConfigGUI {
         });
         this.kInventory.setElement(22, teams);
 
-        KItem friendlyFire = new KItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fFriendlyFire").lore("", "§8§l» §fStatut:  " + translate(uhcTeamManager.isFriendlyFire()), "", "§8┃ §fChoisissez d'§aactiver §Cou non §fles degats entre équipiers", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem friendlyFire = new KItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fFriendlyFire").lore("", "§8§l» §fStatut:  " + translate(uhcTeamManager.isFriendlyFire()), "", "§8┃ §fChoisissez d'§aactiver §Cou non §fles degats entre équipiers", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         friendlyFire.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (uhcTeamManager.isFriendlyFire()) {
                 uhcTeamManager.setFriendlyFire(false);
-                friendlyFire.setItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fFriendlyFire").lore("", "§8§l» §fStatut: " + translate(uhcTeamManager.isFriendlyFire()), "", "§8┃ §fChoisissez d'§aactiver §Cou non §fles degats entre équipiers", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                friendlyFire.setItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fFriendlyFire").lore("", "§8§l» §fStatut: " + translate(uhcTeamManager.isFriendlyFire()), "", "§8┃ §fChoisissez d'§aactiver §Cou non §fles degats entre équipiers", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             }else{
                 uhcTeamManager.setFriendlyFire(true);
-                friendlyFire.setItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fFriendlyFire").lore("", "§8§l» §fStatut: " + translate(uhcTeamManager.isFriendlyFire()), "", "§8┃ §fChoisissez d'§aactiver §Cou non §fles degats entre équipiers", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                friendlyFire.setItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fFriendlyFire").lore("", "§8§l» §fStatut: " + translate(uhcTeamManager.isFriendlyFire()), "", "§8┃ §fChoisissez d'§aactiver §Cou non §fles degats entre équipiers", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
 
             }
         });
-        this.kInventory.setElement(24, friendlyFire);
+        this.kInventory.setElement(21, friendlyFire);
 
+        KItem numberOfTeams = new KItem(new ItemCreator(SkullList.NUMBER_CUBE.getItemStack()).name("§8┃ §fNombre d'équipes").lore("", "§8§l» §fStatut:  §b" + uhcTeamManager.getMaxTeams(), "", "§8┃ §fConfiguez le §anombre d'équipes", "§8┃ §fde votre partie", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit§f pour retirer 1.").get());
+        numberOfTeams.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
+            if (kInventoryClickContext.getClickType().isLeftClick()) {
+                if (uhcTeamManager.getMaxTeams() >= uhcTeamManager.getUhcTeams().size())
+                    return;
+                uhcTeamManager.setMaxTeams(uhcTeamManager.getMaxTeams() + 1);
+                if (UHC.getInstance().getUhcGame().getGameState() != GameState.WAITING){
+                    player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça maintenant !");
+                    SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
+                    return;
+                }
+                PlayersUtils.broadcastMessage("§cReset §7de toutes les équipes !");
+                UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() != null).forEach(UHCPlayer::leaveTeam);
+                for(Player players : Bukkit.getOnlinePlayers()){
+                    players.getInventory().clear();
+                    PlayersUtils.giveWaitingStuff(players);
+                }
+                //UHCTeamManager.getInstance().createTeams();
+            }
+            else if (kInventoryClickContext.getClickType().isRightClick()) {
+                if (uhcTeamManager.getMaxTeams() <= 2)
+                    return;
+                uhcTeamManager.setMaxTeams(uhcTeamManager.getMaxTeams() - 1);
+                if (UHC.getInstance().getUhcGame().getGameState() != GameState.WAITING){
+                    player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça maintenant !");
+                    SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
+                    return;
+                }
+                PlayersUtils.broadcastMessage("§cReset §7de toutes les équipes !");
+                UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() != null).forEach(UHCPlayer::leaveTeam);
+                for(Player players : Bukkit.getOnlinePlayers()){
+                    players.getInventory().clear();
+                    PlayersUtils.giveWaitingStuff(players);
+                }
+            }
+            numberOfTeams.setItem(new ItemCreator(SkullList.NUMBER_CUBE.getItemStack()).name("§8┃ §fNombre d'équipes").lore("", "§8§l» §fStatut:  §b" + uhcTeamManager.getMaxTeams(), "", "§8┃ §fConfiguez le §anombre d'équipes", "§8┃ §fde votre partie", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit§f pour retirer 1.").get());
+        });
+        this.kInventory.setElement(23, numberOfTeams);
+
+        KItem randomTeams = new KItem(new ItemCreator(SkullList.UNKNOWN_ELEMENT.getItemStack()).name("§8┃ §fEquipes aléatoires").lore("", "§8┃ §fStatut: " + translate(uhcTeamManager.isRandomTeam()), "", "§8┃ §fUne envie de pimenter la", "§8┃ §fpartie en mélangeant les équipes ?", "", "§8§l» §6Cliquez §fpour activer.").get());
+        randomTeams.addCallback((kInventory1, item, player, clickContext) -> {
+            uhcTeamManager.setRandomTeam(!uhcTeamManager.isRandomTeam());
+            randomTeams.setItem(new ItemCreator(SkullList.UNKNOWN_ELEMENT.getItemStack()).name("§8┃ §fEquipes aléatoires").lore("", "§8┃ §fStatut: " + translate(uhcTeamManager.isRandomTeam()), "", "§8┃ §fUne envie de pimenter la", "§8┃ §fpartie en mélangeant les équipes ?", "", "§8§l» §6Cliquez §fpour activer.").get());
+            Bukkit.getOnlinePlayers().stream().filter(player1 -> player != player1).forEach(HumanEntity::closeInventory);
+            PlayersUtils.broadcastMessage("§cReset §7de toutes les équipes !");
+            UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() != null).forEach(UHCPlayer::leaveTeam);
+            for(Player players : Bukkit.getOnlinePlayers()){
+                players.getInventory().clear();
+                PlayersUtils.giveWaitingStuff(players);
+            }
+        });
+        this.kInventory.setElement(24, randomTeams);
 
         KItem directionnalArrow = new KItem(new ItemCreator(SkullList.CIBLE.getItemStack()).name("§8┃ §fFlèches directionnelles").lore("", "§8§l» §fStatut: " + translate(uhcTeamManager.isDirectionalArrow()), "", "§8┃ §fLorsque ce paramètre est §aactivé§f,", "§8┃ §fles joueurs connaissent les positions de leurs alliés", "", "§8§l» §6Cliquez §fpour activer.").get());
         directionnalArrow.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
@@ -97,14 +150,14 @@ public class TeamsConfigGUI {
         });
         this.kInventory.setElement(20, directionnalArrow);
 
-        KItem reload = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fRecharger les équipes").lore("", "§8┃ §fVous rencontrer un pépin avec les équipes ?", "§8┃ §fCette fonctionnalité est faîte pour vous !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem reload = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fRecharger les équipes").lore("", "§8┃ §fVous rencontrer un pépin avec les équipes ?", "§8┃ §fCette fonctionnalité est faîte pour vous !", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         reload.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (UHC.getInstance().getUhcGame().getGameState() != GameState.WAITING){
                 player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça maintenant !");
                 SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
                 return;
             }
-            Bukkit.broadcastMessage("§6§lTEAM §8§l» §cReset §7de toutes les équipes !");
+            PlayersUtils.broadcastMessage("§cReset §7de toutes les équipes !");
             UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getUhcTeam() != null).forEach(UHCPlayer::leaveTeam);
             for(Player players : Bukkit.getOnlinePlayers()){
                 players.getInventory().clear();

@@ -62,6 +62,7 @@ public class Mello extends DNRole {
             setInvestigationResultType(InvestigationResultType.SUSPECT);
         }
         if (getMeloType().equals(MeloType.EVIL)) {
+            setCanReveal(true);
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                 getUhcPlayer().getUhcTeam().getAliveUhcPlayers().stream().filter(uhcPlayer -> uhcPlayer.getRole() != null && uhcPlayer.getRole() instanceof Near).forEach(uhcPlayer -> {
                     nearPlayer = uhcPlayer;

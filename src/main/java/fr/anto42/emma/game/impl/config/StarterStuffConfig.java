@@ -1,46 +1,45 @@
 package fr.anto42.emma.game.impl.config;
 
+import fr.anto42.emma.utils.saves.ItemStackToString;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class StarterStuffConfig {
+    ItemStack barrier = new ItemStack(Material.BARRIER);
+    private String head = ItemStackToString.itemStackToString(barrier);
+    private String body = ItemStackToString.itemStackToString(barrier);
+    private String leggins = ItemStackToString.itemStackToString(barrier);
+    private String boots = ItemStackToString.itemStackToString(barrier);
 
-    private ItemStack head;
-    private ItemStack body;
-    private ItemStack leggins;
-    private ItemStack boots;
-
-    public ItemStack getHead() {
+    public String getHead() {
         return head;
     }
 
-    public void setHead(ItemStack head) {
+    public void setHead(String head) {
         this.head = head;
     }
 
-    public ItemStack getBody() {
+    public String getBody() {
         return body;
     }
 
-    public void setBody(ItemStack body) {
+    public void setBody(String body) {
         this.body = body;
     }
 
-    public ItemStack getLeggins() {
+    public String getLeggins() {
         return leggins;
     }
 
-    public void setLeggins(ItemStack leggins) {
+    public void setLeggins(String leggins) {
         this.leggins = leggins;
     }
 
-    public ItemStack getBoots() {
+    public String getBoots() {
         return boots;
     }
 
-    public void setBoots(ItemStack boots) {
+    public void setBoots(String boots) {
         this.boots = boots;
     }
 

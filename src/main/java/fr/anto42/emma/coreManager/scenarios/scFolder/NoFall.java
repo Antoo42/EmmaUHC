@@ -11,8 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class NoFall extends UHCScenario implements Listener {
-    public NoFall(ScenarioManager scenarioManager, int page) {
-        super("NoFall", new ItemCreator(Material.GOLD_BOOTS).get(), scenarioManager, page);
+    public NoFall(ScenarioManager scenarioManager) {
+        super("NoFall", new ItemCreator(Material.GOLD_BOOTS).get(), scenarioManager);
         super.setDesc("§8┃ §fLes dégats de chute sont désormais d'un autre temps");
         setScenarioType(ScenarioType.PVE);
     }

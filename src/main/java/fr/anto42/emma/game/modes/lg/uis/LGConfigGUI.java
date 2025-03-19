@@ -1,7 +1,7 @@
 package fr.anto42.emma.game.modes.lg.uis;
 
 import fr.anto42.emma.UHC;
-import fr.anto42.emma.coreManager.uis.GameModeGUI;
+import fr.anto42.emma.coreManager.uis.config.GameModeGUI;
 import fr.anto42.emma.game.modes.lg.utils.LGUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;

@@ -9,19 +9,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 public class NoNameTag extends UHCScenario {
-    public NoNameTag(ScenarioManager scenarioManager, int page) {
-        super("NoNameTag", new ItemCreator(Material.NAME_TAG).get(), scenarioManager, page);
+    public NoNameTag(ScenarioManager scenarioManager) {
+        super("NoNameTag", new ItemCreator(Material.NAME_TAG).get(), scenarioManager);
         super.setDesc("§8┃ §fLes pseudos sont cachés");
         setScenarioType(ScenarioType.FUN);
+        setAvaible(false);
     }
 
 
     @Override
-    public void onEnable() {
+    public void onStart() {
         Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
             if (!isActivated())
                 return;
-            Bukkit.getOnlinePlayers().forEach(player -> player.setDisplayName(null));
+            Bukkit.getOnlinePlayers().forEach(player -> player.setDisplayName(""));
         }, 0L, 30L);
     }
 }

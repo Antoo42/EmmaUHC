@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class FireLess extends UHCScenario {
-    public FireLess(ScenarioManager scenarioManager, int page) {
-        super("FireLess", new ItemCreator(Material.FLINT_AND_STEEL).get(), scenarioManager, page);
+    public FireLess(ScenarioManager scenarioManager) {
+        super("FireLess", new ItemCreator(Material.FLINT_AND_STEEL).get(), scenarioManager);
         super.setDesc("§8┃ §fLes degâts du feu sont désactivés");
         setScenarioType(ScenarioType.PVP);
     }

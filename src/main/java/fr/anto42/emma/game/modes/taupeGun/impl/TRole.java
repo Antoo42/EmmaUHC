@@ -44,4 +44,23 @@ public class TRole extends Role {
     public boolean isHasClaim() {
         return hasClaim;
     }
+
+    private boolean reveal = false;
+    private boolean superReveal = false;
+
+    public boolean isReveal() {
+        return reveal;
+    }
+
+    public void setReveal(boolean reveal) {
+        this.reveal = reveal;
+    }
+
+    public boolean isSuperReveal() {
+        return superReveal;
+    }
+
+    public void setSuperReveal(boolean superReveal) {
+        this.superReveal = superReveal;
+    }
 }

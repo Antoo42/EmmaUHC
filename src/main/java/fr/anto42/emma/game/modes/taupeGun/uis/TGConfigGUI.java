@@ -5,7 +5,7 @@ package fr.anto42.emma.game.modes.taupeGun.uis;
  */
 
 import fr.anto42.emma.UHC;
-import fr.anto42.emma.coreManager.uis.GameModeGUI;
+import fr.anto42.emma.coreManager.uis.config.GameModeGUI;
 import fr.anto42.emma.game.modes.taupeGun.TGModule;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.SoundUtils;
@@ -84,7 +84,7 @@ public class TGConfigGUI {
         });
         this.kInventory.setElement(23, superTaupe);
 
-        KItem durationSuperTaupe = new KItem(new ItemCreator(Material.WATCH).name("§8┃ §fSéléction des Super Taupes").lore("", "§8» §fStatut: §c" + module.getConfig().getTimerSuperTaupe() + "§f minutes après le PvP", "", "§8┃ §fChsoississez le temps d'activation des §aSuper Taupes", "", "§8» §6Clique-Droit §fpour diminuer de 1.","§8» §6Clique-Gauche§f pour augmenter de 1.").get());
+        KItem durationSuperTaupe = new KItem(new ItemCreator(Material.WATCH).name("§8┃ §fSélection des Super Taupes").lore("", "§8» §fStatut: §c" + module.getConfig().getTimerSuperTaupe() + "§f minutes après le PvP", "", "§8┃ §fChsoississez le temps d'activation des §aSuper Taupes", "", "§8» §6Clique-Droit §fpour diminuer de 1.","§8» §6Clique-Gauche§f pour augmenter de 1.").get());
         durationSuperTaupe.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if(kInventoryClickContext.getClickType().isLeftClick()){
                 if(module.getConfig().getTimerSuperTaupe() == 20){
@@ -97,7 +97,7 @@ public class TGConfigGUI {
                 }else
                     module.getConfig().setTimerSuperTaupe(module.getConfig().getTimerSuperTaupe() - 1);
             }
-            durationSuperTaupe.setItem(new ItemCreator(Material.WATCH).name("§8┃ §fSéléction des Super Taupes").lore("", "§8» §fStatut: §c" + module.getConfig().getTimerSuperTaupe() + "§f minutes après le PvP", "", "§8┃ §fChsoississez le temps d'activation des §aSuper Taupes", "", "§8» §6Clique-Droit §fpour diminuer de 1.","§8» §6Clique-Gauche§f pour augmenter de 1.").get());
+            durationSuperTaupe.setItem(new ItemCreator(Material.WATCH).name("§8┃ §fSélection des Super Taupes").lore("", "§8» §fStatut: §c" + module.getConfig().getTimerSuperTaupe() + "§f minutes après le PvP", "", "§8┃ §fChsoississez le temps d'activation des §aSuper Taupes", "", "§8» §6Clique-Droit §fpour diminuer de 1.","§8» §6Clique-Gauche§f pour augmenter de 1.").get());
         });
         this.kInventory.setElement(24, durationSuperTaupe);
     }

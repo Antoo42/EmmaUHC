@@ -16,8 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public class NineSlots extends UHCScenario {
-    public NineSlots(ScenarioManager scenarioManager, int i) {
-        super("NineSlots", new ItemStack(Material.BARRIER), scenarioManager, i);
+    public NineSlots(ScenarioManager scenarioManager) {
+        super("NineSlots", new ItemStack(Material.BARRIER), scenarioManager);
         setScenarioType(ScenarioType.STUFF);
         setDesc("§8┃ §fVous ne pourrez jouer qu'avec les 9 slots de la hotbar");
     }

@@ -12,8 +12,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class SafeMiners extends UHCScenario implements Listener {
-    public SafeMiners(ScenarioManager scenarioManager, int page) {
-        super("SafeMiners", new ItemStack(Material.DIAMOND_PICKAXE), scenarioManager, page);
+    public SafeMiners(ScenarioManager scenarioManager) {
+        super("SafeMiners", new ItemStack(Material.DIAMOND_PICKAXE), scenarioManager);
         super.setDesc("§8┃ §fVous ne prenez aucun degâts tant que la bordure ne bouge pas sous une hauteur x");
         super.setConfigurable(true);
         super.setkInventory(new SafeMinersGUI(this).getkInventory());

@@ -3,6 +3,7 @@ package fr.anto42.emma.game.modes.deathNote.listeners;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.Module;
 import fr.anto42.emma.coreManager.listeners.customListeners.DeathEvent;
+import fr.anto42.emma.coreManager.listeners.customListeners.EpisodeEvent;
 import fr.anto42.emma.coreManager.listeners.customListeners.RolesEvent;
 import fr.anto42.emma.coreManager.listeners.customListeners.StartEvent;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
@@ -10,6 +11,7 @@ import fr.anto42.emma.coreManager.players.roles.Role;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
+import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.impl.UHCData;
 import fr.anto42.emma.game.modes.deathNote.DeathNoteModule;
@@ -56,10 +58,24 @@ public class DeathNoteListeners implements Listener {
     }
 
     @EventHandler
+    public void onEpisode (EpisodeEvent event) {
+        if (!uhcGame.getGameState().equals(GameState.PLAYING))
+            return;
+        PlayersUtils.broadcastMessage("");
+        PlayersUtils.broadcastMessage("§7Début de l'épisode :§a" + uhcData.getEpisode());
+        PlayersUtils.broadcastMessage("");
+        SoundUtils.playSoundToAll(Sound.ORB_PICKUP);
+    }
+
+
+    UHC uhc = UHC.getInstance();
+    UHCGame uhcGame = uhc.getUhcGame();
+    UHCData uhcData = uhcGame.getUhcData();
+
+
+    @EventHandler
     public void onRoles(RolesEvent event) {
-        UHC uhc = UHC.getInstance();
-        UHCGame uhcGame = uhc.getUhcGame();
-        UHCData uhcData = uhcGame.getUhcData();
+
 
         uhcData.setChat(false);
 
@@ -81,15 +97,16 @@ public class DeathNoteListeners implements Listener {
 
             List<Class<? extends Role>> roles = new ArrayList<>();
             roles.add(Kira.class);
-            roles.add(Mello.class);
-            roles.add(Shinigami.class);
-            roles.add(Near.class);
+            //roles.add(Mello.class);
+            //roles.add(Shinigami.class);
+            //roles.add(Near.class);
             for (int i = 4; i < playerCount; i++) {
                 roles.add(Investigator.class);
             }
 
             Collections.shuffle(roles);
             Collections.shuffle(uhcPlayerList);
+
 
             System.out.println("Joueurs mélangés : " + uhcPlayerList);
             System.out.println("Rôles mélangés : " + roles);
@@ -200,13 +217,15 @@ public class DeathNoteListeners implements Listener {
             hitter.sendClassicMessage("§cVous ne pouvez essayer de KiraKiller qu'une seule fois par épisode !");
             return;
         }
+        ((Near) hitter.getRole()).setTryKiraKiller(true);
         if (target.getRole() instanceof Kira && !((Kira) target.getRole()).isReveal()) {
             target.getBukkitPlayer().setMaxHealth(target.getBukkitPlayer().getMaxHealth() - (((Kira) target.getRole()).isGetKiraKiller() ? 5 : 10));
             ((Kira) target.getRole()).setGetKiraKiller(true);
-            ((Near) hitter.getRole()).setTryKiraKiller(true);
         }
         else {
-            hitter.getBukkitPlayer().setMaxHealth(hitter.getBukkitPlayer().getMaxHealth() - 10);
+            if (hitter.getBukkitPlayer().getMaxHealth() == 10) {
+                hitter.getBukkitPlayer().setHealth(0);
+            } else hitter.getBukkitPlayer().setMaxHealth(hitter.getBukkitPlayer().getMaxHealth() - 10);
         }
     }
 

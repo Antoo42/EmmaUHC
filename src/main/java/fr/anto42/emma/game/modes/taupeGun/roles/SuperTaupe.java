@@ -22,10 +22,25 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
 public class SuperTaupe extends TRole {
-    public SuperTaupe(Module gamemode) {
+    private final Taupe previousTaupe;
+
+    public SuperTaupe(Module gamemode, Taupe previousTaupe) {
         super("Super Taupe", null, gamemode);
+        this.previousTaupe = previousTaupe;
     }
 
+
+
+    public Taupe getPreviousTaupe() {
+        return previousTaupe;
+    }
+
+    @Override
+    public void setRole() {
+        setHasClaim(getPreviousTaupe().isHasClaim());
+        setReveal(getPreviousTaupe().isReveal());
+        setTaupeTeam(getPreviousTaupe().getTaupeTeam());
+    }
 
     @Override
     public void sendDesc() {
@@ -35,34 +50,46 @@ public class SuperTaupe extends TRole {
 
         getUhcPlayer().sendMessage("§6══════════════════════════════");
         getUhcPlayer().sendMessage("§eEffets & Commandes :");
-        getUhcPlayer().sendMessage("  §8⦿ §fUtilisez /t <message> pour communiquer avec votre équipe de taupes.");
-        getUhcPlayer().sendMessage("  §8⦿ §fRévélez votre identité aux autres joueurs en utilisant /reveal. Vous obtiendrez une pomme d'or en conséquence.");
+        getUhcPlayer().sendMessage("  §7➤ §fUtilisez /t <message> pour communiquer avec votre équipe de taupes, tant qu'il est encore temps.");
+        getUhcPlayer().sendMessage("  §7➤ §fRévélez votre identité aux autres joueurs en utilisant /reveal. Vous obtiendrez une pomme d'or en conséquence.");
         getUhcPlayer().sendMessage("§6══════════════════════════════");
     }
 
 
+
     @Override
     public void reveal() {
-        if(GameUtils.getModule().getData().getRevealPlayers().contains(getUhcPlayer())){
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous avez déjà révélé votre identité !");
+        if(isReveal() && isSuperReveal()){
+            getUhcPlayer().sendClassicMessage("§cVous avez déjà révélé votre identité !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
         if (getUhcPlayer().getPlayerState() != UHCPlayerStates.ALIVE) {
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous ne pouvez pas faire ça en étant mort !");
+            getUhcPlayer().sendClassicMessage("§cVous ne pouvez pas faire ça en étant mort !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
         if (UHC.getInstance().getUhcGame().getGameState() != GameState.PLAYING) {
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous ne pouvez pas faire ça maintenant !");
+            getUhcPlayer().sendClassicMessage("§cVous ne pouvez pas faire ça maintenant !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
-        getUhcPlayer().leaveTeam();
-        getUhcPlayer().joinTeam(UHCTeamManager.getInstance().createNewTeam("Super-Taupe", "§4§lS-TAUPE §4☠ ", DyeColor.RED, 14, "§4"));
-        getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
-        Bukkit.broadcastMessage("§6§lUHC §8§l» §c§l" + getUhcPlayer().getName() + "§7 se rèvéle être une §4§lsuper taupe §7!");
-        SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
+        if (!isReveal()) {
+            getUhcPlayer().leaveTeam();
+            getUhcPlayer().joinTeam(getTaupeTeam());
+            getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
+            Bukkit.broadcastMessage("§6§lUHC §8§l» §c§l" + getUhcPlayer().getName() + "§7 se rèvéle être une §c§ltaupe §7!");
+            SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
+            setReveal(true);
+        } else {
+            getUhcPlayer().leaveTeam();
+            getUhcPlayer().joinTeam(UHCTeamManager.getInstance().createNewTeam("Super-Taupe", "§4§lS-TAUPE §4☠ ", DyeColor.RED, 14, "§4"));
+            getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
+            Bukkit.broadcastMessage("§6§lUHC §8§l» §c§l" + getUhcPlayer().getName() + "§7 se rèvéle être une §4§lsuper taupe §7!");
+            SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
+            setSuperReveal(true);
+        }
+
         GameUtils.getModule().getData().getRevealPlayers().add(getUhcPlayer());
 
         int l = 0;
@@ -96,7 +123,7 @@ public class SuperTaupe extends TRole {
             return;
         }
         if (UHC.getInstance().getUhcGame().getGameState() != GameState.PLAYING) {
-            getUhcPlayer().sendMessage("§3§lPeijin §8§l» §cVous ne pouvez pas faire ça maintenant !");
+            getUhcPlayer().sendClassicMessage("§cVous ne pouvez pas faire ça maintenant !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }

@@ -9,8 +9,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class NoFood extends UHCScenario {
-    public NoFood(ScenarioManager scenarioManager, int page) {
-        super("NoFood", new ItemStack(Material.COOKED_BEEF), scenarioManager, page);
+    public NoFood(ScenarioManager scenarioManager) {
+        super("NoFood", new ItemStack(Material.COOKED_BEEF), scenarioManager);
         super.setDesc("§8┃ §fLes joueurs ne perdent plus de satiété");
         setScenarioType(ScenarioType.PVE);
     }

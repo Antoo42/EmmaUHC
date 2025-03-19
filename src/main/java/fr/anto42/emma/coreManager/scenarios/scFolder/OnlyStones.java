@@ -10,16 +10,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class OnlyStones extends UHCScenario {
-    public OnlyStones(ScenarioManager scenarioManager, int page) {
-        super("OnlyStones", new ItemStack(Material.COBBLESTONE), scenarioManager, page);
+    public OnlyStones(ScenarioManager scenarioManager) {
+        super("OnlyStones", new ItemStack(Material.COBBLESTONE), scenarioManager);
         setDesc("§8┃ §fL'andésite et la diorite deviennent de la cobblestone quand elles sont cassées");
         setScenarioType(ScenarioType.MINNING);
     }
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
-        if (event.isCancelled())
-            return;
         if(!isActivated())
             return;
         if (event.getBlock().getType() == Material.STONE) {

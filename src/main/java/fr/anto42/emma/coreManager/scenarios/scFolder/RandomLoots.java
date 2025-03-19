@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class RandomLoots extends UHCScenario {
-    public RandomLoots(ScenarioManager scenarioManager, int page) {
-        super("RandomLoots", new ItemStack(Material.IRON_INGOT), scenarioManager, page);
+    public RandomLoots(ScenarioManager scenarioManager) {
+        super("RandomLoots", new ItemStack(Material.IRON_INGOT), scenarioManager);
         super.setDesc("§8┃ §fLes loots sont tous aléatoires");
         setScenarioType(ScenarioType.WORLD);
         dropList = new HashMap<>();

@@ -34,20 +34,20 @@ public class AdminGUI {
         this.kInventory.setElement(49, back);
 
 
-        KItem messages = new KItem(new ItemCreator(Material.PAPER).name("§8┃ §fMessages privés").lore("", "§8§l» §fStatut: " + translate(UHC.getInstance().getConfig().getBoolean("privatemessages")), "", "§8┃ §fAutorisez les joueurs à communiquer entre eux ou non", "", "§8§l» §6Cliquez§f pour séléctionner.").get());
+        KItem messages = new KItem(new ItemCreator(Material.PAPER).name("§8┃ §fMessages privés").lore("", "§8§l» §fStatut: " + translate(UHC.getInstance().getConfig().getBoolean("privatemessages")), "", "§8┃ §fAutorisez les joueurs à communiquer entre eux ou non", "", "§8§l» §6Cliquez§f pour sélectionner.").get());
         messages.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (UHC.getInstance().getConfig().getBoolean("privatemessages"))
                 UHC.getInstance().getConfig().set("privatemessages", false);
             else
                 UHC.getInstance().getConfig().set("privatemessages", true);
-            messages.setItem(new ItemCreator(Material.PAPER).name("§8┃ §fMessages privés").lore("", "§8§l» §fStatut: " + translate(UHC.getInstance().getConfig().getBoolean("privatemessages")), "", "§8┃ §fAutorisez les joueurs à communiquer entre eux ou non", "", "§8§l» §6Cliquez§f pour séléctionner.").get());
+            messages.setItem(new ItemCreator(Material.PAPER).name("§8┃ §fMessages privés").lore("", "§8§l» §fStatut: " + translate(UHC.getInstance().getConfig().getBoolean("privatemessages")), "", "§8┃ §fAutorisez les joueurs à communiquer entre eux ou non", "", "§8§l» §6Cliquez§f pour sélectionner.").get());
         });
 
         this.kInventory.setElement(20, messages);
 
 
 
-        KItem stop = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fFermer le serveur §7(" + Bukkit.getServerName() + ")").lore("", "§8┃ §fFermez simplement le serveur par le biais de cet item", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem stop = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fFermer le serveur §7(" + Bukkit.getServerName() + ")").lore("", "§8┃ §fFermez simplement le serveur par le biais de cet item", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         stop.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
                 Bukkit.shutdown();
         });

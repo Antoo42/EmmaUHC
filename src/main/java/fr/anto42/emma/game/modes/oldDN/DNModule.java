@@ -109,7 +109,7 @@ public class DNModule extends Module {
         this.dnData = new DNData();
         this.dnConfig = new DNConfig();
         this.dnModule = this;
-        super.setAvaible(false);
+        super.setAvailable(false);
     }
     @Override
     public void onStart(){

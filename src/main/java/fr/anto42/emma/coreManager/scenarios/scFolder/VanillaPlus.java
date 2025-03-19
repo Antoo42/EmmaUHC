@@ -16,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class VanillaPlus extends UHCScenario implements Listener {
 
-    public VanillaPlus(ScenarioManager scenarioManager, int page) {
-        super("VanillaPlus", new ItemCreator(Material.APPLE).get(), scenarioManager, page);
+    public VanillaPlus(ScenarioManager scenarioManager) {
+        super("VanillaPlus", new ItemCreator(Material.APPLE).get(), scenarioManager);
         super.setDesc("§8┃ §fLe taux de drop des pommes et du flint sont boostés");
         setConfigurable(true);
         setkInventory(new VanillaPlusGUI(this).getkInventory());

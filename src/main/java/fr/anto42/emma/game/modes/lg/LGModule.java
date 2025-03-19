@@ -28,7 +28,7 @@ public class LGModule extends Module {
         lgData = new LGData();
         lgConfig = new LGConfig(this);
 
-        setAvaible(false);
+        setAvailable(false);
     }
 
     //DATA

@@ -10,8 +10,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Symetrie extends UHCScenario {
-    public Symetrie(ScenarioManager scenarioManager, int page) {
-        super("Symetrie", new ItemStack(Material.PAINTING), scenarioManager, page);
+    public Symetrie(ScenarioManager scenarioManager) {
+        super("Symetrie", new ItemStack(Material.PAINTING), scenarioManager);
         setDesc("§8┃ §fChaque blocks cassés ou posés se vera attribuer le même sort à ses coordonnés inverses");
         setScenarioType(ScenarioType.WORLD);
     }

@@ -12,8 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class FinalHeal extends UHCScenario implements Listener {
-    public FinalHeal(ScenarioManager scenarioManager, int page) {
-        super("FinalHeal", new ItemCreator(SkullList.HEART.getItemStack()).get(), scenarioManager, page);
+    public FinalHeal(ScenarioManager scenarioManager) {
+        super("FinalHeal", new ItemCreator(SkullList.HEART.getItemStack()).get(), scenarioManager);
         super.setDesc("§8┃ §fAu PvP, tout les joueurs sont soignés");
         setScenarioType(ScenarioType.PVP);
     }

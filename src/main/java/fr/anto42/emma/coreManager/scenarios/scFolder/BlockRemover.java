@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockRemover extends UHCScenario {
-    public BlockRemover(ScenarioManager scenarioManager, int page) {
-        super("BlockRemover", new ItemCreator(Material.COBBLESTONE).get(), scenarioManager, page);
+    private final List<Material> materialList = new ArrayList<>();
+    public BlockRemover(ScenarioManager scenarioManager) {
+        super("BlockRemover", new ItemCreator(Material.COBBLESTONE).get(), scenarioManager);
         setDesc("§8┃ §fSupprime les blocks posés par les joueurs après x secondes");
         setConfigurable(true);
         setkInventory(new BlockRemoverGUI(this).getkInventory());
@@ -69,15 +70,14 @@ public class BlockRemover extends UHCScenario {
 
 
 
-    List<Material> materialList = new ArrayList<>();
     @EventHandler
     public void onBlock(BlockPlaceEvent event) {
         if (!isActivated())
             return;
         if (materialList.contains(event.getBlock().getType())) {
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-                if (event.getBlock().getLocation().getBlock().getWorld().getBlockAt(event.getBlock().getLocation()) != event.getBlock())
-                    return;
+                /*if (event.getBlock().getLocation().getBlock().getWorld().getBlockAt(event.getBlock().getLocation()) != event.getBlock())
+                    return;*/
                 event.getBlock().setType(Material.AIR);
             }, TimeUtils.seconds(cooldown));
         }

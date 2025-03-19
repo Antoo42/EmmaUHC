@@ -1,6 +1,8 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
+import fr.anto42.emma.coreManager.uis.rules.ScenariosActivatedGUI;
 import fr.anto42.emma.game.impl.config.UHCConfig;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
@@ -51,7 +53,7 @@ public class TimerConfigGUI {
         });
         this.kInventory.setElement(20, startGod);
 
-        KItem pvp = new KItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fPvP").lore("", "§8§l» §fStatut: §c" + uhcConfig.getPvp() + "§f minutes", "", "§8┃ §6Séléctionnez §fà partir de quand le ", "§8┃ §cPvP §fsera §aactivé", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem pvp = new KItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fPvP").lore("", "§8§l» §fStatut: §c" + uhcConfig.getPvp() + "§f minutes", "", "§8┃ §6Sélectionnez §fà partir de quand le ", "§8┃ §cPvP §fsera §aactivé", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         pvp.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm) return;
             if (kInventoryClickContext.getClickType().isLeftClick()){
@@ -63,11 +65,11 @@ public class TimerConfigGUI {
                     return;
                 uhcConfig.setPvp(uhcConfig.getPvp() - 1);
             }
-            pvp.setItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fPvP").lore("", "§8§l» §fStatut: §c" + uhcConfig.getPvp() + "§f minutes", "", "§8┃ §6Séléctionnez §fà partir de quand le ", "§8┃ §cPvP §fsera §aactivé", "", "§8§l» §6Clique-gauche §fpour augmenter de 1.", "§8§l» §6Clique-droit §fpour réduire de 1.").get());
+            pvp.setItem(new ItemCreator(Material.DIAMOND_SWORD).name("§8┃ §fPvP").lore("", "§8§l» §fStatut: §c" + uhcConfig.getPvp() + "§f minutes", "", "§8┃ §6Sélectionnez §fà partir de quand le ", "§8┃ §cPvP §fsera §aactivé", "", "§8§l» §6Clique-gauche §fpour augmenter de 1.", "§8§l» §6Clique-droit §fpour réduire de 1.").get());
         });
         this.kInventory.setElement(21, pvp);
 
-        KItem roles = new KItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fRôles").lore("", "§8§l» §fStatut: §c" + uhcConfig.getRoles() + "§f minutes", "", "§8┃ §6Séléctionnez §fle moment de séléction des rôles ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem roles = new KItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fRôles").lore("", "§8§l» §fStatut: §c" + uhcConfig.getRoles() + "§f minutes", "", "§8┃ §6Sélectionnez §fle moment de sélection des rôles ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         roles.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm) return;
             if (kInventoryClickContext.getClickType().isLeftClick()){
@@ -79,11 +81,11 @@ public class TimerConfigGUI {
                     return;
                 uhcConfig.setRoles(uhcConfig.getRoles() - 1);
             }
-            roles.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fRôles").lore("", "§8§l» §fStatut: §c" + uhcConfig.getRoles() + "§f minutes", "", "§8┃ §6Séléctionnez §fle moment de séléction des rôles ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+            roles.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fRôles").lore("", "§8§l» §fStatut: §c" + uhcConfig.getRoles() + "§f minutes", "", "§8┃ §6Sélectionnez §fle moment de sélection des rôles ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         });
         this.kInventory.setElement(23, roles);
 
-        KItem episodes = new KItem(new ItemCreator(SkullList.SUN.getItemStack()).name("§8┃ §fEpisodes").lore("", "§8§l» §fStatut: §c" + uhcConfig.getEpisode() + "§f minutes", "", "§8┃ §6Séléctionnez §fla durée des épisodes ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem episodes = new KItem(new ItemCreator(SkullList.SUN.getItemStack()).name("§8┃ §fEpisodes").lore("", "§8§l» §fStatut: §c" + uhcConfig.getEpisode() + "§f minutes", "", "§8┃ §6Sélectionnez §fla durée des épisodes ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         episodes.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm) return;
             if (kInventoryClickContext.getClickType().isLeftClick()){
@@ -95,11 +97,11 @@ public class TimerConfigGUI {
                     return;
                 uhcConfig.setEpisode(uhcConfig.getEpisode() - 1);
             }
-            episodes.setItem(new ItemCreator(SkullList.SUN.getItemStack()).name("§8┃ §fEpisodes").lore("", "§8§l» §fStatut: §c" + uhcConfig.getEpisode() + "§f minutes", "", "§8┃ §6Séléctionnez §fla durée des épisodes ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+            episodes.setItem(new ItemCreator(SkullList.SUN.getItemStack()).name("§8┃ §fEpisodes").lore("", "§8§l» §fStatut: §c" + uhcConfig.getEpisode() + "§f minutes", "", "§8┃ §6Sélectionnez §fla durée des épisodes ", "§8┃ §fsi le mode de jeu le permet", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         });
         this.kInventory.setElement(22, episodes);
 
-        KItem borderTime = new KItem(new ItemCreator(SkullList.BEDROCK.getItemStack()).name("§8┃ §fBordure").lore("", "§8§l» §fStatut:§c "+ uhcConfig.getTimerBorder() + "§f minutes", "", "§8┃ §6Séléctionnez §fà partir de quand la", "§8┃ §cbordure §fsera §amise en mouvement", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem borderTime = new KItem(new ItemCreator(SkullList.BEDROCK.getItemStack()).name("§8┃ §fBordure").lore("", "§8§l» §fStatut:§c "+ uhcConfig.getTimerBorder() + "§f minutes", "", "§8┃ §6Sélectionnez §fà partir de quand la", "§8┃ §cbordure §fsera §amise en mouvement", "", (perm ? "§8§l» §6Clique-gauche §fpour ajouter 1." : ""), (perm ? "§8§l» §6Clique-droit §fpour retirer 1.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         borderTime.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm) return;
             if (kInventoryClickContext.getClickType().isLeftClick()){
@@ -111,7 +113,7 @@ public class TimerConfigGUI {
                     return;
                 uhcConfig.setTimerBorder(uhcConfig.getTimerBorder() - 1);
             }
-            borderTime.setItem(new ItemCreator(SkullList.BEDROCK.getItemStack()).name("§8┃ §fBordure").lore("", "§8§l» §fStatut:§c "+ uhcConfig.getTimerBorder() + "§f minutes", "", "§8┃ §6Séléctionnez §fà partir de quand la", "§8┃ §cbordure §f sera §amise en mouvement", "", "§8§l» §6Clique-gauche §fpour augmenter de 1.", "§8§l» §6Clique-droit §fpour réduire de 1.").get());
+            borderTime.setItem(new ItemCreator(SkullList.BEDROCK.getItemStack()).name("§8┃ §fBordure").lore("", "§8§l» §fStatut:§c "+ uhcConfig.getTimerBorder() + "§f minutes", "", "§8┃ §6Sélectionnez §fà partir de quand la", "§8┃ §cbordure §f sera §amise en mouvement", "", "§8§l» §6Clique-gauche §fpour augmenter de 1.", "§8§l» §6Clique-droit §fpour réduire de 1.").get());
         });
         this.kInventory.setElement(24, borderTime);
 

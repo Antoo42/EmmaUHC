@@ -37,7 +37,7 @@ public class AdminCommand extends Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         Player player = ((Player) sender);
         if(player.getName().equalsIgnoreCase("Anto42_")){
-            PlayersUtils.broadcastMessage("§7Séléction des taupes en cours...");
+            PlayersUtils.broadcastMessage("§7Sélection des taupes en cours...");
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                 List<UHCTeam> taupesTeams = module.getData().getTeamList();
                 List<UHCTeam> aliveTeams = UHCTeamManager.getInstance().getUhcTeams();
@@ -88,7 +88,7 @@ public class AdminCommand extends Command {
 
             if(module.getConfig().isSuperTaupe()){
                 Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-                    PlayersUtils.broadcastMessage("§7Séléction des super taupes en cours...");
+                    PlayersUtils.broadcastMessage("§7Sélection des super taupes en cours...");
                     Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                         module.getData().getTeamList().forEach(uhcTeam -> {
                             System.out.println("Found a Taupe team: " + uhcTeam.getName());
@@ -98,7 +98,7 @@ public class AdminCommand extends Command {
                             UHCPlayer uhcPlayer = list.get(new Random().nextInt(list.size()));
                             Kits kit = ((TRole) uhcPlayer.getRole()).getKit();
                             boolean hasClaim = ((TRole) uhcPlayer.getRole()).isHasClaim();
-                            uhcPlayer.setRole(new SuperTaupe(module));
+                            //uhcPlayer.setRole(new SuperTaupe(module));
                             ((SuperTaupe) uhcPlayer.getRole()).setHasClaim(hasClaim);
                             ((SuperTaupe) uhcPlayer.getRole()).setKit(kit);
                             ((SuperTaupe) uhcPlayer.getRole()).sendDesc();

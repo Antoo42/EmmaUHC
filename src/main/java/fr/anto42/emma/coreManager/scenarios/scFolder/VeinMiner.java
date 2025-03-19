@@ -19,8 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Optional;
 
 public class VeinMiner extends UHCScenario {
-    public VeinMiner(ScenarioManager scenarioManager, int page) {
-        super("VeinMiner", new ItemStack(Material.GOLD_ORE), scenarioManager, page);
+    public VeinMiner(ScenarioManager scenarioManager) {
+        super("VeinMiner", new ItemStack(Material.GOLD_ORE), scenarioManager);
         super.setDesc("§8┃ §fAccroupissez-vous lorsque vous minez pour détruire tout un filon d'un coup de pioche");
         setScenarioType(ScenarioType.MINNING);
     }
@@ -33,8 +33,6 @@ public class VeinMiner extends UHCScenario {
             BlockFace.EAST,
             BlockFace.WEST
     };
-
-    private boolean calculateToolDamage = true;
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e){
@@ -73,9 +71,8 @@ public class VeinMiner extends UHCScenario {
         }
 
 
-        if (calculateToolDamage) {
-            tool.setDurability((short) (tool.getDurability() + vein.getOres()));
-        }
+        boolean calculateToolDamage = true;
+        tool.setDurability((short) (tool.getDurability() + vein.getOres()));
     }
 
     /*private int getVeinMultiplier(OreType oreType) {

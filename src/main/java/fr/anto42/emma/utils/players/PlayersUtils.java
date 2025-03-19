@@ -5,13 +5,18 @@ import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
+import fr.anto42.emma.utils.ArmorStandUtils;
 import fr.anto42.emma.utils.Cuboid;
 import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
+import fr.anto42.emma.utils.chat.InteractiveMessage;
+import fr.anto42.emma.utils.chat.InteractiveMessageBuilder;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.anto42.emma.utils.versionsUtils.VersionUtils;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -19,6 +24,8 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 
 public class PlayersUtils {
@@ -27,7 +34,7 @@ public class PlayersUtils {
         if (UHC.getInstance().getConfig().getBoolean("customSpawn")) {
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    player.teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
+                    player.teleport(WorldManager.getSpawnLocation());
                     player.setGameMode(GameMode.SURVIVAL);
                     player.getInventory().clear();
                     player.getInventory().setHelmet(null);
@@ -61,7 +68,7 @@ public class PlayersUtils {
             });
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    player.teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
+                    player.teleport(WorldManager.getSpawnLocation());
                     player.setGameMode(GameMode.SURVIVAL);
                     player.getInventory().clear();
                     player.getInventory().setHelmet(null);
@@ -75,6 +82,11 @@ public class PlayersUtils {
                 SoundUtils.playSoundToAll(Sound.ENDERDRAGON_GROWL);
             },10L);
         }
+        Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                new InteractiveMessage().add(new InteractiveMessageBuilder(UHC.getInstance().getPrefix() + " §aCliquez ici pour afficher les crédits.").setClickAction(ClickEvent.Action.RUN_COMMAND, "/credits").build()).sendMessage(player);
+            });
+        }, TimeUtils.seconds(2));
     }
 
 
@@ -84,11 +96,12 @@ public class PlayersUtils {
         player.getInventory().clear();
         if (UHCTeamManager.getInstance().isActivated())
             if (UHC.getUHCPlayer(player).getUhcTeam() == null) {
-                player.getInventory().setItem(0, new ItemCreator(Material.BANNER).bannerColor(DyeColor.WHITE).name("§8§l» §e§lSéléction des équipes").get());
+                player.getInventory().setItem(0, new ItemCreator(Material.BANNER).bannerColor(DyeColor.WHITE).name("§8§l» §e§lSélection des équipes").get());
             }else{
-                player.getInventory().setItem(0, new ItemCreator(Material.BANNER).bannerColor(UHC.getUHCPlayer(player).getUhcTeam().getDyeColor()).name("§8§l» §e§lSéléction des équipes").get());
+                player.getInventory().setItem(0, new ItemCreator(Material.BANNER).bannerColor(UHC.getUHCPlayer(player).getUhcTeam().getDyeColor()).name("§8§l» §e§lSélection des équipes").get());
             }
         player.getInventory().setItem(1, new ItemCreator(SkullList.CHEST.getItemStack()).name("§8§l» §6§lRègles de la partie").get());
+        player.getInventory().setItem(2, new ItemCreator(SkullList.MASCOTTE_COMPUTER.getItemStack()).name("§8§l» §b§lHistorique de partie").get());
         player.getInventory().setItem(8, new ItemCreator(Material.BED).name("§8§l» §c§lRetourner au Hub").get());
         if (UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == UHC.getUHCPlayer(player) || UHC.getInstance().getUhcGame().getUhcData().getCoHostList().contains(UHC.getUHCPlayer(player)))
             player.getInventory().setItem(4, new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).name("§8§l» §b§lConfigurer la partie").get());
@@ -96,10 +109,10 @@ public class PlayersUtils {
 
     public static void randomTp(Player player, World world){
         Random random = new Random();
-        int x = random.nextInt(((int) world.getWorldBorder().getSize() - 20)*2);
-        x = x-((int) world.getWorldBorder().getSize() - 20);
-        int z = random.nextInt(((int) world.getWorldBorder().getSize() - 20)*2);
-        z = z-((int) world.getWorldBorder().getSize() - 20);
+        int x = random.nextInt(((int) world.getWorldBorder().getSize()/2 - 40));
+        x = x-((int) world.getWorldBorder().getSize()/2 - 40);
+        int z = random.nextInt(((int) world.getWorldBorder().getSize()/2 - 40));
+        z = z-((int) world.getWorldBorder().getSize()/2 - 40);
         player.teleport(new Location(world, x, world.getHighestBlockYAt(x, z) + 100, z, 0F, 0F));
         UHC.getUHCPlayer(player).setDamageable(false);
         player.sendMessage(UHC.getInstance().getPrefix() + " §aVous êtes invincible pour les 30 prochaines secondes.");
@@ -133,6 +146,37 @@ public class PlayersUtils {
 
     public static void broadcastMessage(String message){
         Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " " + message);
+    }
+
+
+    public static void createFinalTab () {
+        int rang = 1;
+        Location location = WorldManager.getSpawnLocation().add(5, 2, 5);
+        List<UHCPlayer> classement = UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList();
+        classement.sort(Comparator.comparingLong(UHCPlayer::getKills).reversed());
+
+        Location locationTitre = location.clone();
+        ArmorStand titreStand = ArmorStandUtils.getArmorStandAtLocation(locationTitre);
+        if (titreStand == null) {
+            ArmorStandUtils.createAmorStand("§7§lClassement - §eKills", locationTitre);
+        }
+
+
+        for (UHCPlayer uhcPlayer : classement) {
+            if (rang > 10) return;
+            String playerName = (uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getDisplayName() + " §7- " : "") + (uhcPlayer.getRole() != null ? "§c" + uhcPlayer.getRole().getName() + " §7- " : "") + "§e§l" + uhcPlayer.getName() + " §7- §a" + uhcPlayer.getKills() + " §7kill(s)";
+
+            Location locationArmorStand = location.clone().add(0, -(rang + 1) * 0.3, 0);
+            ArmorStand stand = ArmorStandUtils.getArmorStandAtLocation(locationArmorStand);
+
+            if (stand == null) {
+                ArmorStandUtils.createAmorStand(playerName, locationArmorStand);
+            } else {
+                ArmorStandUtils.updateArmorStandName(stand, playerName);
+            }
+
+            rang++;
+        }
     }
 
 }

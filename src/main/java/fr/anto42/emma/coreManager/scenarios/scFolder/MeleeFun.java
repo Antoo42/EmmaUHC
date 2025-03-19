@@ -13,8 +13,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class MeleeFun extends UHCScenario {
-    public MeleeFun(ScenarioManager scenarioManager, int i) {
-        super("MeleeFun", new ItemStack(Material.IRON_SWORD), scenarioManager, i);
+    public MeleeFun(ScenarioManager scenarioManager) {
+        super("MeleeFun", new ItemStack(Material.IRON_SWORD), scenarioManager);
         setDesc("§8┃ §fLes délais entre chaque coups sont annulés (les degâts sont réduits de 90%)");
         setScenarioType(ScenarioType.PVP);
     }
@@ -35,7 +35,7 @@ public class MeleeFun extends UHCScenario {
         }
 
         final Player player = (Player) event.getEntity();
-        event.setDamage(event.getDamage() * 0.5);
+        event.setDamage(event.getDamage() * 0.1);
 
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), new Runnable() {
             public void run() {

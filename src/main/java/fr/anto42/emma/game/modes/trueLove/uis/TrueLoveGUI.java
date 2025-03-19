@@ -1,7 +1,7 @@
 package fr.anto42.emma.game.modes.trueLove.uis;
 
 import fr.anto42.emma.UHC;
-import fr.anto42.emma.coreManager.uis.GameModeGUI;
+import fr.anto42.emma.coreManager.uis.config.GameModeGUI;
 import fr.anto42.emma.game.modes.trueLove.TrueLoveModule;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;

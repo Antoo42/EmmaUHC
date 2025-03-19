@@ -70,33 +70,20 @@ public class SwitchModule extends Module {
     private final UHCGame uhcGame = UHC.getInstance().getUhcGame();
     public void winTester(){
         if (!UHCTeamManager.getInstance().isActivated()){
-            if (uhcGame.getUhcData().getUhcPlayerList().size() == 1){
+            if (uhcGame.getUhcData().getUhcPlayerList().size() <= 1){
                 uhcGame.setGameState(GameState.FINISH);
-                Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + uhcGame.getUhcData().getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a !");
-                Bukkit.broadcastMessage("§7");
-                for(Player player : Bukkit.getOnlinePlayers()){
-                    UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
-                    player.sendMessage("§8┃ §fRécapitulatif de votre partie:");
-                    player.sendMessage("§7");
-                    player.sendMessage("§8§l» §3Kills: §e" + uhcPlayer.getKills());
-                    player.sendMessage("§8§l» §3Morts: §e" + uhcPlayer.getDeath());
-                    if (uhcPlayer.getRole() != null)
-                        player.sendMessage("§8§l» §3Rôle: §e" + uhcPlayer.getRole().getName());
+                if (uhcGame.getUhcData().getUhcPlayerList().size() == 1){
+                    Bukkit.broadcastMessage("§7");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + uhcGame.getUhcData().getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a kills !");
+                    Bukkit.broadcastMessage("§7");
+                    UHC.getInstance().getDiscordManager().sendWin(uhcGame.getUhcData().getUhcPlayerList().get(0));
+                }else {
+                    Bukkit.broadcastMessage("§7");
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cOups... Je crois que je n'ai pas suivit la partie... Qui a gagné ? :p");
+                    Bukkit.broadcastMessage("§7");
+                    UHC.getInstance().getDiscordManager().sendWin(null);
                 }
-                Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
-                Bukkit.broadcastMessage("§7");
-                PlayersUtils.finishToSpawn();
-                Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
-                    
-                Bukkit.shutdown();                }, TimeUtils.minutes(5));            }
-        }else if (UHCTeamManager.getInstance().getUhcTeams().size() == 1){
-                uhcGame.setGameState(GameState.FINISH);
-                UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
-                Bukkit.broadcastMessage("§7");
-                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a !");
-                Bukkit.broadcastMessage("§7");
+
                 for(Player player : Bukkit.getOnlinePlayers()){
                     UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
                     player.sendMessage("§8┃ §fRécapitulatif de votre partie:");
@@ -110,13 +97,35 @@ public class SwitchModule extends Module {
                 Bukkit.broadcastMessage("§7");
                 Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
                 Bukkit.broadcastMessage("§7");
-            PlayersUtils.finishToSpawn();
-            Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
-                
-                Bukkit.shutdown();                }, TimeUtils.minutes(5));
-        } else if (uhcGame.getUhcData().getUhcPlayerList().size() == 0){
+                PlayersUtils.finishToSpawn();
+                Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));            }
+        }else if (UHCTeamManager.getInstance().getUhcTeams().size() == 1){
             uhcGame.setGameState(GameState.FINISH);
-            
+
+            UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
+            UHC.getInstance().getDiscordManager().sendWin(uhcTeam);
+
+            Bukkit.broadcastMessage("§7");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
+            Bukkit.broadcastMessage("§7");
+            for(Player player : Bukkit.getOnlinePlayers()){
+                UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);
+                player.sendMessage("§8┃ §fRécapitulatif de votre partie:");
+                player.sendMessage("§7");
+                player.sendMessage("§8§l» §3Kills: §e" + uhcPlayer.getKills());
+                player.sendMessage("§8§l» §3Morts: §e" + uhcPlayer.getDeath());
+                if (uhcPlayer.getRole() != null)
+                    player.sendMessage("§8§l» §3Rôle: §e" + uhcPlayer.getRole().getName());
+            }
+
+            Bukkit.broadcastMessage("§7");
+            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
+            Bukkit.broadcastMessage("§7");
+            PlayersUtils.finishToSpawn();
+            Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
+        } else if (uhcGame.getUhcData().getUhcPlayerList().isEmpty()){
+            uhcGame.setGameState(GameState.FINISH);
+            UHC.getInstance().getDiscordManager().sendWin(null);
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
             Bukkit.broadcastMessage("§7");
@@ -134,9 +143,7 @@ public class SwitchModule extends Module {
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
             Bukkit.broadcastMessage("§7");
             PlayersUtils.finishToSpawn();
-            Bukkit.getScheduler().runTaskLater(UHC.getInstance(),  () -> {
-                
-                Bukkit.shutdown();            }, TimeUtils.minutes(5));
+            Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
         }
     }
 

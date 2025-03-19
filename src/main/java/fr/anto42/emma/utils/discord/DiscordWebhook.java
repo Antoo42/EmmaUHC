@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class DiscordWebhook {
@@ -145,7 +148,7 @@ public class DiscordWebhook {
         stream.flush();
         stream.close();
 
-        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
+        connection.getInputStream().close();
         connection.disconnect();
     }
 
@@ -372,8 +375,8 @@ public class DiscordWebhook {
                 }
 
                 builder.append(++i == entrySet.size() ? "}" : ",");
-            }
 
+            }
             return builder.toString();
         }
 
@@ -381,5 +384,5 @@ public class DiscordWebhook {
             return "\"" + string + "\"";
         }
     }
-
 }
+

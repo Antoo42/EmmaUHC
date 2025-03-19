@@ -16,8 +16,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.*;
 
 public class RandomCraft extends UHCScenario {
-    public RandomCraft(ScenarioManager scenarioManager, int page) {
-        super("RandomCraft", new ItemCreator(Material.WORKBENCH).get(), scenarioManager, page);
+    public RandomCraft(ScenarioManager scenarioManager) {
+        super("RandomCraft", new ItemCreator(Material.WORKBENCH).get(), scenarioManager);
         super.setDesc("§8┃ §fTout les crafts sont aléatoires");
         setScenarioType(ScenarioType.WORLD);
     }

@@ -28,10 +28,10 @@ public class EnchantGUI {
         back.addCallback((kInventoryRepresentation, itemStack1, player, kInventoryClickContext) -> player.closeInventory());
         this.kInventory.setElement(49, back);
 
-        KItem unbreakable = new KItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem unbreakable = new KItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         unbreakable.addCallback((kInventoryRepresentation, itemStack1, player, kInventoryClickContext) -> {
             itemStack.setItemMeta(new ItemCreator(itemStack.getType()).unbreakable(!itemStack.getItemMeta().spigot().isUnbreakable()).get().getItemMeta());
-            unbreakable.setItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+            unbreakable.setItem(new ItemCreator(Material.BLAZE_ROD).name("§8┃ §fIncassable").lore("", "§8§l» §fStatut: " + (itemStack.getItemMeta().spigot().isUnbreakable() ? "§aactivé" : "§cdésactivé"), "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         });
         this.kInventory.setElement(4, unbreakable);
 

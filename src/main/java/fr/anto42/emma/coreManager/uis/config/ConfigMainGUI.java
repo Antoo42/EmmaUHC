@@ -1,11 +1,12 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.listeners.customListeners.TryStartEvent;
+import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
+import fr.anto42.emma.coreManager.uis.SavesGUI;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.SoundUtils;
-import fr.anto42.emma.utils.discord.DiscordManager;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.saves.ItemStackToString;
 import fr.anto42.emma.utils.skulls.SkullList;
@@ -22,10 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConfigMainGUI {
     private final KInventory kInventory;
-    private final UHCGame uhc;
 
     public ConfigMainGUI(UHCGame uhc) {
-        this.uhc = uhc;
         this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lConfiguration");
 
 
@@ -51,15 +50,15 @@ public class ConfigMainGUI {
             }
             UHC.getInstance().getUhcManager().getAdminGUI().open(player);
         });
-        this.kInventory.setElement(18, license);
+        this.kInventory.setElement(0, license);
 
-        KItem saves = new KItem(new ItemCreator(SkullList.MASCOTTE_COMPUTER.getItemStack()).name("§8┃ §fSauvegardes").lore("", "§8┃ §fOuvrez ce menu pour séléctionner","§8┃ §fune sauvegarde existante", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
+        KItem saves = new KItem(new ItemCreator(SkullList.MASCOTTE_COMPUTER.getItemStack()).name("§8┃ §fSauvegardes").lore("", "§8┃ §fOuvrez ce menu pour sélectionner","§8┃ §fune sauvegarde existante", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
         saves.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
-            new SavesGUI(player, false, "all").getkInventory().open(player);
+            new SavesGUI(player, false, "all", 0).getkInventory().open(player);
         });
-        this.kInventory.setElement(27, saves);
+        this.kInventory.setElement(8, saves);
 
-        KItem gamemode = new KItem(new ItemCreator(Material.NETHER_STAR).name("§8┃ §fModes de jeu").lore("", "§8┃ §fOuvrez ce menu pour séléctionner","§8┃ §fle §amode de jeu §fde la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
+        KItem gamemode = new KItem(new ItemCreator(Material.NETHER_STAR).name("§8┃ §fModes de jeu").lore("", "§8┃ §fOuvrez ce menu pour sélectionner","§8┃ §fle §amode de jeu §fde la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
         gamemode.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             new GameModeGUI().getkInventory().open(player);
         });
@@ -95,7 +94,7 @@ public class ConfigMainGUI {
         });
         this.kInventory.setElement(2, settings);
 
-        KItem equipements = new KItem(new ItemCreator(Material.DIAMOND_CHESTPLATE).name("§8┃ §fEquipements").lore("", "§8┃ §6Séléctionnez §fchaque éléments du futur §3inventaire des joueurs", "","§8§l» §6Cliquez §fpour ouvrir").get());
+        KItem equipements = new KItem(new ItemCreator(Material.DIAMOND_CHESTPLATE).name("§8┃ §fEquipements").lore("", "§8┃ §6Sélectionnez §fchaque éléments du futur §3inventaire des joueurs", "","§8§l» §6Cliquez §fpour ouvrir").get());
         equipements.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             UHC.getInstance().getUhcManager().getStuffConfigGUI().open(player);
         });
@@ -113,7 +112,7 @@ public class ConfigMainGUI {
         });
         this.kInventory.setElement(30, timer);
 
-        KItem starterStuff = new KItem(new ItemCreator(Material.CHEST).name("§8┃ §fStuff de départ").lore("", "§8┃ §fDonnez un petit coup de pouce", "§8┃ §faux joueurs au début de la partie", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem starterStuff = new KItem(new ItemCreator(Material.CHEST).name("§8┃ §fStuff de départ").lore("", "§8┃ §fDonnez un petit coup de pouce", "§8┃ §faux joueurs au début de la partie", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         starterStuff.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (uhc.getGameState() != GameState.WAITING){
                 player.sendMessage(UHC.getInstance().getPrefix() + " §cC'est trop tard pour faire cette action !");
@@ -139,10 +138,21 @@ public class ConfigMainGUI {
                 player.getInventory().setItem(0, new ItemCreator(Material.COOKED_BEEF, 32).get());
                 player.getInventory().setItem(1, new ItemCreator(Material.BOOK, 1).get());
             }
-            player.getInventory().setHelmet(uhc.getUhcConfig().getStarterStuffConfig().getHead());
-            player.getInventory().setChestplate(uhc.getUhcConfig().getStarterStuffConfig().getBody());
-            player.getInventory().setLeggings(uhc.getUhcConfig().getStarterStuffConfig().getLeggins());
-            player.getInventory().setBoots(uhc.getUhcConfig().getStarterStuffConfig().getBoots());
+            if (!uhc.getUhcConfig().getStarterStuffConfig().getHead().contains("BARRIER")) {
+                player.getInventory().setHelmet(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getHead()));
+            }
+            if (!uhc.getUhcConfig().getStarterStuffConfig().getBody().contains("BARRIER")) {
+                player.getInventory().setChestplate(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getBody()));
+            }
+            if (!uhc.getUhcConfig().getStarterStuffConfig().getLeggins().contains("BARRIER")) {
+                player.getInventory().setLeggings(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getLeggins()));
+            }
+            if (!uhc.getUhcConfig().getStarterStuffConfig().getBoots().contains("BARRIER")) {
+                player.getInventory().setBoots(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getBoots()));
+            }
+            /*player.getInventory().setChestplate(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getBody()));
+            player.getInventory().setLeggings(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getLeggins()));
+            player.getInventory().setBoots(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getBoots()));*/
             player.sendMessage(UHC.getInstance().getPrefix() + " §7Vous éditez désormais l'§ainventaire de départ §7!");
             player.sendMessage("");
             player.sendMessage("§8┃ §7Vous pouvez à tout moment enchanter l'item en main à l'aide de la commande §b/enchant§7.");
@@ -155,20 +165,20 @@ public class ConfigMainGUI {
         });
         this.kInventory.setElement(32, starterStuff);
 
-        KItem whitelist = new KItem(new ItemCreator(Material.PAPER).name("§8┃ §fWhiteList").lore("", "§8§l» §fStatut: " + (uhc.getUhcData().isWhiteList() ? "§aactivé" : "§cdésactivé"), "", "§8┃ §aAutorisez §cou non§f les joueurs", "§8┃ §fà rentrer dans votre partie", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem whitelist = new KItem(new ItemCreator(Material.PAPER).name("§8┃ §fWhiteList").lore("", "§8§l» §fStatut: " + (uhc.getUhcData().isWhiteList() ? "§aactivé" : "§cdésactivé"), "", "§8┃ §aAutorisez §cou non§f les joueurs", "§8┃ §fà rentrer dans votre partie", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         whitelist.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (uhc.getUhcData().isWhiteList()){
                 uhc.getUhcData().setWhiteList(false);
-                whitelist.setItem(new ItemCreator(Material.PAPER).name("§8┃ §fWhiteList").lore("", "§8§l» §fStatut: §cdésactivé", "", "§8┃ §aAutorisez §cou non§f les joueurs", "§8┃ §fà rentrer dans votre partie", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                whitelist.setItem(new ItemCreator(Material.PAPER).name("§8┃ §fWhiteList").lore("", "§8§l» §fStatut: §cdésactivé", "", "§8┃ §aAutorisez §cou non§f les joueurs", "§8┃ §fà rentrer dans votre partie", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             }else{
                 uhc.getUhcData().setWhiteList(true);
-                whitelist.setItem(new ItemCreator(Material.PAPER).name("§8┃ §fWhiteList").lore("", "§8§l» §fStatut: §aactivé", "", "§8┃ §aAutorisez §cou non§f les joueurs", "§8┃ §fà rentrer dans votre partie", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                whitelist.setItem(new ItemCreator(Material.PAPER).name("§8┃ §fWhiteList").lore("", "§8§l» §fStatut: §aactivé", "", "§8┃ §aAutorisez §cou non§f les joueurs", "§8┃ §fà rentrer dans votre partie", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             }
         });
         this.kInventory.setElement(16, whitelist);
 
         AtomicBoolean can = new AtomicBoolean(uhc.getUhcData().isDiscordSend());
-        KItem discordGame = new KItem(new ItemCreator(SkullList.DISCORD.getItemStack()).name("§8┃ §9Discord").lore("", "§8┃ §aAnnoncer §fvotre partie sur §9Discord", "", "§c§o Cette action ne peut être effectuée qu'une fois !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem discordGame = new KItem(new ItemCreator(SkullList.DISCORD.getItemStack()).name("§8┃ §9Discord").lore("", "§8┃ §aAnnoncer §fvotre partie sur §9Discord", "", "§c§o Cette action ne peut être effectuée qu'une fois !", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         discordGame.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (can.get()){
                 player.sendMessage(UHC.getInstance().getConfig().getString("discordPrefix").replace("&", "§") + " §cVous avez déjà envoyer une annonce !");
@@ -181,8 +191,8 @@ public class ConfigMainGUI {
             player.sendMessage(UHC.getInstance().getConfig().getString("discordPrefix").replace("&", "§") + " §aVotre partie a été annoncé sur le serveur §9Discord§a !");
             SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_YES);
         });
-        if (!DiscordManager.getAnnounceURL().equalsIgnoreCase(""))
-            this.kInventory.setElement(35, discordGame);
+        if (UHC.getInstance().getConfig().getBoolean("discordbot"))
+            this.kInventory.setElement(47, discordGame);
 
 
         KItem rules = new KItem(new ItemCreator(Material.BOOK).name("§8┃ §fRègles de votre partie").lore("", "§8┃ §6Consultez §fles règles actuelles de votre partie", "","§8§l» §6Cliquez §fpour ouvrir.").get());
@@ -191,7 +201,7 @@ public class ConfigMainGUI {
         });
         this.kInventory.setElement(51, rules);
 
-        KItem start = new KItem(new ItemCreator((uhc.isStart() ? SkullList.RED_BALL.getItemStack() : SkullList.GREEN_BALL.getItemStack())).name("§8┃ §fLancer la partie").lore("", "§8§l» §fStatut: " + (uhc.isStart() ? "§cEn cours" : "§aEn attente"), "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem start = new KItem(new ItemCreator((uhc.isStart() ? SkullList.RED_BALL.getItemStack() : SkullList.GREEN_BALL.getItemStack())).name("§8┃ §fLancer la partie").lore("", "§8§l» §fStatut: " + (uhc.isStart() ? "§cEn cours" : "§aEn attente"), "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         start.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             TryStartEvent tryStartEvent = new TryStartEvent();
             Bukkit.getServer().getPluginManager().callEvent(tryStartEvent);
@@ -205,10 +215,10 @@ public class ConfigMainGUI {
                     return;
                 }
                 uhc.setStart(false);
-                start.setItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §fLancer la partie").lore("", "§8§l» §fStatut: §aEn attente", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                start.setItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §fLancer la partie").lore("", "§8§l» §fStatut: §aEn attente", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             } else {
                 uhc.startGame();
-                start.setItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §cArrêter la partie").lore("", "§8§l» §fStatut: §cEn cours", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                start.setItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §cArrêter la partie").lore("", "§8§l» §fStatut: §cEn cours", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             }
 
         });

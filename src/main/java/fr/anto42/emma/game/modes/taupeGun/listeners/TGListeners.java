@@ -40,6 +40,7 @@ public class TGListeners implements Listener {
     List<UHCTeam> teamList = new ArrayList<>();
     @EventHandler
     public void onRoles(RolesEvent event) {
+        UHC.getInstance().getUhcGame().getUhcData().setChat(false);
         PlayersUtils.broadcastMessage("§7Sélection des taupes en cours...");
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
             List<UHCTeam> taupesTeams = module.getData().getTeamList();
@@ -93,15 +94,8 @@ public class TGListeners implements Listener {
 
                         if (!taupes.isEmpty()) {
                             UHCPlayer superTaupe = taupes.get(new Random().nextInt(taupes.size()));
-                            Kits kit = ((TRole) superTaupe.getRole()).getKit();
-                            boolean hasClaim = ((TRole) superTaupe.getRole()).isHasClaim();
-
-                            superTaupe.setRole(new SuperTaupe(module));
-                            ((SuperTaupe) superTaupe.getRole()).setHasClaim(hasClaim);
-                            ((SuperTaupe) superTaupe.getRole()).setKit(kit);
-                            ((SuperTaupe) superTaupe.getRole()).sendDesc();
-
-                            module.getData().getRevealPlayers().remove(superTaupe);
+                            superTaupe.setRole(new SuperTaupe(module, ((Taupe) superTaupe.getRole())));
+                            superTaupe.getRole().setRole();
                             SoundUtils.playSoundToPlayer(superTaupe.getBukkitPlayer(), Sound.ANVIL_LAND);
                             Title.sendTitle(superTaupe.getBukkitPlayer(), 0, 20 * 5, 15, "§cVous êtes une Super Taupe !", "§6§oNe le dîtes à personne !");
                         }
@@ -137,10 +131,9 @@ public class TGListeners implements Listener {
         UHCTeam uhcTeam = victim.getUhcTeam();
         Location loc = deathEvent.getVictim().getBukkitPlayer().getLocation();
         PlayersUtils.broadcastMessage("§c" + uhcTeam.getPrefix() + victim.getName() + "§7 est mort !");
-        if (victim.getRole() != null && ((TRole) victim.getRole()).getTaupeTeam() != null){
-            System.out.println("oui");
+        /*if (victim.getRole() != null && ((TRole) victim.getRole()).getTaupeTeam() != null){
             ((TRole) victim.getRole()).setTaupeTeam(null);
-        }
+        }*/
         SoundUtils.playSoundToAll(Sound.WITHER_SPAWN);
 
         deathEvent.getVictim().leaveTeam();
@@ -172,6 +165,8 @@ public class TGListeners implements Listener {
                 }
             }
             if(l == 0){
+                UHCTeam uhcTeam1 = ((Taupe) victim.getRole()).getTaupeTeam();
+                System.out.println(uhcTeam1.getName());
                 module.getData().getTeamList().remove(((Taupe) victim.getRole()).getTaupeTeam());
                 ((Taupe) victim.getRole()).getTaupeTeam().destroy();
 

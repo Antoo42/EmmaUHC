@@ -18,6 +18,7 @@ public abstract class DNRole extends Role {
     private int maxNumberOfInvest = 1;
     private boolean reveal = false;
     private boolean seeLife = false;
+    private boolean canReveal = false;
 
     @Override
     public void sendDesc() {
@@ -32,6 +33,8 @@ public abstract class DNRole extends Role {
     }
 
     public void reveal() {
+        if (!canReveal)
+            return;
         UHCTeam uhcTeam = getUhcPlayer().getUhcTeam();
         setReveal(true);
         getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
@@ -101,5 +104,13 @@ public abstract class DNRole extends Role {
 
     public void setSeeLife(boolean seeLife) {
         this.seeLife = seeLife;
+    }
+
+    public boolean isCanReveal() {
+        return canReveal;
+    }
+
+    public void setCanReveal(boolean canReveal) {
+        this.canReveal = canReveal;
     }
 }

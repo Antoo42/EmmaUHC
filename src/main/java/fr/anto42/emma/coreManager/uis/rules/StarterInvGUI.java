@@ -1,4 +1,4 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.rules;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.game.impl.config.StarterStuffConfig;
@@ -8,7 +8,6 @@ import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 public class StarterInvGUI {
     private final KInventory kInventory;
@@ -32,18 +31,18 @@ public class StarterInvGUI {
         });
         this.kInventory.setElement(49, back);
 
-        if(stuffConfig.getHead() != null) {
-            KItem kItem = new KItem(stuffConfig.getHead());
+        if(!stuffConfig.getHead().contains("BARRIER")) {
+            KItem kItem = new KItem(ItemStackToString.ItemStackFromString(stuffConfig.getHead()));
             kInventory.setElement(0, kItem);
         }
-        if(stuffConfig.getBody() != null) {
-            KItem kItem = new KItem(stuffConfig.getBody());
+        if(!stuffConfig.getBody().contains("BARRIER")) {
+            KItem kItem = new KItem(ItemStackToString.ItemStackFromString(stuffConfig.getBody()));
             kInventory.setElement(1, kItem);
-        }if(stuffConfig.getLeggins() != null) {
-            KItem kItem = new KItem(stuffConfig.getLeggins());
+        }if(!stuffConfig.getLeggins().contains("BARRIER")) {
+            KItem kItem = new KItem(ItemStackToString.ItemStackFromString(stuffConfig.getLeggins()));
             kInventory.setElement(2, kItem);
-        }if(stuffConfig.getBoots() != null) {
-            KItem kItem = new KItem(stuffConfig.getBoots());
+        }if(!stuffConfig.getBoots().contains("BARRIER")) {
+            KItem kItem = new KItem(ItemStackToString.ItemStackFromString(stuffConfig.getBoots()));
             kInventory.setElement(3, kItem);
         }
 

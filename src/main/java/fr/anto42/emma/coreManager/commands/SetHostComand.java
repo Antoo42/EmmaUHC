@@ -12,6 +12,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class SetHostComand extends Command {
 
     public SetHostComand() {
@@ -24,18 +26,18 @@ public class SetHostComand extends Command {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
         if(player.isOp() || player.getName().equalsIgnoreCase("Anto42_")){
             if(strings.length == 0){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur.");
                 return true;
             }
             Player target = Bukkit.getPlayer(strings[0]);
             if(target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur connecté.");
                 return true;
             }
             UHCPlayer uhctarget = UHC.getUHCPlayer(target);
             if(uhctarget == UHC.getInstance().getUhcGame().getUhcData().getHostPlayer()){
                 SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
+                uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas faire ça !");
                 return true;
             }
             if(UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() != null){

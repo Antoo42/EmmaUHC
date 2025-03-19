@@ -28,8 +28,8 @@ import java.util.Random;
 
 public class DragonRush extends UHCScenario {
     private final List<Block> portalBlocks;
-    public DragonRush(ScenarioManager scenarioManager, int page) {
-        super("DragonRush", new ItemCreator(Material.DRAGON_EGG).get(), scenarioManager, page);
+    public DragonRush(ScenarioManager scenarioManager) {
+        super("DragonRush", new ItemCreator(Material.DRAGON_EGG).get(), scenarioManager);
         portalBlocks = new ArrayList<>();
         setScenarioType(ScenarioType.PVE);
     }

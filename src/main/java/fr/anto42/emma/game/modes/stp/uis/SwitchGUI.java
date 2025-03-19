@@ -2,7 +2,7 @@ package fr.anto42.emma.game.modes.stp.uis;
 
 import fr.anto42.emma.game.modes.stp.SwitchModule;
 import fr.anto42.emma.UHC;
-import fr.anto42.emma.coreManager.uis.GameModeGUI;
+import fr.anto42.emma.coreManager.uis.config.GameModeGUI;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;

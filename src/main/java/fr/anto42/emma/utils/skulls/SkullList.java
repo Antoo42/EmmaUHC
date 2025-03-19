@@ -54,7 +54,9 @@ public enum SkullList {
     DEAD_STEVE("dead_steve", "b1637016f91f8388ffdcd3778e8be7bdb16d7a37046b79a5218bf5da9f5d7f2a"),
     HEART("heart_ball", "7dfe38599fe369862fe56b83fca25b831ea2a348b029bfb24b987dc92e875658"),
     XP("", "3255327dd8e90afad681a19231665bea2bd06065a09d77ac1408837f9e0b242"),
-    SUN("sun", "ed2ff09cf6e793ca8871b46070d1a582fdc16e7b9fba67d3c08f15c6e47eb645");
+    SUN("sun", "ed2ff09cf6e793ca8871b46070d1a582fdc16e7b9fba67d3c08f15c6e47eb645"),
+    NUMBER_CUBE("number cube", "433f5cc9de3585d8f64330f4468d156baf034a25dcb773c0479d7ca526a13d61"),
+    UNKNOWN_ELEMENT("element unknow", "b51702a0bd387783a4f4e47cfa48a7a17c8bcc2336eb6088a178834d783da707");
 
     private String name;
     private String texture;

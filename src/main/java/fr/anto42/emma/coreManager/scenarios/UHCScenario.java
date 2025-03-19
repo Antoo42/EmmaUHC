@@ -15,14 +15,12 @@ public abstract class UHCScenario implements Listener {
     private KInventory kInventory;
     private final UHCGame uhcGame = UHC.getInstance().getUhcGame();
     private final ScenarioManager scenarioManager;
+    private boolean avaible = true;
 
-    private final int page;
-
-    public UHCScenario(String name, ItemStack itemStack, ScenarioManager scenarioManager, int page) {
+    public UHCScenario(String name, ItemStack itemStack, ScenarioManager scenarioManager) {
         setScenarioType(ScenarioType.OTHER);
         this.name = name;
         this.scenarioManager = scenarioManager;
-        this.page = page;
         this.desc = "§cAucune information.";
         this.itemStack = itemStack;
     }
@@ -48,10 +46,7 @@ public abstract class UHCScenario implements Listener {
     }
 
     public boolean isActivated(){
-        if (scenarioManager.getActivatedScenarios().contains(this))
-            return true;
-        else
-            return false;
+        return scenarioManager.getActivatedScenarios().contains(this);
     }
 
     public boolean isConfigurable() {
@@ -79,9 +74,6 @@ public abstract class UHCScenario implements Listener {
 
     public void onDisable(){}
 
-    public int getPage() {
-        return page;
-    }
 
     public ScenarioType getScenarioType() {
         return scenarioType;
@@ -91,6 +83,13 @@ public abstract class UHCScenario implements Listener {
         this.scenarioType = scenarioType;
     }
 
+    public boolean isAvaible() {
+        return avaible;
+    }
+
+    public void setAvaible(boolean avaible) {
+        this.avaible = avaible;
+    }
 
     public void onStart(){}
 }

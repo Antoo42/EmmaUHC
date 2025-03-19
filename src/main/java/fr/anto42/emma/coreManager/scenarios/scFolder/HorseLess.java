@@ -12,8 +12,8 @@ import org.bukkit.event.Listener;
 import org.spigotmc.event.entity.EntityMountEvent;
 
 public class HorseLess extends UHCScenario implements Listener {
-    public HorseLess(ScenarioManager scenarioManager, int page) {
-        super("Horseless", new ItemCreator(Material.SADDLE).get(), scenarioManager, page);
+    public HorseLess(ScenarioManager scenarioManager) {
+        super("Horseless", new ItemCreator(Material.SADDLE).get(), scenarioManager);
         super.setDesc("§8┃ §fIl est impossible de monter des cheveaux");
         setScenarioType(ScenarioType.PVP);
     }

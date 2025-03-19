@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Random;
 
 public class FlowerPower extends UHCScenario {
-    public FlowerPower(ScenarioManager scenarioManager, int page) {
-        super("FlowerPower", new ItemStack(Material.RED_ROSE), scenarioManager, page);
+    public FlowerPower(ScenarioManager scenarioManager) {
+        super("FlowerPower", new ItemStack(Material.RED_ROSE), scenarioManager);
         setDesc("§8┃ §fLes fleurs ont désormais 4 chances sur 5 de §adrop §fun §aitem aléatoire");
         setScenarioType(ScenarioType.FUN);
         materials.add(Material.RED_ROSE);

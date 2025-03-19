@@ -3,6 +3,7 @@ package fr.anto42.emma.coreManager.worldManager;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.chat.Title;
+import fr.anto42.emma.utils.gameSaves.EventType;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -59,7 +61,7 @@ public class Generator {
         if (WorldManager.getInGeneration() != null) {
             return;
         }
-
+        UHC.getInstance().getGameSave().registerEvent(EventType.CORE, "Lancement de la prégen du monde " + world.getName());
         PlayersUtils.broadcastMessage("§8§l» §7Lancement de la prégénération du monde §a" + world.getName() + "§7...");
         PlayersUtils.broadcastMessage("§8§l» §cLe serveur peut subir des ralentissements ! Évitez de lancer la partie durant ce processus.");
 
@@ -75,7 +77,7 @@ public class Generator {
                 } else {
                     setChunksPerTick(chunksPerTick - 5);
                     stableTicks = 0;
-                    PlayersUtils.broadcastMessage("§8§l» §e⚠ Réduction du rythme de génération pour préserver les performances.");
+                    //PlayersUtils.broadcastMessage("§8§l» §e⚠ Réduction du rythme de génération pour préserver les performances.");
                 }
             } else if (tps > 18.5D && chunksPerTick < limit) {
                 if (stableTicks < 50) {
@@ -83,7 +85,7 @@ public class Generator {
                 } else {
                     stableTicks = 0;
                     setChunksPerTick(chunksPerTick + 5);
-                    PlayersUtils.broadcastMessage("§8§l» §a✔ Augmentation du rythme de génération, serveur stable !");
+                    //PlayersUtils.broadcastMessage("§8§l» §a✔ Augmentation du rythme de génération, serveur stable !");
                 }
             }
 
@@ -99,14 +101,14 @@ public class Generator {
             }
         }, 0L, 1L);
     }
-
+    OrePopulator orePopulator = UHC.getInstance().getWorldManager().getOrePopulator();
     private void generateChunk(int x, int z) {
         Bukkit.getScheduler().runTask(UHC.getInstance(), () -> {
             try {
                 Chunk chunk = world.getChunkAt(world.getBlockAt(x, 64, z));
                 chunk.load(true);
                 chunk.load(false);
-
+                orePopulator.populate(chunk.getWorld(), new Random(), chunk);
                 completedChunks++;
                 if (completedChunks % 100 == 0) {
                     updateProgress();
@@ -131,8 +133,7 @@ public class Generator {
                     "§3: §e" + percentage + "§3%" +
                     " §7(§e" + completedChunks + "§7/§a" + totalChunks + "§7 chunks)" +
                     " §8§l» §3Temps restant estimé: §a" + minutes + "§3m §a" + seconds + "§3s" +
-                    " §8§l» §3Chunks/tick: §a" + chunksPerTick +
-                    " §8§l» " + getServerHealthMessage());
+                    " §8§l» §3Chunks/tick: §a" + chunksPerTick);
         }
     }
 
@@ -145,6 +146,7 @@ public class Generator {
         if (totalTime < 120) {
             Bukkit.broadcastMessage("§7§o(wow c'était rapide !)");
         }
+        UHC.getInstance().getGameSave().registerEvent(EventType.CORE, "Fin de la prégen du monde " + world.getName());
 
         if (world.getEnvironment() == World.Environment.NORMAL) {
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(true);

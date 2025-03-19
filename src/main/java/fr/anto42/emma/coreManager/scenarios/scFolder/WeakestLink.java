@@ -16,8 +16,8 @@ import org.bukkit.event.EventHandler;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class WeakestLink extends UHCScenario {
-    public WeakestLink(ScenarioManager scenarioManager, int page) {
-        super("WeakestLink", new ItemCreator(Material.COAL).get(), scenarioManager, page);
+    public WeakestLink(ScenarioManager scenarioManager) {
+        super("WeakestLink", new ItemCreator(Material.COAL).get(), scenarioManager);
         setDesc("§8┃ §fA une intervalle définie, le joueur ayant le moins de vie est éliminé");
         setConfigurable(true);
         setkInventory(new WeakestLinkGUI(this).getkInventory());
@@ -38,7 +38,7 @@ public class WeakestLink extends UHCScenario {
     public void onStart(StartEvent event){
         AtomicReference<UHCPlayer> uhcPlayer = new AtomicReference<>(getUhcGame().getUhcData().getUhcPlayerList().get(0));
         Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
-            if (!getScenarioManager().isEnabled("WeakestLink"))
+            if (!isActivated())
                 return;
             getUhcGame().getUhcData().getUhcPlayerList().forEach(uhcPlayer1 -> {
                 if (uhcPlayer1.getBukkitPlayer().getHealth() <= uhcPlayer.get().getBukkitPlayer().getHealth()) {

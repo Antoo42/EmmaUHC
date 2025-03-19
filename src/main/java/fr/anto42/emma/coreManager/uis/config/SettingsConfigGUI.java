@@ -1,6 +1,8 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
+import fr.anto42.emma.coreManager.uis.rules.ScenariosActivatedGUI;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.SoundUtils;
@@ -50,19 +52,19 @@ public class SettingsConfigGUI {
         });
         this.kInventory.setElement(49, back);
 
-        KItem spectators = new KItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: §atout le monde", "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem spectators = new KItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: §atout le monde", "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         spectators.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm)
                 return;
             if (uhc.getUhcConfig().getAllowSpec().equalsIgnoreCase("everyone")){
                 uhc.getUhcConfig().setAllowSpec("dead");
-                spectators.setItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: " + translateSpec(uhc.getUhcConfig().getAllowSpec()), "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                spectators.setItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: " + translateSpec(uhc.getUhcConfig().getAllowSpec()), "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }else if (uhc.getUhcConfig().getAllowSpec().equalsIgnoreCase("dead")){
                 uhc.getUhcConfig().setAllowSpec("nobody");
-                spectators.setItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: " + translateSpec(uhc.getUhcConfig().getAllowSpec()), "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                spectators.setItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: " + translateSpec(uhc.getUhcConfig().getAllowSpec()), "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }else if (uhc.getUhcConfig().getAllowSpec().equalsIgnoreCase("nobody")){
                 uhc.getUhcConfig().setAllowSpec("everyone");
-                spectators.setItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: " + translateSpec(uhc.getUhcConfig().getAllowSpec()), "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                spectators.setItem(new ItemCreator(SkullList.EYE.getItemStack()).name("§8┃ §fSpectateurs").lore("", "§8§l» §fStatut: " + translateSpec(uhc.getUhcConfig().getAllowSpec()), "", "§8┃ §6Configurez §fqui pourra §aregarder votre partie", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }
         });
         kInventory.setElement(16, spectators);
@@ -83,16 +85,16 @@ public class SettingsConfigGUI {
         });
         this.kInventory.setElement(10, slots);
 
-        KItem gappleOnKill = new KItem(new ItemCreator(Material.GOLDEN_APPLE).name("§8┃ §fPomme d'or à la mort").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGappleOnKill()), "", "§8┃ §aActiver §cou non§f le drop d'une", "§8┃ §epomme en or§f lors d'un kill", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem gappleOnKill = new KItem(new ItemCreator(Material.GOLDEN_APPLE).name("§8┃ §fPomme d'or à la mort").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGappleOnKill()), "", "§8┃ §aActiver §cou non§f le drop d'une", "§8┃ §epomme en or§f lors d'un kill", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         gappleOnKill.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm)
                 return;
             if (uhc.getUhcConfig().isGappleOnKill()){
                 uhc.getUhcConfig().setGappleOnKill(false);
-                gappleOnKill.setItem(new ItemCreator(Material.GOLDEN_APPLE).name("§8┃ §fPomme d'or à la mort").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGappleOnKill()), "", "§8┃ §aActiver §cou non§f le drop d'une", "§8┃ §epomme en or§f lors d'un kill", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                gappleOnKill.setItem(new ItemCreator(Material.GOLDEN_APPLE).name("§8┃ §fPomme d'or à la mort").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGappleOnKill()), "", "§8┃ §aActiver §cou non§f le drop d'une", "§8┃ §epomme en or§f lors d'un kill", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }else{
                 uhc.getUhcConfig().setGappleOnKill(true);
-                gappleOnKill.setItem(new ItemCreator(Material.GOLDEN_APPLE).name("§8┃ §fPomme d'or à la mort").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGappleOnKill()), "", "§8┃ §aActiver §cou non§f le drop d'une", "§8┃ §epomme en or§f lors d'un kill", "",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                gappleOnKill.setItem(new ItemCreator(Material.GOLDEN_APPLE).name("§8┃ §fPomme d'or à la mort").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGappleOnKill()), "", "§8┃ §aActiver §cou non§f le drop d'une", "§8┃ §epomme en or§f lors d'un kill", "",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }
         });
         this.kInventory.setElement(12, gappleOnKill);
@@ -132,16 +134,16 @@ public class SettingsConfigGUI {
         });
         this.kInventory.setElement(22, xpBooster);
 
-        KItem groupSystem = new KItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fSystème de groupes").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGroupSystem()), "", "§8┃ §fCe système est §aparfait §fpour §crappeler", "§8┃ §cà l'ordre les joueurs §fdans certains modes de jeu","",(perm ? "§8§l» §6Cliquez §fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem groupSystem = new KItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fSystème de groupes").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGroupSystem()), "", "§8┃ §fCe système est §aparfait §fpour §crappeler", "§8┃ §cà l'ordre les joueurs §fdans certains modes de jeu","",(perm ? "§8§l» §6Cliquez §fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         groupSystem.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm)
                 return;
             if (uhc.getUhcConfig().isGroupSystem()){
                 uhc.getUhcConfig().setGroupSystem(false);
-                groupSystem.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fSystème de groupes").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGroupSystem()), "", "§8┃ §fCe système est §aparfait §fpour §crappeler", "§8┃ §cà l'ordre les joueurs §fdans certains modes de jeu", "",(perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                groupSystem.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fSystème de groupes").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGroupSystem()), "", "§8┃ §fCe système est §aparfait §fpour §crappeler", "§8┃ §cà l'ordre les joueurs §fdans certains modes de jeu", "",(perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }else{
                 uhc.getUhcConfig().setGroupSystem(true);
-                groupSystem.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fSystème de groupes").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGroupSystem()), "", "§8┃ §fCe système est §aparfait §fpour §crappeler", "§8┃ §cà l'ordre les joueurs §fdans certains modes de jeu", "",(perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+                groupSystem.setItem(new ItemCreator(SkullList.LUCKYBLOCK.getItemStack()).name("§8┃ §fSystème de groupes").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isGroupSystem()), "", "§8┃ §fCe système est §aparfait §fpour §crappeler", "§8┃ §cà l'ordre les joueurs §fdans certains modes de jeu", "",(perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
             }
         });
         this.kInventory.setElement(20, groupSystem);
@@ -170,28 +172,28 @@ public class SettingsConfigGUI {
         });
         this.kInventory.setElement(34, potion);
 
-        KItem bowLife = new KItem(new ItemCreator(Material.BOW).name("§8┃ §fAffichage de la vie au contact d'une flèche").lore("", "§8§l» §fStatut: " + (uhc.getUhcConfig().isBowLife() ? "§aactivé" : "§cdésactivé"), "", "§8┃ §fLorsque cette option est §aactivé§f,", "§8┃ §florsqu'un joueur touchera quelqu'un en §6lui tirant dessus§f,", "§8┃ §fil §3aconnaîtra la vie §fde ce dernier", "",(perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem bowLife = new KItem(new ItemCreator(Material.BOW).name("§8┃ §fAffichage de la vie au contact d'une flèche").lore("", "§8§l» §fStatut: " + (uhc.getUhcConfig().isBowLife() ? "§aactivé" : "§cdésactivé"), "", "§8┃ §fLorsque cette option est §aactivé§f,", "§8┃ §florsqu'un joueur touchera quelqu'un en §6lui tirant dessus§f,", "§8┃ §fil §3aconnaîtra la vie §fde ce dernier", "",(perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         bowLife.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm)
                 return;
             uhc.getUhcConfig().setBowLife(!uhc.getUhcConfig().isBowLife());
-            bowLife.setItem(new ItemCreator(Material.BOW).name("§8┃ §fAffichage de la vie au contact d'une flèche").lore("", "§8§l» §fStatut: " + (uhc.getUhcConfig().isBowLife() ? "§aactivé" : "§cdésactivé"), "", "§8┃ §fLorsque cette option est §aactivé§f,", "§8┃ §florsqu'un joueur touchera quelqu'un en §6lui tirant dessus§f,", "§8┃ §fil §3aconnaîtra la vie §fde ce dernier", "",(perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+            bowLife.setItem(new ItemCreator(Material.BOW).name("§8┃ §fAffichage de la vie au contact d'une flèche").lore("", "§8§l» §fStatut: " + (uhc.getUhcConfig().isBowLife() ? "§aactivé" : "§cdésactivé"), "", "§8┃ §fLorsque cette option est §aactivé§f,", "§8┃ §florsqu'un joueur touchera quelqu'un en §6lui tirant dessus§f,", "§8┃ §fil §3aconnaîtra la vie §fde ce dernier", "",(perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         });
         this.kInventory.setElement(32, bowLife);
 
-        KItem milk = new KItem(new ItemCreator(Material.MILK_BUCKET).name("§8┃ §fSceaux de lait").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isMilkBukket()), "", "§8┃ §6Configurez §fla possibilité de §bboire", "§8┃ §bdes sceaux de laits§f, ces derniers annulant les effets de §aMinecraft", "",(perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem milk = new KItem(new ItemCreator(Material.MILK_BUCKET).name("§8┃ §fSceaux de lait").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isMilkBukket()), "", "§8┃ §6Configurez §fla possibilité de §bboire", "§8┃ §bdes sceaux de laits§f, ces derniers annulant les effets de §aMinecraft", "",(perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         milk.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!perm)
                 return;
             uhc.getUhcConfig().setMilkBukket(!uhc.getUhcConfig().isMilkBukket());
-            milk.setItem(new ItemCreator(Material.MILK_BUCKET).name("§8┃ §fSceaux de lait").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isMilkBukket()), "", "§8┃ §6Configurez §fla possibilité de §bboire", "§8┃ §bdes sceaux de laits§f, ces derniers annulant les effets de §aMinecraft", "", (perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+            milk.setItem(new ItemCreator(Material.MILK_BUCKET).name("§8┃ §fSceaux de lait").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isMilkBukket()), "", "§8┃ §6Configurez §fla possibilité de §bboire", "§8┃ §bdes sceaux de laits§f, ces derniers annulant les effets de §aMinecraft", "", (perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         });
         this.kInventory.setElement(28, milk);
 
-        KItem lifeTab = new KItem(new ItemCreator(SkullList.HEART.getItemStack()).name("§8┃ §fVie dans le tab").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isLifeTab()), "", "§8┃ §6Configurez §fl'affichage de la", "§8┃ §dvie des joueurs §fdans le tab", "", (perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+        KItem lifeTab = new KItem(new ItemCreator(SkullList.HEART.getItemStack()).name("§8┃ §fVie dans le tab").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isLifeTab()), "", "§8┃ §6Configurez §fl'affichage de la", "§8┃ §dvie des joueurs §fdans le tab", "", (perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         lifeTab.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             uhc.getUhcConfig().setLifeTab(!uhc.getUhcConfig().isLifeTab());
-            lifeTab.setItem(new ItemCreator(SkullList.HEART.getItemStack()).name("§8┃ §fVie dans le tab").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isLifeTab()), "", "§8┃ §6Configurez §fl'affichage de la", "§8┃ §dvie des joueurs §fdans le tab", "",(perm ? "§8§l» §6Cliquez§fpour séléctionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
+            lifeTab.setItem(new ItemCreator(SkullList.HEART.getItemStack()).name("§8┃ §fVie dans le tab").lore("", "§8§l» §fStatut: " + translateBoolean(uhc.getUhcConfig().isLifeTab()), "", "§8┃ §6Configurez §fl'affichage de la", "§8┃ §dvie des joueurs §fdans le tab", "",(perm ? "§8§l» §6Cliquez§fpour sélectionner.": "§8§l» §cVous ne pouvez pas modifié cela.")).get());
         });
         this.kInventory.setElement(30, lifeTab);
 

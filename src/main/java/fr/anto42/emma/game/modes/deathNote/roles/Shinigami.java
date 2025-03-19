@@ -28,6 +28,7 @@ public class Shinigami extends DNRole {
     @Override
     public void setRole() {
         super.setRole();
+        setCanReveal(true);
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
             getUhcPlayer().getUhcTeam().getAliveUhcPlayers().stream().filter(uhcPlayer -> uhcPlayer.getRole() != null && uhcPlayer.getRole() instanceof Kira).forEach(uhcPlayer -> {
                 kiraPlayer = uhcPlayer;

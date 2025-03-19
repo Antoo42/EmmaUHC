@@ -15,8 +15,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Random;
 
 public class SuperHeroes extends UHCScenario {
-    public SuperHeroes(ScenarioManager scenarioManager, int page) {
-        super("SuperHeroes", new ItemStack(Material.POTION), scenarioManager, page);
+    public SuperHeroes(ScenarioManager scenarioManager) {
+        super("SuperHeroes", new ItemStack(Material.POTION), scenarioManager);
         super.setDesc("§8┃ §fDevenez un héro (à défaut d'être un zéro) et obtenez des pouvoirs aléatoirs au début de la partie");
         setScenarioType(ScenarioType.PVP);
     }

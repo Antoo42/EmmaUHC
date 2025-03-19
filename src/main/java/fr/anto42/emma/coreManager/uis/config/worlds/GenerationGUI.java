@@ -1,4 +1,4 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config.worlds;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.worldManager.Generator;

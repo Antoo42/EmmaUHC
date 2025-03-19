@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 
 public class LuckyLeaves extends UHCScenario {
-    public LuckyLeaves(ScenarioManager scenarioManager, int page) {
-        super("LuckyLeaves", new ItemStack(Material.LEAVES), scenarioManager, page);
+    public LuckyLeaves(ScenarioManager scenarioManager) {
+        super("LuckyLeaves", new ItemStack(Material.LEAVES), scenarioManager);
         setkInventory(new LuckyLeavesGUI(this).getkInventory());
         setScenarioType(ScenarioType.MINNING);
         setDesc("§8┃ §fVous avez une chance de récupperer une pomme d'or lorsque vous cassez une feuille");

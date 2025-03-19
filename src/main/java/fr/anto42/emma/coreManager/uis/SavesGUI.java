@@ -1,11 +1,11 @@
 package fr.anto42.emma.coreManager.uis;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.UHCScenario;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.impl.UHCData;
 import fr.anto42.emma.game.impl.config.UHCConfig;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
@@ -13,21 +13,20 @@ import fr.blendman974.kinventory.inventories.KItem;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SavesGUI {
     private final KInventory kInventory;
     private static final String SAVE_FOLDER = "plugins/UHC/saves/";
 
-    public SavesGUI(Player player, boolean priv, String type) {
-        priv = true;
+    public SavesGUI(Player player, boolean priv, String type, int page) {
         UHC uhcInstance = UHC.getInstance();
         UHCGame uhcGame = uhcInstance.getUhcGame();
         UHCData uhcData = uhcGame.getUhcData();
@@ -35,7 +34,6 @@ public class SavesGUI {
 
         this.kInventory = new KInventory(54, UHC.getInstance().getConfig().getString("generalPrefix").replace("&", "§") + " §6§lSauvegardes");
 
-        // Bordures en verre rouge
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 14).get());
             this.kInventory.setElement(i, glass);
@@ -46,7 +44,6 @@ public class SavesGUI {
             this.kInventory.setElement(i, glass);
         }
 
-        // Vérifier et créer le dossier de sauvegarde
         Path savePath = Paths.get(SAVE_FOLDER);
         if (!Files.exists(savePath)) {
             try {
@@ -62,11 +59,20 @@ public class SavesGUI {
         });
         this.kInventory.setElement(49, back);
 
+        KItem filter = new KItem(new ItemCreator(Material.PAPER).name("§8┃ §fFiltre").lore("", "§8┃ §fStatut :§b " + (priv ? "vos configurations" : "toutes"), "", "§8§l» §6Cliquez §fpour modifier.").get());
+        filter.addCallback((kInventory1, item, player1, clickContext) -> {
+            new SavesGUI(player, !priv, "all", 0).getkInventory().open(player);
+        });
+        this.kInventory.setElement(7, filter);
+
         KItem save = new KItem(new ItemCreator(SkullList.LIME_BALL.getItemStack()).name("§8┃ §aCréer une nouvelle sauvegarde").lore("", "§8┃ §6Cliquez §fpour ajouter une nouvelle sauvegarde", "§8┃ §fet ainsi vous §aépargner du temps §fde configuration", "", "§8§l» §6Cliquez §fpour sauvegarder.").get());
         save.addCallback((kInventoryRepresentation, itemStack, player4, kInventoryClickContext) -> {
             String uuid = RandomStringUtils.random(5, true, false) + "-" + RandomStringUtils.random(5, false, true);
-
             uhcConfig.setCreator(uhcData.getHostName());
+            uhcConfig.getScenarios().clear();
+            uhcInstance.getUhcManager().getScenarioManager().getActivatedScenarios().forEach(uhcScenario -> {
+                uhcConfig.getScenarios().add(uhcScenario.getName());
+            });
 
             File saveFolder = new File(SAVE_FOLDER);
             if (!saveFolder.exists() && !saveFolder.mkdirs()) {
@@ -74,7 +80,7 @@ public class SavesGUI {
                 return;
             }
 
-            File saveFile = new File(saveFolder, uhcData.getHostName() + " - " + uhcConfig.getUHCName() + " - " + uuid + ".json");
+            File saveFile = new File(saveFolder, uhcData.getHostName() + " - " + uhcConfig.getUHCName() + "§6 - " + uuid + ".json");
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile))) {
                 String json = uhcInstance.getSaveSerializationManager().serialize(uhcConfig);
@@ -84,52 +90,98 @@ public class SavesGUI {
                 UHC.getUHCPlayer(player4).sendClassicMessage("§cErreur lors de la sauvegarde !");
                 e.printStackTrace();
             }
-            new SavesGUI(player4, false, type).getkInventory().open(player4);
+            new SavesGUI(player4, false, type, 0).getkInventory().open(player4);
         });
         this.kInventory.setElement(4, save);
 
         File folder = new File(SAVE_FOLDER);
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
-        if (files == null || files.length == 0) {
+
+        int maxPerPage = 27;
+        assert files != null;
+        int totalPages = (files.length + maxPerPage - 1) / maxPerPage;
+
+        if (files.length == 0) {
             KItem noSave = new KItem(new ItemCreator(SkullList.COMMANDBLOCK_RED.getItemStack()).name("§8┃ §cAucune sauvegarde trouvée").lore("", "§8┃ §fAucune sauvegarde n'a été trouvée.", "", "§8§l» §6Cliquez §fpour rafraîchir.").get());
             this.kInventory.setElement(22, noSave);
         } else {
+            int start = page * maxPerPage;
+            int end = Math.min(start + maxPerPage, files.length);
+            UHCConfig uhcConfig1 = null;
             int slot = 9;
-            for (File file : files) {
-                KItem saveItem = new KItem(new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).name("§8┃ §6" + file.getName().replace(".json", "")).lore("", "§8§l» §6Cliquez §fpour charger.", "§8§l» §6Jetez §fpour supprimer.").get());
+            for (int i = start; i < end; i++) {
+                File file = files[i];
+                String[] strings = file.getName().split(" - ");
+                String creator = strings[0];
+                String tempName = strings[1];
+                if (priv && !creator.contains(player.getName())) return;
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String json = reader.lines().reduce("", (a, b) -> a + b);
+                    uhcConfig1 = uhcInstance.getSaveSerializationManager().deserialize(json);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                UHCConfig finalUhcConfig = uhcConfig1;
+                KItem saveItem = new KItem(new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).get());
+
+                saveItem.setName("§8┃ §6" + tempName);
+
+                saveItem.setDescription(player1 -> {
+                    List<String> lore = new ArrayList<>();
+
+                    lore.add("");
+                    lore.add("§8§l» §7Créateur: §b" + creator);
+                    lore.add("");
+                    lore.add("§8§l» §7Slots: §c" + finalUhcConfig.getSlots());
+                    lore.add("§8§l» §7PvP: §c" + finalUhcConfig.getPvp() + "§7 min");
+                    lore.add("§8§l» §7Roles: §c" + finalUhcConfig.getRoles() + "§7 min");
+                    lore.add("");
+                    lore.add("§8§l» §7Bordure de départ: §c" + finalUhcConfig.getStartBorderSize());
+                    lore.add("§8§l» §7Bordure de fin: §c" + finalUhcConfig.getFinalBorderSize());
+                    lore.add("§8§l» §7Blocks/s: §c" + finalUhcConfig.getBlockPerS());
+                    lore.add("");
+
+                    lore.add((finalUhcConfig.getScenarios().isEmpty() ? "§8§l» §cAucun scénario" : "§8§l» §7Scénarios:"));
+                    for (String scenario : finalUhcConfig.getScenarios()) {
+                        lore.add("  §8§l» §a" + scenario);
+                    }
+
+                    lore.add("");
+                    lore.add("§8§l» §6Cliquez §fpour charger.");
+                    lore.add("§8§l» §6Jetez §fpour supprimer.");
+
+                    return lore;
+                });
+
+
+
                 saveItem.addCallback((kInventoryRepresentation, itemStack, player3, kInventoryClickContext) -> {
                     if (kInventoryClickContext.getInventoryAction().name().contains("DROP")) {
-                        if (!Bukkit.getPlayer(player3.getName()).isOp())
-                            return;
-                        if (!file.delete()) {
-                            UHC.getUHCPlayer(player3).sendClassicMessage("§cImpossible de supprimer cette sauvegarde !");
-                        } else {
-                            new DeleteFileGUI(file, getkInventory()).getkInventory().open(player);
-                        }
-                        new SavesGUI(player3, false, type).getkInventory().open(player3);
+                        if (!Bukkit.getPlayer(player3.getName()).isOp()) return;
+                        new DeleteFileGUI(file, getkInventory()).getkInventory().open(player);
                     } else {
-                        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                            StringBuilder jsonBuilder = new StringBuilder();
-                            String line;
-                            while ((line = reader.readLine()) != null) {
-                                jsonBuilder.append(line);
-                            }
-
-                            String json = jsonBuilder.toString();
-                            uhcInstance.getUhcGame().setUhcConfig(uhcInstance.getSaveSerializationManager().deserialize(json));
-                            UHC.getUHCPlayer(player3).sendClassicMessage("§aConfiguration §3" + file.getName().replace(".json", "") + "  §achargée avec succès !");
-
-                            for (UHCScenario uhcScenario : uhcInstance.getUhcManager().getScenarioManager().getActivatedScenarios()) {
-                                uhcScenario.onEnable();
-                            }
-                        } catch (IOException e) {
-                            UHC.getUHCPlayer(player3).sendClassicMessage("§cErreur lors du chargement !");
-                            e.printStackTrace();
-                        }
+                        uhcGame.setUhcConfig(finalUhcConfig);
+                        uhcInstance.getUhcManager().getScenarioManager().resetScenarios();
+                        finalUhcConfig.getScenarios().forEach(s -> {
+                            uhcInstance.getUhcManager().getScenarioManager().activateScenerio(uhcInstance.getUhcManager().getScenarioManager().getScenario(s));
+                        });
+                        UHC.getUHCPlayer(player3).sendClassicMessage("§aConfiguration chargée !");
                     }
                 });
                 this.kInventory.setElement(slot++, saveItem);
             }
+        }
+
+        if (page > 0) {
+            KItem prevPage = new KItem(new ItemCreator(Material.ARROW).name("§8┃ §6Page précédente").get());
+            prevPage.addCallback((kInventoryRepresentation, itemStack, player2, kInventoryClickContext) -> new SavesGUI(player2, priv, type, page - 1).getkInventory().open(player2));
+            this.kInventory.setElement(3, prevPage);
+        }
+
+        if (page < totalPages - 1) {
+            KItem nextPage = new KItem(new ItemCreator(Material.ARROW).name("§8┃ §6Page suivante").get());
+            nextPage.addCallback((kInventoryRepresentation, itemStack, player2, kInventoryClickContext) -> new SavesGUI(player2, priv, type, page + 1).getkInventory().open(player2));
+            this.kInventory.setElement(5, nextPage);
         }
     }
 

@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 public class ClassicModule extends Module {
     public ClassicModule() {
-        super("§6§lCLASSIQUE", "Classique", new ItemCreator(Material.GOLDEN_APPLE).get());
+        super("§6§lClassique", "Classique", new ItemCreator(Material.GOLDEN_APPLE).get());
         super.setConfigurable(false);
         super.setDev("Anto42_");
         super.getDesc().add("§8┃ §fLe mode de jeu par défaut mais qui n'est pas moins extravagant !");
@@ -38,10 +38,12 @@ public class ClassicModule extends Module {
                     Bukkit.broadcastMessage("§7");
                     Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + uhcGame.getUhcData().getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a kills !");
                     Bukkit.broadcastMessage("§7");
-                }else {
+                    UHC.getInstance().getDiscordManager().sendWin(uhcGame.getUhcData().getUhcPlayerList().get(0));
+            }else {
                 Bukkit.broadcastMessage("§7");
                 Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cOups... Je crois que je n'ai pas suivit la partie... Qui a gagné ? :p");
                 Bukkit.broadcastMessage("§7");
+                UHC.getInstance().getDiscordManager().sendWin(null);
                 }
 
                 for(Player player : Bukkit.getOnlinePlayers()){
@@ -63,6 +65,8 @@ public class ClassicModule extends Module {
             uhcGame.setGameState(GameState.FINISH);
 
             UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
+            UHC.getInstance().getDiscordManager().sendWin(uhcTeam);
+
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
             Bukkit.broadcastMessage("§7");
@@ -83,7 +87,7 @@ public class ClassicModule extends Module {
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
         } else if (uhcGame.getUhcData().getUhcPlayerList().isEmpty()){
             uhcGame.setGameState(GameState.FINISH);
-            
+            UHC.getInstance().getDiscordManager().sendWin(null);
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Oh mince, je n'ai pas regarder la partie... §3Qui a gagner ?");
             Bukkit.broadcastMessage("§7");

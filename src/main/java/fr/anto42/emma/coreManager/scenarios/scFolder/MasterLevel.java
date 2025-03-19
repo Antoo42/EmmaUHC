@@ -11,8 +11,8 @@ import fr.anto42.emma.utils.skulls.SkullList;
 import org.bukkit.event.EventHandler;
 
 public class MasterLevel extends UHCScenario {
-    public MasterLevel(ScenarioManager scenarioManager, int page) {
-        super("MasterLevel", new ItemCreator(SkullList.XP.getItemStack()).get(), scenarioManager, page);
+    public MasterLevel(ScenarioManager scenarioManager) {
+        super("MasterLevel", new ItemCreator(SkullList.XP.getItemStack()).get(), scenarioManager);
         setDesc("§8┃ §fCommencez la partie avec un nombre précis de niveaux d'expérience");
         setConfigurable(true);
         setkInventory(new MasterLevelGUI(this).getkInventory());

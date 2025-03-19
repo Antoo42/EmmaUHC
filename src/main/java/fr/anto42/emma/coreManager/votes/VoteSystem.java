@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoteSystem {
-    private static VoteSystem instance;
+    private VoteSystem instance;
 
     public VoteSystem() {
         instance = this;
@@ -36,7 +36,7 @@ public class VoteSystem {
         (new BukkitRunnable() {
             @Override
             public void run() {
-                Title.sendActionBar("§8§l» §6" + message + " §8┃ §aoui: §e" + yes + " §8┃ §cnon: §e" + no + " §7(Temps restant: §b" + (30-t) + " secondes§7)");
+                Title.sendActionBar("§8§l» §6" + message + " §8§l┃ §aoui: §e" + yes + " §8§l┃ §cnon: §e" + no + " §7(Temps restant: §b" + (30-t) + " seconde" + (t > 28 ? "" : "s") + "§7)");
                 if (t == 30){
                     Bukkit.broadcastMessage(UHC.getInstance().getPrefix() +  " §7Voici le résultat au vote §3" + message +"§7:");
                     Bukkit.broadcastMessage("");
@@ -50,7 +50,7 @@ public class VoteSystem {
         }).runTaskTimer(UHC.getInstance(), 0L, 20L);
     }
 
-    public static VoteSystem getInstance() {
+    public VoteSystem getInstance() {
         return instance;
     }
 

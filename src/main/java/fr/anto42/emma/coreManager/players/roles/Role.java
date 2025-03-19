@@ -1,11 +1,7 @@
 package fr.anto42.emma.coreManager.players.roles;
 
-import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.Module;
-import fr.anto42.emma.coreManager.UHCManager;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
-import fr.anto42.emma.game.UHCGame;
-import org.bukkit.Bukkit;
 
 public abstract class Role {
     private final String name;

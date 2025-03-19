@@ -14,8 +14,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Timber extends UHCScenario implements Listener {
-    public Timber(ScenarioManager scenarioManager, int page) {
-        super("Timber", new ItemCreator(Material.LOG).get(), scenarioManager, page);
+    public Timber(ScenarioManager scenarioManager) {
+        super("Timber", new ItemCreator(Material.LOG).get(), scenarioManager);
         setDesc("§8┃ §fLes arbres sont coupés au premier coup de poing");
         setScenarioType(ScenarioType.MINNING);
     }

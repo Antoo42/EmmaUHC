@@ -30,7 +30,7 @@ public class KiraEyesGUI {
             ((DNRole) uhcPlayer.getRole()).setSeeLife(true);
         });
 
-        KItem kItem2 = new KItem(new ItemCreator(new ItemStack(Material.ARROW, 1, (short) 14)).name("§cAnnuler").lore("§7Vous permet de fermer ce menu.", "").get());
+        KItem kItem2 = new KItem(new ItemCreator(new ItemStack(Material.ARROW)).name("§cAnnuler").lore("§7Vous permet de fermer ce menu.", "").get());
         kItem2.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             player.closeInventory();
             UHC.getUHCPlayer(player).sendClassicMessage("§cVous avez annulé l'échange.");

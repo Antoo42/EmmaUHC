@@ -17,8 +17,8 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class NoBow extends UHCScenario implements Listener {
-    public NoBow(ScenarioManager scenarioManager, int page) {
-        super("NoBow", new ItemCreator(Material.BOW).get(), scenarioManager, page);
+    public NoBow(ScenarioManager scenarioManager) {
+        super("NoBow", new ItemCreator(Material.BOW).get(), scenarioManager);
         super.setDesc("§8┃ §fIl est maintenant §cimpossible §fde craft des arcs");
         setScenarioType(ScenarioType.PVP);
     }

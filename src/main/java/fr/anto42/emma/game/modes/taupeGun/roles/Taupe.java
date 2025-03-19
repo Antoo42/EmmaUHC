@@ -27,34 +27,35 @@ public class Taupe extends TRole {
 
     @Override
     public void sendDesc() {
-        getUhcPlayer().sendMessage("§6══════════════════════════════");
-        getUhcPlayer().sendMessage("§eRôle : §bTaupe");
-        getUhcPlayer().sendMessage("§eObjectif : §bGagner avec " + getTaupeTeam().getName());
+        getUhcPlayer().sendMessage("§8§l══════════════════════════════");
+        getUhcPlayer().sendMessage("§6§lRôle : §bTaupe");
+        getUhcPlayer().sendMessage("§6§lObjectif : §bGagner avec " + getTaupeTeam().getName());
 
-        getUhcPlayer().sendMessage("§6══════════════════════════════");
-        getUhcPlayer().sendMessage("§eEffets & Commandes :");
-        getUhcPlayer().sendMessage("  §8⦿ §fUtilisez /t <message> pour communiquer avec votre équipe.");
-        getUhcPlayer().sendMessage("  §8⦿ §fRécupérez les objets de votre kit avec /claim.");
-        getUhcPlayer().sendMessage("  §8⦿ §fRévélez votre identité aux autres joueurs en utilisant /reveal. Vous obtiendrez une pomme d'or en conséquence.");
-        getUhcPlayer().sendMessage("§6══════════════════════════════");
+        getUhcPlayer().sendMessage("§8§l══════════════════════════════");
+        getUhcPlayer().sendMessage("§e§lEffets & Commandes :");
+        getUhcPlayer().sendMessage("  §7➤ §fUtilisez /t <message> pour discuter avec votre équipe.");
+        getUhcPlayer().sendMessage("  §7➤ §fRécupérez votre kit en utilisant /claim.");
+        getUhcPlayer().sendMessage("  §7➤ §fRévélez votre identité avec /reveal. Vous recevrez une pomme d'or.");
+
+        getUhcPlayer().sendMessage("§8§l══════════════════════════════");
     }
 
 
     @Override
     public void reveal() {
         UHCTeam uhcTeam = getUhcPlayer().getUhcTeam();
-        if(GameUtils.getModule().getData().getRevealPlayers().contains(getUhcPlayer())){
-            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous avez déjà révélé votre identité !");
+        if(isReveal()){
+            getUhcPlayer().sendClassicMessage("§cVous avez déjà révélé votre identité !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
         if (getUhcPlayer().getPlayerState() != UHCPlayerStates.ALIVE) {
-            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous ne pouvez pas faire ça en étant mort !");
+            getUhcPlayer().sendClassicMessage("§cVous ne pouvez pas faire ça en étant mort !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
         if (UHC.getInstance().getUhcGame().getGameState() != GameState.PLAYING) {
-            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous ne pouvez pas faire ça maintenant !");
+            getUhcPlayer().sendClassicMessage("§cVous ne pouvez pas faire ça maintenant !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }
@@ -63,6 +64,7 @@ public class Taupe extends TRole {
         getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
         Bukkit.broadcastMessage("§6§lUHC §8§l» §c§l" + getUhcPlayer().getName() + "§7 se rèvéle être une §c§ltaupe §7!");
         SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
+        setReveal(true);
         GameUtils.getModule().getData().getRevealPlayers().add(getUhcPlayer());
         if(uhcTeam.getAlivePlayersAmount() == 0)
             uhcTeam.destroy();
@@ -77,7 +79,7 @@ public class Taupe extends TRole {
             return;
         }
         if (UHC.getInstance().getUhcGame().getGameState() != GameState.PLAYING) {
-            getUhcPlayer().sendMessage("§c§lTAUPE §8§l» §cVous ne pouvez pas faire ça maintenant !");
+            getUhcPlayer().sendClassicMessage("§cVous ne pouvez pas faire ça maintenant !");
             SoundUtils.playSoundToPlayer(getUhcPlayer().getBukkitPlayer(), Sound.VILLAGER_NO);
             return;
         }

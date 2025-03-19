@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 public class CatEyes extends UHCScenario {
-    public CatEyes(ScenarioManager scenarioManager, int page) {
-        super("CatEyes", SkullList.EYE.getItemStack(), scenarioManager, page);
+    public CatEyes(ScenarioManager scenarioManager) {
+        super("CatEyes", SkullList.EYE.getItemStack(), scenarioManager);
         super.setDesc("§8┃ §fAh... On y voit quand même bien mieux !");
         setScenarioType(ScenarioType.PVE);
     }

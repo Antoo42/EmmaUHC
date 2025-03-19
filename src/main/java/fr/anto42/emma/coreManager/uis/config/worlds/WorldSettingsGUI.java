@@ -1,6 +1,7 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config.worlds;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.worldManager.OrePopulator;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.coreManager.worldManager.WorldPopulator;
 import fr.anto42.emma.game.UHCGame;
@@ -40,15 +41,30 @@ public class WorldSettingsGUI {
         });
         this.kInventory.setElement(49, back);
 
-        KItem nether = new KItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem boost = new KItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fAfin que le boost prenne effet,", "§8┃ §fvous devez prégener la carte de jeu", "", "§8§l» §6Clique-gauche §fpour ajouter 25%.", "§8§l» §6Clique-droit §fpour retirer 25%.").get());
+        boost.addCallback((kInventory1, item, player, clickContext) -> {
+            if (clickContext.getClickType().isLeftClick()) {
+                if (uhc.getUhcConfig().getBoostMultiplier() >= 3000)
+                    return;
+                uhc.getUhcConfig().setBoostMultiplier(uhc.getUhcConfig().getBoostMultiplier() + 25);
+            } if (clickContext.getClickType().isRightClick()) {
+                if (uhc.getUhcConfig().getBoostMultiplier() <= 100)
+                    return;
+                uhc.getUhcConfig().setBoostMultiplier(uhc.getUhcConfig().getBoostMultiplier() - 25);
+            }
+            boost.setItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fAfin que le boost prenne effet,", "§8┃ §fvous devez prégener la carte de jeu", "", "§8§l» §6Clique-gauche §fpour ajouter 25%.", "§8§l» §6Clique-droit §fpour retirer 25%.").get());
+        });
+        this.kInventory.setElement(21, boost);
+
+        KItem nether = new KItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         nether.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (uhc.getUhcConfig().isNether()){
                 uhc.getUhcConfig().setNether(false);
-                nether.setItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                nether.setItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             }
             else{
                 uhc.getUhcConfig().setNether(true);
-                nether.setItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+                nether.setItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
             }
         });
         this.kInventory.setElement(13, nether);
@@ -64,7 +80,7 @@ public class WorldSettingsGUI {
         });
         this.kInventory.setElement(15, pregen);
 
-        KItem cleanCenter = new KItem(new ItemCreator(SkullList.CYAN_BALL.getItemStack()).name("§8┃ §fNettoyer le centre").lore("", "§8┃ §fNettoyer le centre afin que ce dernier", "§8┃ §fsoit §asans eau","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem cleanCenter = new KItem(new ItemCreator(SkullList.CYAN_BALL.getItemStack()).name("§8┃ §fNettoyer le centre").lore("", "§8┃ §fNettoyer le centre afin que ce dernier", "§8┃ §fsoit §asans eau","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         cleanCenter.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (WorldManager.isClean()){
                 player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
@@ -76,7 +92,7 @@ public class WorldSettingsGUI {
         this.kInventory.setElement(11, cleanCenter);
 
 
-        KItem roofed = new KItem(new ItemCreator(Material.SAPLING, 1, (short) 5).name("§8┃ §fForêt noir").lore( "", "§8┃ §fGénérez une §cforêt §fartificielle §aau centre de la carte","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §6Cliquez §fpour séléctionner.").get());
+        KItem roofed = new KItem(new ItemCreator(Material.SAPLING, 1, (short) 5).name("§8┃ §fForêt noir").lore( "", "§8┃ §fGénérez une §cforêt §fartificielle §aau centre de la carte","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         roofed.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (WorldManager.isRoofed()){
                 player.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
@@ -87,15 +103,15 @@ public class WorldSettingsGUI {
         });
         this.kInventory.setElement(29, roofed);
 
-        KItem end = new KItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §6Cliquez §fpour séléctionner").get());
+        KItem end = new KItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §6Cliquez §fpour sélectionner").get());
         end.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (uhc.getUhcConfig().isEnd()){
                 uhc.getUhcConfig().setEnd(false);
-                end.setItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §6Cliquez §fpour séléctionner").get());
+                end.setItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §6Cliquez §fpour sélectionner").get());
             }
             else{
                 uhc.getUhcConfig().setEnd(true);
-                end.setItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §6Cliquez §fpour séléctionner").get());
+                end.setItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §6Cliquez §fpour sélectionner").get());
             }
         });
         this.kInventory.setElement(31, end);

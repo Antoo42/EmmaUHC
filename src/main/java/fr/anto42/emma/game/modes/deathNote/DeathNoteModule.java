@@ -18,6 +18,7 @@ import fr.anto42.emma.game.modes.deathNote.roles.Shinigami;
 import fr.anto42.emma.game.modes.deathNote.uis.DeathNoteConfigGUI;
 import fr.anto42.emma.game.modes.deathNote.utils.GameUtils;
 import fr.anto42.emma.game.modes.deathNote.utils.MeloType;
+import fr.anto42.emma.game.modes.deathNote.utils.NearHealthView;
 import fr.anto42.emma.utils.CommandUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
@@ -38,12 +39,13 @@ public class DeathNoteModule extends Module {
         getDesc().add("§8┃ §fBasé sur l'§eunivers §fdu manga au même nom, §3Death§6Note");
         getDesc().add("§8┃ §fvous plongera dans une partie avec §cmoultes rebondissements§f.");
         super.setConfigurable(true);
-        super.setkInventory(new DeathNoteConfigGUI(this).getkInventory());
         GameUtils.init(this);
+        setVersion("V4.0");
 
 
-        deathNoteConfig = new DeathNoteConfig(this);
+        deathNoteConfig = new DeathNoteConfig();
         deathNoteData = new DeathNoteData(this);
+        setkInventory(new DeathNoteConfigGUI(this).getkInventory());
     }
 
     @Override
@@ -61,6 +63,7 @@ public class DeathNoteModule extends Module {
         CommandUtils.registerCommand("uhc", new RevealCommand());
         CommandUtils.registerCommand("uhc", new KCommand());
         CommandUtils.registerCommand("uhc", new MelloCommand());
+        new NearHealthView().startHealthUpdater();
     }
 
     public DeathNoteConfig getDeathNoteConfig() {
@@ -102,12 +105,15 @@ public class DeathNoteModule extends Module {
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
             Bukkit.broadcastMessage("§7");
             announceEnd();
+            UHC.getInstance().getDiscordManager().sendWin(uhcTeam);
+
         }
         if(UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size() == 1 && shinigami == 1 || UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size() == 1 && badMello == 1){
             UHC.getInstance().getUhcGame().setGameState(GameState.FINISH);
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + gameManager.getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + gameManager.getUhcPlayerList().get(0).getKills() + "§a kills !");
             Bukkit.broadcastMessage("§7");
+            UHC.getInstance().getDiscordManager().sendWin(gameManager.getUhcPlayerList().get(0));
             announceEnd();
         } else if(UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size() == kira){
             for(UHCPlayer uhcPlayer : UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList()){
@@ -118,6 +124,7 @@ public class DeathNoteModule extends Module {
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe des §c§l Kira§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a !");
             Bukkit.broadcastMessage("§7");
+            UHC.getInstance().getDiscordManager().sendWin(null);
             announceEnd();
         }
     }

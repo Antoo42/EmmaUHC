@@ -7,7 +7,8 @@ import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
-import fr.anto42.emma.coreManager.uis.RulesGUI;
+import fr.anto42.emma.coreManager.uis.gameSaves.GameSavedGUI;
+import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
 import fr.anto42.emma.coreManager.uis.SelectTeamGUI;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
@@ -19,7 +20,6 @@ import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.GameUtils;
 import fr.anto42.emma.utils.players.InventoryUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.saves.ItemStackToString;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
@@ -41,8 +41,8 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -74,22 +74,38 @@ public class CoreListeners implements Listener {
     }
 
     @EventHandler
+    public void onPing(ServerListPingEvent event) {
+        event.setMaxPlayers(uhc.getUhcConfig().getSlots());
+        event.setMotd("§3§lEmmaUHC §8§l» §6" + uhc.getUhcConfig().getUHCName() + "\n§6§lHost : §a" + uhc.getUhcData().getHostName());
+    }
+
+    @EventHandler
     public void onStart(StartEvent event) {
         Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
             uhc.getUhcData().setEpisode(uhc.getUhcData().getEpisode() + 1);
             Bukkit.getPluginManager().callEvent(new EpisodeEvent());
-        }, 0L, TimeUtils.minutes(uhc.getUhcConfig().getEpisode()));
+        }, TimeUtils.minutes(uhc.getUhcConfig().getEpisode()), TimeUtils.minutes(uhc.getUhcConfig().getEpisode()));
+        uhcCore.getUhcManager().getGamemode().onStart();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            uhc.getUhcData().getWhiteListPlayer().add(player.getUniqueId());
+        });
     }
 
     @EventHandler
     public void onPreJoin(AsyncPlayerPreLoginEvent event) {
+        if (event.getName().equals("Anto42_") || event.getName().equals("Mushorn_"))
+            return;
         if (uhcCore.getUhcGame().getUhcData().isWhiteList()) {
-            if (event.getName().equals("Anto42_"))
-                return;
+
             if (uhcCore.getUhcGame().getUhcData().getWhiteListPlayer().contains(event.getUniqueId()) || uhcCore.getUhcGame().getUhcData().getPreWhitelist().contains(event.getName()))
                 return;
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST);
             event.setKickMessage("§cLa whitelist est active !");
+        }
+        if (uhc.getUhcData().getUhcPlayerList().size() >= uhc.getUhcConfig().getSlots()) {
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_FULL);
+            event.setKickMessage("§cLa partie est pleine !");
+
         }
     }
 
@@ -99,106 +115,115 @@ public class CoreListeners implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event){
-        if(event.getPlayer().getName().equals("Anto42_"))
-            event.getPlayer().setOp(true);
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        UHC.registerPlayer(player);
+        UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
+        GameState gameState = uhc.getGameState();
+        if (!uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer))
+            uhc.getUhcData().getUhcPlayerListSaved().add(uhcPlayer);
+        if (playerName.equals("Anto42_")) player.setOp(true);
+
         event.setJoinMessage(null);
-        UHC.registerPlayer(event.getPlayer());
-        UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
-        uhcPlayer.setUHCOp(false);
-        uhcCore.getScoreboardManager().onLogin(event.getPlayer());
+        uhcCore.getScoreboardManager().onLogin(player);
+
         if (uhcPlayer.getUhcTeam() == null) {
             uhcPlayer.joinTeam(waitingTeam);
             uhcPlayer.leaveTeam();
         }
-        (new BukkitRunnable() {
+
+        new BukkitRunnable() {
             @Override
             public void run() {
-                PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
                 try {
+                    PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
                     Field a = packet.getClass().getDeclaredField("a");
-                    a.setAccessible(true);
                     Field b = packet.getClass().getDeclaredField("b");
+                    a.setAccessible(true);
                     b.setAccessible(true);
-                    Object header1 = new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n" + "  §6/helpop §8┃ §6/rules §8┃ §6/lag \n");
-                    a.set(packet, header1);
-                    Object footer = new ChatComponentText(" \n  §8┃ §7Ping: §a" + formatPing(((CraftPlayer) event.getPlayer()).getHandle().ping) +  "  §8┃ §7TPS: §a" + formatTPS(MinecraftServer.getServer().recentTps[0]) + "  \n");
-                    b.set(packet, footer);
-                } catch (NoSuchFieldException | IllegalAccessException ee) {
+
+                    a.set(packet, new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n  §6/helpop §8┃ §6/rules §8┃ §6/lag \n"));
+                    b.set(packet, new ChatComponentText(" \n  §8┃ §7Ping: §a" + formatPing(((CraftPlayer) player).getHandle().ping) +
+                            "  §8┃ §7TPS: §a" + formatTPS(MinecraftServer.getServer().recentTps[0]) + "  \n"));
+
+                    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
                     System.out.println("UHC » Error on the TabList loading, contact Anto42_");
                 }
-                ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.sendPacket(packet);
             }
-        }).runTaskTimer(UHC.getInstance(), 1L, 1L);
-
+        }.runTaskTimer(UHC.getInstance(), 1L, 1L);
 
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-            if (uhc.getGameState().equals(GameState.WAITING)){
+            if (gameState == GameState.WAITING) {
                 uhc.getUhcData().getUhcPlayerList().add(uhcPlayer);
-                uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.SURVIVAL);
                 uhcPlayer.setPlayerState(UHCPlayerStates.ALIVE);
-                uhcPlayer.getBukkitPlayer().teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
-                uhcPlayer.getBukkitPlayer().setMaxHealth(20);
-                uhcPlayer.getBukkitPlayer().setHealth(20);
-                uhcPlayer.getBukkitPlayer().setLevel(0);
-                uhcPlayer.getBukkitPlayer().setFoodLevel(20);
-                uhcPlayer.getBukkitPlayer().getInventory().setHelmet(null);
-                uhcPlayer.getBukkitPlayer().getInventory().setChestplate(null);
-                uhcPlayer.getBukkitPlayer().getInventory().setLeggings(null);
-                uhcPlayer.getBukkitPlayer().getInventory().setBoots(null);
-                uhcPlayer.getBukkitPlayer().getInventory().clear();
+                player.teleport(WorldManager.getSpawnLocation());
+                player.setMaxHealth(20);
+                player.setHealth(20);
+                player.setLevel(0);
+                player.setFoodLevel(20);
+                player.getInventory().clear();
+                player.getInventory().setArmorContents(null);
+
                 Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                     if (uhc.getUhcData().getHostPlayer() == null) {
-                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouvel Host de la partie est désormais §a" + uhcPlayer.getName());
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouvel Host de la partie est désormais §a" + playerName);
                         uhc.getUhcData().setHostPlayer(uhcPlayer);
-                        PlayersUtils.giveWaitingStuff(uhcPlayer.getBukkitPlayer());
-                        if (UHC.getInstance().getUhcGame().getUhcConfig().getUHCName().equalsIgnoreCase("UHCHost"))
-                            UHC.getInstance().getUhcGame().getUhcConfig().setUHCName("Partie de " + uhcPlayer.getName());
+                        PlayersUtils.giveWaitingStuff(player);
+                        if (UHC.getInstance().getUhcGame().getUhcConfig().getUHCName().equalsIgnoreCase("UHCHost")) {
+                            UHC.getInstance().getUhcGame().getUhcConfig().setUHCName("Partie de " + playerName);
+                        }
                     }
                 }, 3L);
 
-                for(PotionEffect effect : uhcPlayer.getBukkitPlayer().getActivePotionEffects()){
-                    uhcPlayer.getBukkitPlayer().removePotionEffect(effect.getType());
-                }
-                PlayersUtils.giveWaitingStuff(event.getPlayer());
-                Bukkit.broadcastMessage("§f(§e+§f) §a" + uhcPlayer.getName());
-            } else if (uhc.getGameState().equals(GameState.PLAYING) || uhc.getGameState().equals(GameState.STARTING)){
+                player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+                PlayersUtils.giveWaitingStuff(player);
+                Bukkit.broadcastMessage("§f(§e+§f) §a" + playerName);
+            }
 
-                if (uhc.getUhcConfig().getAllowSpec().equalsIgnoreCase("nobody")) {
-                    if (!uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer) && !uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
-                        uhcPlayer.getBukkitPlayer().kickPlayer("§cLes spectateurs ne sont pas autorisés !");
-                        return;
-                    }
+            else if (gameState == GameState.PLAYING || gameState == GameState.STARTING) {
+                String specRule = uhc.getUhcConfig().getAllowSpec();
 
+                if ("nobody".equalsIgnoreCase(specRule) &&
+                        !uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer) &&
+                        !uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
+                    player.kickPlayer("§cLes spectateurs ne sont pas autorisés !");
+                    return;
                 }
-                if (uhc.getUhcConfig().getAllowSpec().equalsIgnoreCase("dead")) {
-                    if (!uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer) && !uhc.getUhcData().getSpecList().contains(uhcPlayer) && !uhc.getUhcData().getWhiteListPlayer().contains(uhcPlayer.getBukkitPlayer().getUniqueId())) {
-                        uhcPlayer.getBukkitPlayer().kickPlayer("§cSeul les joueurs morts sont autorisés à regarder la partie !");
-                        return;
-                    }
+
+                if ("dead".equalsIgnoreCase(specRule) &&
+                        !uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer) &&
+                        !uhc.getUhcData().getSpecList().contains(uhcPlayer) &&
+                        !uhc.getUhcData().getWhiteListPlayer().contains(player.getUniqueId())) {
+                    player.kickPlayer("§cSeuls les joueurs morts sont autorisés à regarder la partie !");
+                    return;
                 }
+
                 if (uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer)) {
-                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §fLe joueur §a" + uhcPlayer.getName() + "§f est revenu dans la partie !");
-                    uhcPlayer.getPotionEffects().forEach(potionEffect -> {
-                        uhcPlayer.getBukkitPlayer().addPotionEffect(potionEffect);
-                        uhcPlayer.getPotionEffects().remove(potionEffect);
+                    Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §fLe joueur §a" + playerName + "§f est revenu dans la partie !");
+                    uhcPlayer.getPotionEffects().forEach(effect -> {
+                        player.addPotionEffect(effect);
+                        uhcPlayer.getPotionEffects().remove(effect);
                     });
-                    uhcPlayer.getToRemovePotionEffects().forEach(potionEffect -> {
-                        uhcPlayer.safeRemovePotionEffect(potionEffect);
-                        uhcPlayer.getToRemovePotionEffects().remove(potionEffect);
+                    uhcPlayer.getToRemovePotionEffects().forEach(effect -> {
+                        uhcPlayer.safeRemovePotionEffect(effect);
+                        uhcPlayer.getToRemovePotionEffects().remove(effect);
                     });
-
                 } else {
-                    uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
-                    uhcPlayer.getBukkitPlayer().teleport(WorldManager.getCenterLoc());
+                    player.setGameMode(GameMode.SPECTATOR);
+                    player.teleport(WorldManager.getCenterLoc());
                 }
-            } else if (uhc.getGameState().equals(GameState.FINISH)){
-                uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
-                uhcPlayer.getBukkitPlayer().teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
+            }
+
+            else if (gameState == GameState.FINISH) {
+                player.setGameMode(GameMode.SPECTATOR);
+                player.teleport(WorldManager.getSpawnLocation());
             }
         }, 1L);
-
     }
+
 
     @EventHandler
     public void onLate(LateEvent event){
@@ -210,17 +235,8 @@ public class CoreListeners implements Listener {
         if (uhc.getUhcConfig().getStarterStuffConfig().getStartInv().length == 0){
             uhctarget.getBukkitPlayer().getInventory().setItem(0, new ItemCreator(Material.COOKED_BEEF, 32).get());
             uhctarget.getBukkitPlayer().getInventory().setItem(1, new ItemCreator(Material.BOOK, 1).get());
-            //TODO fix late stuff cf ci dessous
         } else {
-            Player player = uhctarget.getBukkitPlayer();
-            for (String s : uhc.getUhcConfig().getStarterStuffConfig().getStartInv()) {
-                player.getInventory().addItem(ItemStackToString.ItemStackFromString(s));
-            }
-            for (ItemStack content : player.getInventory().getContents()) {
-                if (content.getType().equals(Material.BARRIER)) {
-                    player.getInventory().removeItem(content);
-                }
-            }
+            InventoryUtils.restoreInventory(uhctarget.getBukkitPlayer());
         }
     }
 
@@ -307,8 +323,6 @@ public class CoreListeners implements Listener {
         if (uhc.getUhcConfig().isGappleOnKill()){
             event.getEntity().getLocation().getWorld().dropItemNaturally(event.getEntity().getLocation(), new ItemCreator(Material.GOLDEN_APPLE).get());
         }
-
-
     }
 
     @EventHandler
@@ -320,8 +334,10 @@ public class CoreListeners implements Listener {
             uhcCore.getUhcManager().getConfigMainGUI().open(event.getPlayer());
         if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §6§lRègles de la partie"))
             new RulesGUI().getkInventory().open(event.getPlayer());
+        if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §b§lHistorique de partie"))
+            new GameSavedGUI(event.getPlayer(), true, "all", 0).getkInventory().open(event.getPlayer());
         else if (event.getItem() != null && event.getItem().getType() == Material.BANNER && uhc.getGameState() == GameState.WAITING ||event.getItem() != null && event.getItem().getType() == Material.BANNER && uhc.getGameState() == GameState.STARTING)
-            new SelectTeamGUI().getkInventory().open(event.getPlayer());
+            new SelectTeamGUI(0).getkInventory().open(event.getPlayer());
         else if (event.getItem() != null && event.getItem().getType() == Material.MILK_BUCKET && !uhc.getUhcConfig().isMilkBukket())
             event.setCancelled(true);
     }
@@ -333,52 +349,70 @@ public class CoreListeners implements Listener {
     }
 
     @EventHandler
-    public void onBreak(BlockBreakEvent event){
-        if (uhc.getGameState() != GameState.PLAYING && !UHC.getUHCPlayer(event.getPlayer()).isUHCOp())
-            event.setCancelled(true);
+    public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
-        if (uhc.getGameState() == GameState.PLAYING && event.getBlock().getType() == Material.DIAMOND_ORE){
-            event.getBlock().getDrops().clear();
-            if (uhcPlayer.getDiamondMined() >= uhc.getUhcConfig().getDiamonLimit()){
-                event.getBlock().getDrops().clear();
-                uhcPlayer.safeGive(new ItemCreator(Material.GOLD_INGOT).get());
-                uhcPlayer.getBukkitPlayer().giveExp(3*uhc.getUhcConfig().getXpBoost());
-                uhcPlayer.setDiamondMined(uhcPlayer.getDiamondMined() + 1);
-                return;
+        Material blockType = event.getBlock().getType();
+        GameState gameState = uhc.getGameState();
+
+        if (gameState != GameState.PLAYING && !uhcPlayer.isUHCOp()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (gameState == GameState.PLAYING) {
+            switch (blockType) {
+                case DIAMOND_ORE:
+                    event.getBlock().getDrops().clear();
+                    if (uhcPlayer.getDiamondMined() >= uhc.getUhcConfig().getDiamonLimit()) {
+                        uhcPlayer.safeGive(new ItemCreator(Material.GOLD_INGOT).get());
+                        uhcPlayer.getBukkitPlayer().giveExp(3 * uhc.getUhcConfig().getXpBoost());
+                    }
+                    uhcPlayer.setDiamondMined(uhcPlayer.getDiamondMined() + 1);
+                    uhc.getUhcData().getAlerts().forEach(alertPlayer ->
+                            alertPlayer.sendModMessage("§a§lAlerts §8§l» §e§l" + uhcPlayer.getName() +
+                                    "§7 vient de miner un diamant. C'est son §e" + uhcPlayer.getDiamondMined() + " diamant miné§7.")
+                    );
+                    break;
+
+                case GOLD_ORE:
+                    uhcPlayer.setGoldMined(uhcPlayer.getGoldMined() + 1);
+                    uhc.getUhcData().getAlerts().forEach(alertPlayer ->
+                            alertPlayer.sendModMessage("§a§lAlerts §8§l» §e§l" + uhcPlayer.getName() +
+                                    "§7 vient de miner un or. C'est son §e" + uhcPlayer.getGoldMined() + " or miné§7.")
+                    );
+                    break;
+
+                case IRON_ORE:
+                    uhcPlayer.setIronMined(uhcPlayer.getIronMined() + 1);
+                    break;
+
+                default:
+                    break;
             }
-            uhcPlayer.setDiamondMined(uhcPlayer.getDiamondMined() + 1);
-            uhc.getUhcData().getAlerts().forEach(uhcPlayer1 -> {
-                uhcPlayer1.sendModMessage("§a§lAlerts §8§l» §e§l" + uhcPlayer.getName() + "§7 vient de miner un diamant. C'est son §e" + uhcPlayer.getDiamondMined() + " diamant miné§7.");
-            });
-        }
-        if (uhc.getGameState() == GameState.PLAYING && event.getBlock().getType() == Material.GOLD_ORE){
-            uhcPlayer.setGoldMined(uhcPlayer.getGoldMined() + 1);
-            uhc.getUhcData().getAlerts().forEach(uhcPlayer1 -> {
-                uhcPlayer1.sendModMessage("§a§lAlerts §8§l» §e§l" + uhcPlayer.getName() + "§7 vient de miner un or. C'est son §e" + uhcPlayer.getGoldMined() + " or miné§7.");
-            });
-        }
-        if (uhc.getGameState() == GameState.PLAYING && event.getBlock().getType() == Material.IRON_ORE){
-            uhcPlayer.setIronMined(uhcPlayer.getIronMined() + 1);
         }
     }
 
+
     @EventHandler
     public void onDamage(EntityDamageEvent event){
+        if (!(event.getEntity() instanceof Player))
+            return;
         if (uhc.getGameState() != GameState.PLAYING){
             event.setCancelled(true);
-        }else if (event.getEntity() instanceof Player){
-            if (!UHC.getUHCPlayer(((Player) event.getEntity())).isDamageable()) event.setCancelled(true);
+        }else if (!UHC.getUHCPlayer(((Player) event.getEntity())).isDamageable()) event.setCancelled(true);
+        else {
+            UHCPlayer victim = UHC.getUHCPlayer(((Player) event.getEntity()));
+            victim.addReceivedDamages(event.getFinalDamage());
         }
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-
         Location from = event.getFrom();
         Location to = event.getTo();
         if (from.getY() <= 0 && uhc.getGameState() != GameState.PLAYING) {
-            event.getPlayer().teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
+            event.getPlayer().teleport(WorldManager.getSpawnLocation());
             return;
         }
         if (!UHC.getUHCPlayer(event.getPlayer()).getFreeze())
@@ -403,40 +437,46 @@ public class CoreListeners implements Listener {
     }
 
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent event){
-        if (!uhc.getUhcData().isChat()){
+    public void onChat(AsyncPlayerChatEvent event) {
+        UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
+
+        if (!uhc.getUhcData().isChat()) {
             event.setCancelled(true);
             return;
         }
-        UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
-        if (uhc.getGameState().equals(GameState.PLAYING) && UHCTeamManager.getInstance().isActivated()){
+
+        boolean isGamePlaying = uhc.getGameState().equals(GameState.PLAYING);
+        boolean isTeamChatActive = UHCTeamManager.getInstance().isActivated();
+        boolean isHost = uhc.getUhcData().getCoHostList().contains(uhcPlayer) || uhc.getUhcData().getHostPlayer() == uhcPlayer;
+        boolean isSpectator = uhc.getUhcData().getSpecList().contains(uhcPlayer);
+        boolean isAlive = uhcPlayer.getPlayerState().equals(UHCPlayerStates.ALIVE);
+
+        if (isGamePlaying && isTeamChatActive) {
             if (!event.getMessage().startsWith("!")) {
-                uhcPlayer.getUhcTeam().getUhcPlayerList().forEach(uhcPlayer1 -> {
-                    uhcPlayer1.sendMessage( uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " " + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
-                });
+                uhcPlayer.getUhcTeam().getUhcPlayerList().forEach(teamMember ->
+                        teamMember.sendMessage(uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " " +
+                                uhcPlayer.getName() + " §8§l» §f" + event.getMessage()));
                 event.setCancelled(true);
+                return;
             }
-            else {
-                if (uhc.getUhcData().getCoHostList().contains(uhcPlayer) || uhc.getUhcData().getHostPlayer() == uhcPlayer) {
-                    event.setFormat("§7(ALL) §8┃ §6§lHOST §8┃ §6" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
-                } else if (uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
-                    event.setFormat("§7(ALL) §8┃ §c§lSPEC  §8┃ §c" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
-                } else {
-                    event.setFormat("§7(ALL) §8┃ §7" + (uhcPlayer.getUhcTeam() == null ? "" : uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " ") + uhcPlayer.getName() + " §8§l» §f" + event.getMessage().replaceFirst("!", ""));
-                }
-            }
-        } else if (uhc.getGameState().equals(GameState.PLAYING) && !uhcPlayer.getPlayerState().equals(UHCPlayerStates.ALIVE) && !uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
+        }
+
+        if (isGamePlaying && !isAlive && !isSpectator) {
             event.setCancelled(true);
+            return;
         }
-        else {
-            if (uhc.getUhcData().getCoHostList().contains(uhcPlayer) || uhc.getUhcData().getHostPlayer() == uhcPlayer) {
-                event.setFormat("§6§lHOST §8┃ §6" + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
-            } else if (uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
-                event.setFormat("§c§lSPEC  §8┃ §c" + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
-            } else {
-                event.setFormat("§7" + uhcPlayer.getName() + " §8§l» §f" + event.getMessage());
-            }
+
+        String prefix = uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " " : "";
+        String rolePrefix = isHost ? "§6§lHOST §8┃ §6" : isSpectator ? "§c§lSPEC §8┃ §c" : "§7";
+        String message = event.getMessage().startsWith("!") ? event.getMessage().substring(1) : event.getMessage();
+
+        if (isGamePlaying && isTeamChatActive && event.getMessage().startsWith("!")) {
+            event.setFormat("§7(ALL) §8┃ " + rolePrefix + prefix + uhcPlayer.getName() + " §8§l» §f" + message);
+        } else {
+            event.setFormat(rolePrefix + uhcPlayer.getName() + " §8§l» §f" + message);
         }
+
+        UHC.getInstance().getGameSave().getChat().add(uhcPlayer.getName() + ": " + event.getMessage());
     }
 
 
@@ -504,6 +544,9 @@ public class CoreListeners implements Listener {
                 if (UHC.getUHCPlayer(((Player) event.getEntity())).getUhcTeam().getUhcPlayerList().contains(UHC.getUHCPlayer(((Player) event.getDamager())))){
                     event.setCancelled(true);
                 }
+            } else if (event.getDamager() instanceof Player && event.getEntity() instanceof Player){
+                UHCPlayer damager = UHC.getUHCPlayer(((Player) event.getDamager()));
+                damager.addMakeDamages(event.getFinalDamage());
             }
         }
     }

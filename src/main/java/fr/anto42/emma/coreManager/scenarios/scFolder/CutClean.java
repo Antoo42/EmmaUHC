@@ -24,8 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Random;
 
 public class CutClean extends UHCScenario implements Listener {
-    public CutClean(ScenarioManager scenarioManager, int page) {
-        super("CutClean", new ItemCreator(SkullList.DIAMOND_BALL.getItemStack()).get(), scenarioManager, page);
+    public CutClean(ScenarioManager scenarioManager) {
+        super("CutClean", new ItemCreator(SkullList.DIAMOND_BALL.getItemStack()).get(), scenarioManager);
         setDesc("§8┃ §fLes minerais sont directement cuits");
         setScenarioType(ScenarioType.MINNING);
     }

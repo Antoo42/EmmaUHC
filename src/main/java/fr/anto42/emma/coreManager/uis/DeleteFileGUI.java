@@ -30,16 +30,16 @@ public class DeleteFileGUI {
         });
         this.kInventory.setElement(49, back);
 
-        KItem green = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 5).get());
+        /*KItem green = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 5).get());
         placeGlass(0, green);
         KItem kitem = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 14).get());
-        placeGlass(4, kitem);
+        placeGlass(4, kitem);*/
 
         KItem delete = new KItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §aEcraser le fichier").lore("", "§8§l» §6Cliquez §fpour §csupprimer définitivement ce fichier§f.").get());
         delete.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             file.delete();
-            previousKinv.open(player);
             UHC.getUHCPlayer(player).sendClassicMessage("§aSauvegarde supprimée !");
+            new SavesGUI(player, false, "all", 0).getkInventory().open(player);
         });
         this.kInventory.setElement(20, delete);
 

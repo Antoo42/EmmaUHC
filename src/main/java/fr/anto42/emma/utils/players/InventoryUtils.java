@@ -57,13 +57,28 @@ public class InventoryUtils {
                 uhcPlayer.getBukkitPlayer().getInventory().setItem(0, new ItemCreator(Material.COOKED_BEEF, 32).get());
                 uhcPlayer.getBukkitPlayer().getInventory().setItem(1, new ItemCreator(Material.BOOK, 1).get());
             }else {
-                for (String s : uhc.getUhcConfig().getStarterStuffConfig().getStartInv()) {
-                    uhcPlayer.getBukkitPlayer().getInventory().addItem(ItemStackToString.ItemStackFromString(s));
+                if (!uhc.getUhcConfig().getStarterStuffConfig().getHead().contains("BARRIER")) {
+                    player.getInventory().setHelmet(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getHead()));
                 }
-                uhcPlayer.getBukkitPlayer().getInventory().setHelmet(uhc.getUhcConfig().getStarterStuffConfig().getHead());
-                uhcPlayer.getBukkitPlayer().getInventory().setChestplate(uhc.getUhcConfig().getStarterStuffConfig().getBody());
-                uhcPlayer.getBukkitPlayer().getInventory().setLeggings(uhc.getUhcConfig().getStarterStuffConfig().getLeggins());
-                uhcPlayer.getBukkitPlayer().getInventory().setBoots(uhc.getUhcConfig().getStarterStuffConfig().getBoots());
+                if (!uhc.getUhcConfig().getStarterStuffConfig().getBody().contains("BARRIER")) {
+                    player.getInventory().setChestplate(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getBody()));
+                }
+                if (!uhc.getUhcConfig().getStarterStuffConfig().getLeggins().contains("BARRIER")) {
+                    player.getInventory().setLeggings(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getLeggins()));
+                }
+                if (!uhc.getUhcConfig().getStarterStuffConfig().getBoots().contains("BARRIER")) {
+                    player.getInventory().setBoots(ItemStackToString.ItemStackFromString(uhc.getUhcConfig().getStarterStuffConfig().getBoots()));
+                }
+                for (String s : uhc.getUhcConfig().getStarterStuffConfig().getStartInv()) {
+                    player.getInventory().addItem(ItemStackToString.ItemStackFromString(s));
+                }
+                for (ItemStack content : player.getInventory().getContents()) {
+                    if (content == null)
+                        return;
+                    if (content.getType().equals(Material.BARRIER)) {
+                        player.getInventory().removeItem(content);
+                    }
+                }
             }
         }
         player.getInventory().setContents(playerInventoryMap.get(player.getUniqueId()));

@@ -1,7 +1,8 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.UHCManager;
+import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
@@ -33,11 +34,10 @@ public class GameModeGUI {
 
         final int[] slot = {9};
         uhcManager.getModuleList().forEach(module -> {
-            if (!module.isAvaible())
-                return;
             List<String> strings = new ArrayList<>();
+            strings.add("§8" + module.getVersion());
             strings.add("");
-            if (module.getDesc().size() != 0) {
+            if (!module.getDesc().isEmpty() && module.isAvailable()) {
                 strings.addAll(module.getDesc());
             } else strings.add("§8┃ §cAucune information.");
             strings.add("");
@@ -48,21 +48,26 @@ public class GameModeGUI {
                 strings.add("");
             }
             if (module.isConfigurable()){
-                strings.add("§8§l» §6Clique-gauche §fpour séléctionner.");
+                strings.add("§8§l» §6Clique-gauche §fpour sélectionner.");
                 strings.add("§8§l» §6Clique-droit §fpour §bconfigurer§f.");
             } else {
-                strings.add("§8§l» §6Clique-gauche §fpour séléctionner.");
+                strings.add("§8§l» §6Clique-gauche §fpour sélectionner.");
             }
-            KItem kItem = new KItem(new ItemCreator(module.getItemStack()).name("§8┃ §6" + module.getName() + (module.isAvaible() ? "" : " §c(exclusif aux staffs)")).lore(strings).get());
+            KItem kItem = new KItem(new ItemCreator(module.getItemStack()).name("§8┃ §6" + (module.isAvailable() ? module.getName() : " §c§kxxxxxxxxxxxxxxx")).lore(strings).get());
             if (module.isConfigurable()){
                 kItem.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
+                    if (!Objects.equals(player.getName(), "Anto42_") && !module.isAvailable()) {
+                        return;
+                    }
                     if (kInventoryClickContext.getClickType().isLeftClick()){
+                        if (!UHC.getInstance().getUhcGame().getGameState().equals(GameState.WAITING))
+                            return;
                         if (Objects.equals(module.getName(), uhcManager.getGamemode().getName()))
                             return;
                         uhcManager.getGamemode().onUnLoad();
                         uhcManager.setGamemode(module);
                         uhcManager.getGamemode().onLoad();
-                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu séléctionné par l'Host est " + module.getName() + "§7 !");
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu sélectionné par l'Host est " + module.getName() + "§7 !");
                         new GameModeGUI().getkInventory().open(player);
                     }
                     else if (kInventoryClickContext.getClickType().isRightClick())
@@ -71,13 +76,18 @@ public class GameModeGUI {
             }
             else {
                 kItem.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
+                    if (!Objects.equals(player.getName(), "Anto42_") && !module.isAvailable()) {
+                        return;
+                    }
+                    if (!UHC.getInstance().getUhcGame().getGameState().equals(GameState.WAITING))
+                        return;
                     if (Objects.equals(module.getName(), uhcManager.getGamemode().getName()))
                         return;
                     if (kInventoryClickContext.getClickType().isLeftClick()){
                         uhcManager.getGamemode().onUnLoad();
                         uhcManager.setGamemode(module);
                         uhcManager.getGamemode().onLoad();
-                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu séléctionné par l'Host est " + module.getName() + "§7 !");
+                        Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu sélectionné par l'Host est " + module.getName() + "§7 !");
                         new GameModeGUI().getkInventory().open(player);
                     }
                 });

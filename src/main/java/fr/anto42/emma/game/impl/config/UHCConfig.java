@@ -21,6 +21,17 @@ public class UHCConfig {
         return UHCName;
     }
 
+
+    private int boostMultiplier = 100;
+
+    public int getBoostMultiplier() {
+        return boostMultiplier;
+    }
+
+    public void setBoostMultiplier(int boostMultiplier) {
+        this.boostMultiplier = boostMultiplier;
+    }
+
     public void setUHCName(String UHCName) {
         this.UHCName = UHCName;
     }

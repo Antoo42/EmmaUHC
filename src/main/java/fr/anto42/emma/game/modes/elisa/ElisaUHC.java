@@ -13,6 +13,6 @@ public class ElisaUHC extends Module {
         setConfigurable(true);
         //setkInventory(new ElisaUHC().getkInventory());
         super.setUhcScoreboard(new ElisaScoreboard());
-
+        super.setAvailable(false);
     }
 }

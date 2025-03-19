@@ -19,6 +19,7 @@ public class Kira extends DNRole {
 
     @Override
     public void setRole() {
+        setCanReveal(true);
         getUhcPlayer().safeGive(new ItemCreator(Material.ENCHANTED_BOOK).name("§4§lDEATH NOTE").get());
     }
 

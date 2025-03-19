@@ -1,4 +1,4 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config.worlds;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
@@ -33,13 +33,13 @@ public class CreateWorldGUI {
         this.kInventory.setElement(49, back);
 
 
-        KItem settings = new KItem(new ItemCreator(Material.REDSTONE_COMPARATOR).name("§8┃ §fParamètres du monde").lore("", "§8┃ §6Configurez§f des éléments tels que", "§8┃ §ale boost de minerais§f, ou de cavernes", "", "§c§o  Cette option n'est pas encore disponible !", "§c§o  Prévue dans une future mise à jour !").get());
+        KItem settings = new KItem(new ItemCreator(Material.REDSTONE_COMPARATOR).name("§8┃ §fMondes spéciaux").lore("", "§8┃ §cA vos risques et périls...", "", "§c§o  Cette option n'est pas encore disponible !", "§c§o  Prévue dans une future mise à jour !").get());
         settings.addCallback((kInventory1, item, player, clickContext) -> {
-            //new SettingsNewWorldGUI().getkInventory().open(player);
+            new SettingsNewWorldGUI().getkInventory().open(player);
         });
         this.kInventory.setElement(21, settings);
 
-        KItem createWorld = new KItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §fCréer un nouveau monde").lore("", "§8┃ §fLe monde de jeu actuel §cne vous plaît pas §f?", "§8┃ §aRe-créez en un facilement §fque vous pouvez configuré", "§8┃ §fau préalable avec l'option §eparamètres du monde", "", "§8§l» §6Cliquez §fpour séléctionner").get());
+        KItem createWorld = new KItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §fCréer un nouveau monde").lore("", "§8┃ §fLe monde de jeu actuel §cne vous plaît pas §f?", "§8┃ §aRe-créez en un facilement §fque vous pouvez configuré", "§8┃ §fau préalable avec l'option §eparamètres du monde", "", "§8§l» §6Cliquez §fpour sélectionner").get());
         createWorld.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (!UHC.getInstance().getUhcGame().getGameState().equals(GameState.WAITING)){
                 UHC.getUHCPlayer(player).sendClassicMessage("§cHop hop hop tu ne peux pas faire ça maintenant !");

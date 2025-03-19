@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 public class InfiniteEnchant extends UHCScenario {
-    public InfiniteEnchant(ScenarioManager scenarioManager, int page) {
-        super("InfiniteEnchanter", new ItemStack(Material.EXP_BOTTLE), scenarioManager, page);
+    public InfiniteEnchant(ScenarioManager scenarioManager) {
+        super("InfiniteEnchanter", new ItemStack(Material.EXP_BOTTLE), scenarioManager);
         super.setDesc("§8┃ §fPrenez vous pour Merlin l'enchanteur et débarquez avec vos outils de magie au début de la partie");
         setScenarioType(ScenarioType.STUFF);
     }

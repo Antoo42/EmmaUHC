@@ -24,7 +24,7 @@ public class UHCPlayer {
     private UHCPlayerStates playerState;
     private Role role;
     private Player player;
-    private Boolean UHCOp;
+    private Boolean UHCOp = false;
     private Boolean freeze = false;
     private Boolean damageable;
     private UUID offlineZombieUuid;
@@ -38,8 +38,27 @@ public class UHCPlayer {
     private boolean editing = false;
     private UHCTeam previousTeam;
     private boolean hasWin = false;
+    private double receivedDamages = 0;
+    private double makeDamages = 0;
 
     private final Inventory backupInventory;
+
+
+    public double getReceivedDamages() {
+        return receivedDamages;
+    }
+
+    public double getMakeDamages() {
+        return makeDamages;
+    }
+
+    public void addMakeDamages(Double makeDamages) {
+        this.makeDamages = this.makeDamages + makeDamages;
+    }
+
+    public void addReceivedDamages(Double receivedDamages) {
+        this.receivedDamages = this.receivedDamages + receivedDamages;
+    }
 
     public Inventory getBackupInventory() {
         return backupInventory;
@@ -60,6 +79,7 @@ public class UHCPlayer {
     public void joinTeam(UHCTeam uhcTeam) {
         if (uhcTeam != null)
             leaveTeam();
+        assert uhcTeam != null;
         uhcTeam.getUhcPlayerList().forEach(uhcPlayer1 -> {
             uhcPlayer1.sendMessage("§6§lTEAM §8§l» §7Le joueur §a" + this.getName() + "§7 a rejoint l'équipe !");
         });
@@ -86,6 +106,13 @@ public class UHCPlayer {
         getBukkitPlayer().addPotionEffect(potionEffect);
     }
 
+    public boolean isHost () {
+        return UHC.getInstance().getUhcGame().getUhcData().getCoHostList().contains(this) || UHC.getInstance().getUhcGame().getUhcData().getHostPlayer().equals(this);
+    }
+
+    public boolean isSpec () {
+        return UHC.getInstance().getUhcGame().getUhcData().getSpecList().contains(this);
+    }
 
     public Player getBukkitPlayer() {
         return player;
@@ -101,6 +128,10 @@ public class UHCPlayer {
 
     public UHCPlayerStates getPlayerState() {
         return playerState;
+    }
+
+    public boolean isAlive() {
+        return playerState==UHCPlayerStates.ALIVE;
     }
 
     public void setPlayerState(UHCPlayerStates playerState) {
@@ -121,7 +152,7 @@ public class UHCPlayer {
 
     public void sendModMessage(String string) {
         if (getBukkitPlayer() == null) return;
-        getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + "" + string);
+        getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7" + string);
     }
 
 
@@ -158,7 +189,7 @@ public class UHCPlayer {
             //getBukkitPlayer().getLocation().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), itemStack);
             //sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés au sol !");
             //SoundUtils.playSoundToPlayer(getBukkitPlayer(), Sound.VILLAGER_NO);
-            getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés dans l'inventaire de backup (/backup) !");
+            sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, les items qui vous ont été donnés ont été posés dans l'inventaire de backup (/backup) !");
             this.backupInventory.addItem(itemStack);
         }else{
             getBukkitPlayer().getInventory().addItem(itemStack);
@@ -168,12 +199,12 @@ public class UHCPlayer {
     public void safeGiveOrDrop(ItemStack itemStack){
         if (getBukkitPlayer() == null)
             return;
-        if (getBukkitPlayer().getInventory().firstEmpty() == -1) { // -1 signifie que l'inventaire est plein
+        if (getBukkitPlayer().getInventory().firstEmpty() == -1) {
             getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), itemStack);
             sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Les items ont été déposés au sol !");
             SoundUtils.playSoundToPlayer(getBukkitPlayer(), Sound.VILLAGER_NO);
         } else {
-            getBukkitPlayer().getInventory().addItem(itemStack); // Ajoute l'item si l'inventaire n'est pas plein
+            getBukkitPlayer().getInventory().addItem(itemStack);
         }
     }
 
@@ -281,6 +312,7 @@ public class UHCPlayer {
 
     public void freeze() {
         freeze = true;
+        getBukkitPlayer().setWalkSpeed(0F);
         sendModMessage("§cUn modérateur vous a §b§lfreeze§c. Vous ne pouvez par conséquent plus vous déplacer.");
     }
 

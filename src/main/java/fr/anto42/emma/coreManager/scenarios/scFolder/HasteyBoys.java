@@ -15,8 +15,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class HasteyBoys extends UHCScenario implements Listener {
 
 
-    public HasteyBoys(ScenarioManager scenarioManager, int page) {
-        super("HasteyBoys", new ItemCreator(Material.IRON_AXE).get(), scenarioManager, page);
+    public HasteyBoys(ScenarioManager scenarioManager) {
+        super("HasteyBoys", new ItemCreator(Material.IRON_AXE).get(), scenarioManager);
         super.setDesc("§8┃ §fLes outils sont directement enchantés efficacité III ainsi que durabilité III");
         setScenarioType(ScenarioType.STUFF);
     }

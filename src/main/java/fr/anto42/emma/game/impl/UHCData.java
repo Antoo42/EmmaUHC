@@ -97,6 +97,11 @@ public class UHCData {
     }
     private final List<UHCTeam> uhcTeamList = new ArrayList<>();
 
+    private List<UHCPlayer> uhcPlayerListSaved = new ArrayList<>();
+    public List<UHCPlayer> getUhcPlayerListSaved() {
+        return uhcPlayerListSaved;
+    }
+
     public List<UHCTeam> getUhcTeamList() {
         return uhcTeamList;
     }

@@ -1,6 +1,6 @@
 package fr.anto42.emma.coreManager.commands;
 
-import fr.anto42.emma.coreManager.uis.RulesGUI;
+import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

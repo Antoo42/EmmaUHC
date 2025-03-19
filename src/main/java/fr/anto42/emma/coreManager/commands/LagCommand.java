@@ -14,6 +14,9 @@ import org.bukkit.entity.Player;
 public class LagCommand extends Command {
     public LagCommand() {
         super("lag");
+        super.getAliases().add("ping");
+        super.getAliases().add("tps");
+        super.getAliases().add("bug");
     }
 
     @Override
@@ -67,11 +70,11 @@ public class LagCommand extends Command {
 
     private String analyzePerformance(double tps, int ping, long usedMemory, long maxMemory) {
         if (tps > 18.5 && ping < 50 && usedMemory < (maxMemory * 0.75)) {
-            return "§a(Tout roule, fonce et tryhard !)";
+            return "§a(Tout roule !)";
         } else if (tps > 16.0 && ping < 150 && usedMemory < (maxMemory * 0.85)) {
-            return "§e(Pas mal, mais garde un œil sur les perfs...)";
+            return "§e(Pas mal, mais garde un oeil sur les perfs...)";
         } else {
-            return "§c(Alerte rouge ! Le serveur est en PLS !)";
+            return "§c(Alerte rouge !)";
         }
     }
 }

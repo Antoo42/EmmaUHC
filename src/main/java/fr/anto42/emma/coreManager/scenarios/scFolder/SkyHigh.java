@@ -17,8 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 public class SkyHigh extends UHCScenario {
-    public SkyHigh(ScenarioManager scenarioManager, int page) {
-        super("SkyHigh", new ItemCreator(SkullList.EARTH.getItemStack()).get(), scenarioManager, page);
+    public SkyHigh(ScenarioManager scenarioManager) {
+        super("SkyHigh", new ItemCreator(SkullList.EARTH.getItemStack()).get(), scenarioManager);
         super.setDesc("§8┃ §fUn des pilliers de l'UHC mondial, ce scénario vous fera prendre de la hauteur sur la situation");
         taskId = -1;
         super.setConfigurable(true);

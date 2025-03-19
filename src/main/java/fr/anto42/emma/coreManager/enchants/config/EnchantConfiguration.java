@@ -23,11 +23,11 @@ public class EnchantConfiguration extends Command {
         Player player = ((Player) commandSender);
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
         if (!uhcPlayer.isEditing()){
-            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
+            uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas faire ça !");
             return false;
         }
         if (player.getItemInHand().getType() == Material.AIR){
-            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVeuillez prendre un item en main !");
+            uhcPlayer.sendClassicMessage(" §cVeuillez prendre un item en main !");
             return false;
         }
         new EnchantGUI(player.getItemInHand()).getkInventory().open(player);

@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class GoneFishing extends UHCScenario {
-    public GoneFishing(ScenarioManager scenarioManager, int page) {
-        super("GoneFishing", new ItemStack(Material.FISHING_ROD), scenarioManager, page);
+    public GoneFishing(ScenarioManager scenarioManager) {
+        super("GoneFishing", new ItemStack(Material.FISHING_ROD), scenarioManager);
         setDesc("§8┃ §fVotre canne à pêche vous permettra de trouver des merveilles submérgées");
         setScenarioType(ScenarioType.MINNING);
     }

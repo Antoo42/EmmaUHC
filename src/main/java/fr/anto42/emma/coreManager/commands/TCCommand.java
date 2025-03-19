@@ -2,8 +2,10 @@ package fr.anto42.emma.coreManager.commands;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
+import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
+import fr.anto42.emma.utils.materials.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,7 +34,7 @@ public class TCCommand extends Command {
             int y = (int) uhcPlayer.getBukkitPlayer().getLocation().getY();
             int z = (int) uhcPlayer.getBukkitPlayer().getLocation().getZ();
             uhcGame.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer1 -> uhcPlayer1.getUhcTeam() != null && uhcPlayer1.getUhcTeam().getUuid().equals(uhcPlayer.getUhcTeam().getUuid())).forEach(uhcPlayer1 -> {
-                uhcPlayer1.sendClassicMessage("§7Coordonnés de §a" + uhcPlayer.getBukkitPlayer().getName() + "§7: §7X: §e" + x + "§7,Y:§e" + y + "§7,Z: §e" + z);
+                uhcPlayer1.sendClassicMessage("§7Coordonnés de §a" + uhcPlayer.getBukkitPlayer().getName() + "§7: §7X: §e" + x + "§7,Y:§e" + y + "§7,Z: §e" + z + "§7 (" + WorldUtils.distance(uhcPlayer1.getLocation(), uhcPlayer.getLocation()) + "m " + WorldUtils.Fleche(WorldUtils.Angle(uhcPlayer1.getBukkitPlayer(), uhcPlayer.getLocation())) + ")");
             });
         }
         return false;

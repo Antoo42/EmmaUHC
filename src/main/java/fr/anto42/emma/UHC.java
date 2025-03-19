@@ -1,5 +1,6 @@
 package fr.anto42.emma;
 
+
 import fr.anto42.emma.coreManager.UHCManager;
 import fr.anto42.emma.coreManager.commands.*;
 import fr.anto42.emma.coreManager.enchants.EnchantsManager;
@@ -11,18 +12,24 @@ import fr.anto42.emma.coreManager.scoreboard.ScoreboardManager;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.worldManager.BiomeChanger;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
+import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.CommandUtils;
-import fr.anto42.emma.utils.FileUtils;
+import fr.anto42.emma.utils.discord.DiscordEvents;
 import fr.anto42.emma.utils.discord.DiscordManager;
+import fr.anto42.emma.utils.gameSaves.GameSave;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import fr.blendman974.kinventory.KInventoryManager;
+import me.daddychurchill.CityWorld.CityWorld;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -51,6 +58,10 @@ public final class UHC extends JavaPlugin {
     private SaveSerializationManager saveSerializationManager;
     private String prefix;
 
+    private CityWorld cityWorldPlugin;
+
+    private GameSave gameSave;
+    private String ip;
     @Override
     public void onEnable() {
         getLogger().info("");
@@ -59,6 +70,9 @@ public final class UHC extends JavaPlugin {
 
         saveDefaultConfig();
         instance = this;
+        prefix = getConfig().getString("generalPrefix").replace("&", "§");
+        ip = getConfig().getString("ip");
+        cityWorldPlugin = ((CityWorld) Bukkit.getPluginManager().getPlugin("CityWorld"));
 
         KInventoryManager.init(this);
         BiomeChanger.init();
@@ -67,17 +81,21 @@ public final class UHC extends JavaPlugin {
 
         enchantsManager = new EnchantsManager();
         saveSerializationManager = new SaveSerializationManager();
+        PluginManager pluginManager = Bukkit.getPluginManager();
 
         uhcGame = new UHCGame();
         uhcManager = new UHCManager();
-        discordManager = new DiscordManager();
-        messageManager = new MessageManager();
+        if (getConfig().getBoolean("discordbot")) {
+            discordManager = new DiscordManager();
+            pluginManager.registerEvents(new DiscordEvents(), this);
 
-        PluginManager pluginManager = Bukkit.getPluginManager();
+        }
+        messageManager = new MessageManager();
         pluginManager.registerEvents(new CoreListeners(), this);
 
 
         CommandUtils.registerCommand("uhc", new SetHostComand());
+        CommandUtils.registerCommand("uhc", new CreditsCommand());
         CommandUtils.registerCommand("uhc", new HCommand());
         CommandUtils.registerCommand("uhc", new SaveCommand());
         CommandUtils.registerCommand("uhc", new GodCommand());
@@ -98,6 +116,7 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new SpawnCommand());
         CommandUtils.registerCommand("uhc", new BackupCommand());
         CommandUtils.registerCommand("uhc", new WinTest());
+        CommandUtils.registerCommand("uhc", new StatsCommand());
 
         scheduledExecutorService = Executors.newScheduledThreadPool(16);
         executorMonoThread = Executors.newScheduledThreadPool(1);
@@ -106,15 +125,33 @@ public final class UHC extends JavaPlugin {
         UHCTeamManager.getInstance().createTeams();
 
         loadServerVersion();
-        prefix = getConfig().getString("generalPrefix").replace("&", "§");
         getUhcGame().getUhcData().setWhiteList(getConfig().getBoolean("whiteListOnTheStart"));
-        getDiscordManager().sendStarterAnounce();
+
+        gameSave = new GameSave();
+
+        Bukkit.getScheduler().runTaskTimer(this, this::updateTabList, 2L, 2L);
+
 
         getLogger().info("");
         getLogger().info("§a§lSuccessfuly initialize UHCCore");
         getLogger().info("");
     }
 
+    public void updateTabList() {
+        if (UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == null)
+            return;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            UHCPlayer uhcPlayer = UHC.getUHCPlayer(p);
+
+            if (uhcGame.getUhcConfig().isLifeTab() && uhcGame.getGameState().equals(GameState.PLAYING)) {
+                int healthPercent = (int) (p.getHealth() / p.getMaxHealth() * 100.0);
+                p.setPlayerListName((uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getPrefix() : "") + "§7" + p.getName() + "§e (" + healthPercent + "%)");
+            }
+            else {
+                p.setPlayerListName((uhcPlayer.isHost() ? "§6§lHOST §8┃ " : "") + (uhcPlayer.isSpec() ? "§c§lSPEC §8┃ " : "") + (uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getDisplayName() : "§7") + " " + p.getName());
+            }
+        }
+    }
 
 
     private void loadServerVersion() {
@@ -161,16 +198,8 @@ public final class UHC extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        deleteGamesWorld();
-    }
-
-    private void deleteGamesWorld() {
-        getLogger().info("§cStart delete the GameWorlds...");
-        WorldManager.worldList.forEach(world -> {
-            if (world.getWorldFolder().exists()) FileUtils.delete(world.getWorldFolder());
-            System.out.println(world.getName() + " has been deleted.");
-        });
-        getLogger().info("§aDone !");
+        if (getConfig().getBoolean("discordbot"))
+            discordManager.sendShutdownAnounce();
     }
 
     public static void registerPlayer(Player player) {
@@ -229,5 +258,26 @@ public final class UHC extends JavaPlugin {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+
+    public String getIp() {
+        return ip;
+    }
+
+    public GameSave getGameSave() {
+        return gameSave;
+    }
+
+    public void setGameSave(GameSave gameSave) {
+        this.gameSave = gameSave;
+    }
+
+    public CityWorld getCityWorldPlugin() {
+        return cityWorldPlugin;
+    }
+
+    public void setCityWorldPlugin(CityWorld cityWorldPlugin) {
+        this.cityWorldPlugin = cityWorldPlugin;
     }
 }

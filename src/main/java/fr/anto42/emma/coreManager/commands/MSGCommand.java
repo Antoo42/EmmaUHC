@@ -7,6 +7,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class MSGCommand extends Command {
     public MSGCommand() {
         super("msg");
@@ -37,7 +41,7 @@ public class MSGCommand extends Command {
         StringBuilder stringBuilder = new StringBuilder();
         strings[0] = strings[0].replace(uhcTarget.getName(), "");
         for (String l : strings) {
-            stringBuilder.append(l + " ");
+            stringBuilder.append(l).append(" ");
         }
 
         uhcTarget.sendMessage("§b§l" + uhcPlayer.getName() + " §8§l» §eVous§7: " + stringBuilder.toString());
@@ -45,7 +49,18 @@ public class MSGCommand extends Command {
         UHC.getInstance().getUhcGame().getUhcData().getSpyList().forEach(uhcPlayer1 -> {
             uhcPlayer1.sendMessage("§b§lMSG §e(" + uhcPlayer + " §8§l» §e" + uhcTarget + ")§7: "+ stringBuilder.toString());
         });
+        UHC.getInstance().getGameSave().getChat().add(uhcPlayer.getName() + " » " + uhcTarget.getName() + ": " + stringBuilder);
         UHC.getInstance().getMessageManager().recentlyMessaged.put(uhcTarget.getBukkitPlayer(), uhcPlayer.getBukkitPlayer());
         return false;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            completions.add(onlinePlayer.getName());
+        }
+        Collections.sort(completions);
+        return completions;
     }
 }

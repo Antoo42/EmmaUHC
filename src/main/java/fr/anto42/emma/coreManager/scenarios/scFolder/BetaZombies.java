@@ -12,15 +12,15 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import java.util.Random;
 
 public class BetaZombies extends UHCScenario {
-    public BetaZombies(ScenarioManager scenarioManager, int page) {
-        super("BetaZombies", new ItemCreator(Material.FEATHER).get(), scenarioManager, page);
+    public BetaZombies(ScenarioManager scenarioManager) {
+        super("BetaZombies", new ItemCreator(Material.FEATHER).get(), scenarioManager);
         setDesc("§8┃ §fLes zombies donnent des plumes à leur mort");
         setScenarioType(ScenarioType.PVE);
     }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event){
-        if (!getScenarioManager().isEnabled("BetaZombies"))
+        if (!isActivated())
             return;
         if (!(event.getEntity() instanceof Zombie))
             return;

@@ -7,8 +7,8 @@ import fr.anto42.emma.coreManager.scenarios.uis.XHealthsGUI;
 import fr.anto42.emma.utils.skulls.SkullList;
 
 public class XHealths extends UHCScenario {
-    public XHealths(ScenarioManager scenarioManager, int page) {
-        super("XHealths", SkullList.HEART.getItemStack(), scenarioManager, page);
+    public XHealths(ScenarioManager scenarioManager) {
+        super("XHealths", SkullList.HEART.getItemStack(), scenarioManager);
         setConfigurable(true);
         setDesc("§8┃ §fDébutez la partie avec un certain montant de vie");
         setkInventory(new XHealthsGUI(this).getkInventory());

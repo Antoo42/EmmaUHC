@@ -1,7 +1,9 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.enchants.EnchantsManager;
+import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
+import fr.anto42.emma.coreManager.uis.rules.ScenariosActivatedGUI;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;

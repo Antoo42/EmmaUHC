@@ -1,4 +1,4 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.config.worlds;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
@@ -37,7 +37,7 @@ public class SpecialGenerationGUI {
 
 
 
-        KItem createWorld = new KItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §fCréer un nouveau monde").lore("", "§8┃ §fLe monde de jeu actuel §cne vous plaît pas §f?", "§8┃ §aRe-créez en un facilement §fque vous pouvez configuré", "§8┃ §fau préalable avec l'option §eparamètres du monde", "", "§8§l» §6Cliquez §fpour séléctionner").get());
+        KItem createWorld = new KItem(new ItemCreator(SkullList.GREEN_BALL.getItemStack()).name("§8┃ §fCréer un nouveau monde").lore("", "§8┃ §fLe monde de jeu actuel §cne vous plaît pas §f?", "§8┃ §aRe-créez en un facilement §fque vous pouvez configuré", "§8┃ §fau préalable avec l'option §eparamètres du monde", "", "§8§l» §6Cliquez §fpour sélectionner").get());
         createWorld.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cCréation d'un nouveau monde ! Le serveur peut par conséquant subir des ralentissements.");
             WorldManager.setRoofed(false);

@@ -12,13 +12,19 @@ import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SpecCommand extends Command {
@@ -61,9 +67,11 @@ public class SpecCommand extends Command {
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec kill <Player>§7: Tuez le joueur indiquer.");
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §c/spec wiewoffline§7: Regardez les joueurs hors-ligne.");
+            uhcPlayer.sendMessage("§8§l» §c/spec viewoffline§7: Regardez les joueurs hors-ligne.");
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §c/spec wiewoffline§7: Tuez un joueur déconnecté.");
+            uhcPlayer.sendMessage("§8§l» §c/spec killoffline§7: Tuez un joueur déconnecté.");
+            uhcPlayer.sendMessage("");
+            uhcPlayer.sendMessage("§8§l» §c/spec events§7: Obtenez un récap de toute la game.");
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/god§7: Devenez opérateur de la partie.");
             uhcPlayer.sendMessage("");
@@ -88,7 +96,15 @@ public class SpecCommand extends Command {
                 SoundUtils.playSoundToPlayer(uhctarget.getBukkitPlayer(), Sound.ORB_PICKUP);
                 uhctarget.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous avez été ajouté comme §aspectateur §7à la partie. Consultez dès à présent les commandes mises à votre disposition en utilisant le §b/spec help§7.");
             }
-        }else if (args[0].equalsIgnoreCase("remove")){
+        }else if(args[0].equalsIgnoreCase("recap") || args[0].equalsIgnoreCase("events")) {
+            uhcPlayer.sendModMessage("Voici un récap de toute la partie:");
+            UHC.getInstance().getGameSave().getEvents().forEach(s1 -> {
+                uhcPlayer.sendMessage("§7-§e" + SaveSerializationManager.fromEventString(s1).getTimer() + " §8§l» §f" + SaveSerializationManager.fromEventString(s1).getString());
+            });
+        }
+
+
+        else if (args[0].equalsIgnoreCase("remove")){
             if (uhcPlayer.getBukkitPlayer().hasPermission("emma.manageSpec") || uhc.getUhcData().getHostPlayer() == uhcPlayer || uhc.getUhcData().getCoHostList().contains(uhcPlayer)){
                 if (args.length == 1){
                     uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur.");
@@ -114,7 +130,7 @@ public class SpecCommand extends Command {
                 }
             }
         }else if (args[0].equalsIgnoreCase("list")){
-            if (uhc.getUhcData().getSpecList().size() == 0)
+            if (uhc.getUhcData().getSpecList().isEmpty())
                 uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cAucun spectateur n'est présent.");
             uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Voici la liste des spectateurs de la partie:");
             uhc.getUhcData().getSpecList().forEach(uhcPlayer1 -> {
@@ -297,7 +313,6 @@ public class SpecCommand extends Command {
                 return true;
             }
             uhcTarget.freeze();
-            uhcTarget.getBukkitPlayer().setWalkSpeed(0F);
             uhcPlayer.sendModMessage("§cVous avez §b§lfreeze §a" + uhcTarget.getName() + "§c. N'oubliez pas de vous occuper de lui !");
         } else if (args[0].equalsIgnoreCase("unfreeze")){
             if(args.length == 1) {
@@ -331,5 +346,33 @@ public class SpecCommand extends Command {
             new SpecInfoGUI(player).getkInventory().open(uhcPlayer.getBukkitPlayer());
         }
         return false;
+    }
+
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
+
+        if (!(sender instanceof Player)) {
+            return completions;
+        }
+        if (args.length == 1) {
+            List<String> subCommands = Arrays.asList(
+                    "add", "remove", "list", "config", "chat", "inv", "role", "spy", "teams",
+                    "tp", "kill", "viewoffline", "killoffline", "recap", "events"
+            );
+            StringUtil.copyPartialMatches(args[0], subCommands, completions);
+        } else if (args.length == 2) {
+            List<String> playerCommands = Arrays.asList("inv", "role", "tp", "kill", "killoffline");
+
+            if (playerCommands.contains(args[0].toLowerCase())) {
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    completions.add(onlinePlayer.getName());
+                }
+            }
+        }
+
+        Collections.sort(completions);
+        return completions;
     }
 }

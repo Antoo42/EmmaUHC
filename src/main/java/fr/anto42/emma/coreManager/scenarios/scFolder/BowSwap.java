@@ -15,8 +15,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BowSwap extends UHCScenario {
-    public BowSwap(ScenarioManager scenarioManager, int page) {
-        super("BowSwap", new ItemStack(Material.ARROW), scenarioManager, page);
+    public BowSwap(ScenarioManager scenarioManager) {
+        super("BowSwap", new ItemStack(Material.ARROW), scenarioManager);
         super.setDesc("§8┃ §fLorsqu'un joueur tire sur un autre, leurs positions sont échangés");
         setScenarioType(ScenarioType.PVP);
     }

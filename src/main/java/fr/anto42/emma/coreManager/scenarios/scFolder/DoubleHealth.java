@@ -9,8 +9,8 @@ import fr.anto42.emma.utils.skulls.SkullList;
 import org.bukkit.event.EventHandler;
 
 public class DoubleHealth extends UHCScenario {
-    public DoubleHealth(ScenarioManager scenarioManager, int page) {
-        super("DoubleHealth", new ItemCreator(SkullList.HEART.getItemStack()).get(), scenarioManager, page);
+    public DoubleHealth(ScenarioManager scenarioManager) {
+        super("DoubleHealth", new ItemCreator(SkullList.HEART.getItemStack()).get(), scenarioManager);
         setDesc("§8┃ §fJouez la partie avec §d20 coeurs §fau lieu de 10");
         setScenarioType(ScenarioType.PVP);
     }

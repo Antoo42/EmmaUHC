@@ -89,12 +89,14 @@ public class TGModule extends Module {
                 Bukkit.broadcastMessage("§7");
                 Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + gameManager.getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + gameManager.getUhcPlayerList().get(0).getKills() + "§a kills !");
                 Bukkit.broadcastMessage("§7");
+                UHC.getInstance().getDiscordManager().sendWin(gameManager.getUhcPlayerList().get(0));
                 announceEnd();
             }
         } else if (UHCTeamManager.getInstance().getUhcTeams().size() == 1 && !(data.getTeamList().contains(UHCTeamManager.getInstance().getUhcTeams().get(0))) && kira == 0 && gameManager.getUhcPlayerList().stream().noneMatch(uhcPlayer -> uhcPlayer.getUhcTeam() == null)) {
             UHC.getInstance().getUhcGame().setGameState(GameState.FINISH);
             
             UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
+            UHC.getInstance().getDiscordManager().sendWin(uhcTeam);
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
             Bukkit.broadcastMessage("§7");
@@ -103,6 +105,7 @@ public class TGModule extends Module {
             UHC.getInstance().getUhcGame().setGameState(GameState.FINISH);
             
             UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
+            UHC.getInstance().getDiscordManager().sendWin(uhcTeam);
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
             Bukkit.broadcastMessage("§7");
@@ -111,13 +114,14 @@ public class TGModule extends Module {
             UHC.getInstance().getUhcGame().setGameState(GameState.FINISH);
             
             UHCTeam uhcTeam = UHCTeamManager.getInstance().getUhcTeams().get(0);
+            UHC.getInstance().getDiscordManager().sendWin(uhcTeam);
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations à l'équipe " + uhcTeam.getDisplayName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcTeam.getKillsTeam() + "§a kills !");
             Bukkit.broadcastMessage("§7");
             announceEnd();
-        } else if (UHCTeamManager.getInstance().getUhcTeams().size() == 0 && gameManager.getUhcPlayerList().size() == 1) {
+        } else if (UHCTeamManager.getInstance().getUhcTeams().isEmpty() && gameManager.getUhcPlayerList().size() == 1) {
             UHC.getInstance().getUhcGame().setGameState(GameState.FINISH);
-            
+            UHC.getInstance().getDiscordManager().sendWin(gameManager.getUhcPlayerList().get(0));
             Bukkit.broadcastMessage("§7");
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + gameManager.getUhcPlayerList().get(0).getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + gameManager.getUhcPlayerList().get(0).getKills() + "§a kills !");
             Bukkit.broadcastMessage("§7");

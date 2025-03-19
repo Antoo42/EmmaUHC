@@ -12,6 +12,7 @@ import fr.anto42.emma.utils.materials.WorldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -61,16 +62,19 @@ public class  PersonalScoreboard {
             case WAITING:
                 objectiveSign.setLine(0, "§f");
                 objectiveSign.setLine(1, "§8§l» §e§lINFORMATIONS");
-                objectiveSign.setLine(2, "  §8┃ §fHost: §6" + UHC.getInstance().getUhcGame().getUhcData().getHostName());
-                objectiveSign.setLine(3, "  §8┃ §fWhiteList: §6" + isWl());
-                objectiveSign.setLine(4, "  §8┃ §fJoueurs: §a" + UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size() + "§7/" + UHC.getInstance().getUhcGame().getUhcConfig().getSlots());
-                objectiveSign.setLine(5, "  §8┃ §fEquipes: §c" + UHCTeamManager.getInstance().getDisplayFormat());
+                objectiveSign.setLine(2, "  §8┃ §fHost: §a" + UHC.getInstance().getUhcGame().getUhcData().getHostName());
+                objectiveSign.setLine(3, "  §8┃ §fEquipes: §6" + UHCTeamManager.getInstance().getDisplayFormat());
+                objectiveSign.setLine(4, "  §8┃ §fJoueur(s): §a" + UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size() + "§7/" + UHC.getInstance().getUhcGame().getUhcConfig().getSlots());
+                objectiveSign.setLine(5, "  §8┃ §fMode: §6" + UHC.getInstance().getUhcManager().getGamemode().getName());
                 objectiveSign.setLine(6, "§c");
-                objectiveSign.setLine(7, "§8§l» §e§lPARTIE");
-                objectiveSign.setLine(8, "  §8┃ §fMode: §6" + UHC.getInstance().getUhcManager().getGamemode().getName());
-                objectiveSign.setLine(9, "  §8┃ §fRègles: §e/rules");
-                objectiveSign.setLine(10, "§b");
-                objectiveSign.setLine(11, ip);
+                objectiveSign.setLine(7, "§8§l» §e§lSCENARIOS:");
+                List<String> scenarios = UHC.getInstance().getUhcManager().getScenarioManager().getTabScenarios();
+                for (int i = 0; i < scenarios.size() && i + 8 < 14; i++) {
+                    objectiveSign.setLine(8 + i, scenarios.get(i));
+                }
+
+                objectiveSign.setLine(9 + scenarios.size(), "§b");
+                objectiveSign.setLine(10 + scenarios.size(), ip);
                 break;
             case PLAYING:
                 if (UHC.getInstance().getUhcManager().getGamemode().getUhcScoreboard() != null)
@@ -78,7 +82,7 @@ public class  PersonalScoreboard {
                 else {
                     objectiveSign.setLine(0, "§f");
                     objectiveSign.setLine(1, "§8§l» §e§lINFORMATIONS");
-                    objectiveSign.setLine(2, "  §8┃ §fHost: §6" + UHC.getInstance().getUhcGame().getUhcData().getHostName());
+                    objectiveSign.setLine(2, "  §8┃ §fHost: §a" + UHC.getInstance().getUhcGame().getUhcData().getHostName());
                     objectiveSign.setLine(3, "  §8┃ §fJoueurs: §a" + UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size() + getAliveTeamsNumber());
                     objectiveSign.setLine(4, "  §8┃ §fTimer: §c" + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
                     objectiveSign.setLine(5, "§c");
@@ -96,7 +100,7 @@ public class  PersonalScoreboard {
                 objectiveSign.setDisplayName("§6§lPartie terminée");
                 objectiveSign.setLine(0, "§f");
                 objectiveSign.setLine(1, "§8§l» §e§lINFORMATIONS");
-                objectiveSign.setLine(2, "  §8┃ §fHost: §6" + UHC.getInstance().getUhcGame().getUhcData().getHostName());
+                objectiveSign.setLine(2, "  §8┃ §fHost: §a" + UHC.getInstance().getUhcGame().getUhcData().getHostName());
                 objectiveSign.setLine(3, "  §8┃ §fJoueurs: §a" + UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().size());
                 objectiveSign.setLine(4, "  §8┃ §fTimer: §c" + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
                 objectiveSign.setLine(5, "§c");

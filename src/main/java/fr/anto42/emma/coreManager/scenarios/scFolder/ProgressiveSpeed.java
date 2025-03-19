@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ProgressiveSpeed extends UHCScenario {
-    public ProgressiveSpeed(ScenarioManager scenarioManager, int page) {
-        super("ProgressiveSpeed", new ItemStack(Material.RABBIT_FOOT), scenarioManager, page);
+    public ProgressiveSpeed(ScenarioManager scenarioManager) {
+        super("ProgressiveSpeed", new ItemStack(Material.RABBIT_FOOT), scenarioManager);
         setDesc("§8┃ §fA chaque kills, vous gagnez un niveau de vitesse");
         setScenarioType(ScenarioType.PVP);
     }

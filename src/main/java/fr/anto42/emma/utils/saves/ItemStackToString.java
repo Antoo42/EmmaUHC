@@ -17,30 +17,35 @@ public class ItemStackToString {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(item.getType().toString()).append(":").append(item.getAmount()); // Type et quantité
+        sb.append(item.getType().toString()).append(":").append(item.getAmount());
+
+        if (item.getDurability() != 0) {
+            sb.append("|data=").append(item.getDurability());
+        }
 
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             if (meta.hasDisplayName()) {
-                sb.append("|name=").append(meta.getDisplayName()); // Nom personnalisé
+                sb.append("|name=").append(meta.getDisplayName());
             }
             if (meta.hasLore()) {
-                sb.append("|lore=").append(String.join(";", meta.getLore())); // Lore
+                sb.append("|lore=").append(String.join(";", meta.getLore()));
             }
             if (meta.hasEnchants()) {
                 sb.append("|enchants=");
                 for (Map.Entry<Enchantment, Integer> enchant : meta.getEnchants().entrySet()) {
                     sb.append(enchant.getKey().getName()).append("-").append(enchant.getValue()).append(",");
                 }
-                sb.setLength(sb.length() - 1); // Supprime la dernière virgule
+                sb.setLength(sb.length() - 1);
             }
             if (meta.spigot().isUnbreakable()) {
-                sb.append("|unbreakable=true"); // Ajout du flag Unbreakable
+                sb.append("|unbreakable=true");
             }
         }
 
         return sb.toString();
     }
+
 
 
 
@@ -53,17 +58,21 @@ public class ItemStackToString {
             String[] parts = itemString.split("\\|");
             String[] baseInfo = parts[0].split(":");
 
-            Material material = Material.valueOf(baseInfo[0]); // Type de l'item
-            int amount = Integer.parseInt(baseInfo[1]); // Quantité
+            Material material = Material.valueOf(baseInfo[0]);
+            int amount = Integer.parseInt(baseInfo[1]);
+            short data = 0;
 
             ItemStack itemStack = new ItemStack(material, amount);
+
             ItemMeta meta = itemStack.getItemMeta();
 
             for (int i = 1; i < parts.length; i++) {
-                if (parts[i].startsWith("name=")) {
-                    meta.setDisplayName(parts[i].substring(5)); // Nom personnalisé
+                if (parts[i].startsWith("data=")) {
+                    data = Short.parseShort(parts[i].substring(5));
+                } else if (parts[i].startsWith("name=")) {
+                    meta.setDisplayName(parts[i].substring(5));
                 } else if (parts[i].startsWith("lore=")) {
-                    meta.setLore(Arrays.asList(parts[i].substring(5).split(";"))); // Lore
+                    meta.setLore(Arrays.asList(parts[i].substring(5).split(";")));
                 } else if (parts[i].startsWith("enchants=")) {
                     String[] enchants = parts[i].substring(9).split(",");
                     for (String enchant : enchants) {
@@ -75,18 +84,17 @@ public class ItemStackToString {
                         }
                     }
                 } else if (parts[i].equals("unbreakable=true")) {
-                    meta.spigot().setUnbreakable(true); // Restaure l'attribut Unbreakable
+                    meta.spigot().setUnbreakable(true);
                 }
             }
 
             itemStack.setItemMeta(meta);
+            itemStack.setDurability(data);
+
             return itemStack;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
-
-
 }

@@ -6,10 +6,14 @@ import fr.anto42.emma.coreManager.tasks.UHCTimer;
 import fr.anto42.emma.game.impl.UHCData;
 import fr.anto42.emma.game.impl.config.UHCConfig;
 import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.Title;
+import fr.anto42.emma.utils.gameSaves.EventType;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Date;
 
 import static fr.anto42.emma.game.GameState.STARTING;
 import static fr.anto42.emma.game.GameState.WAITING;
@@ -57,6 +61,7 @@ public class UHCGame {
     private boolean start = false;
 
     public void setGameState(GameState gameState) {
+        UHC.getInstance().getGameSave().registerEvent(EventType.CORE, "Passage du statut de la partie vers: " + gameState.getString());
         this.gameState = gameState;
     }
 
@@ -88,6 +93,7 @@ public class UHCGame {
                         Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aDémarrage de la partie dans §b" + timer/20 + "§a seconde" + (timer != 20 ? "s" : "") +  " !");
                         SoundUtils.playSoundToAll(Sound.ORB_PICKUP);
                     }
+                    
                     if (timer == 0){
                         Bukkit.getOnlinePlayers().forEach(player -> {
                             player.setLevel(0);

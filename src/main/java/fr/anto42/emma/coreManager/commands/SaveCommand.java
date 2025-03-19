@@ -30,7 +30,7 @@ public class SaveCommand extends Command {
     public boolean execute(CommandSender sender, String s, String[] strings) {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(((Player) sender));
         if (!uhcPlayer.isEditing()) {
-            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
+            uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas faire ça !");
             return true;
         }
 
@@ -42,27 +42,48 @@ public class SaveCommand extends Command {
             startInvMap.put(i, ItemStackToString.itemStackToString(content));
         }
 
-        // Convertir la map en un tableau de chaînes (optionnel, si tu veux le stocker comme ça)
         String[] startInvArray = new String[startInvMap.size()];
         for (Map.Entry<Integer, String> entry : startInvMap.entrySet()) {
-            startInvArray[entry.getKey()] = entry.getValue();  // Associe le slot avec l'item sous forme de chaîne
+            startInvArray[entry.getKey()] = entry.getValue();
         }
 
         UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setStartInv(startInvArray);
 
-        // Mets à jour l'équipement du joueur
-        UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setHead(uhcPlayer.getBukkitPlayer().getInventory().getHelmet());
+        Player player = uhcPlayer.getBukkitPlayer();
+        if (player.getInventory().getHelmet() == null) {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setHead(ItemStackToString.itemStackToString(new ItemStack(Material.BARRIER)));
+        }
+        else {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setHead(ItemStackToString.itemStackToString(uhcPlayer.getBukkitPlayer().getInventory().getHelmet()));
+        }
+        if (player.getInventory().getChestplate() == null) {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBody(ItemStackToString.itemStackToString(new ItemStack(Material.BARRIER)));
+        }
+        else {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBody(ItemStackToString.itemStackToString(uhcPlayer.getBukkitPlayer().getInventory().getChestplate()));
+        }
+        if (player.getInventory().getLeggings() == null) {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setLeggins(ItemStackToString.itemStackToString(new ItemStack(Material.BARRIER)));
+        }
+        else {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setLeggins(ItemStackToString.itemStackToString(uhcPlayer.getBukkitPlayer().getInventory().getLeggings()));
+        }
+        if (player.getInventory().getBoots() == null) {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBoots(ItemStackToString.itemStackToString(new ItemStack(Material.BARRIER)));
+        }
+        else {
+            UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBoots(ItemStackToString.itemStackToString(uhcPlayer.getBukkitPlayer().getInventory().getBoots()));
+        }
+        /*UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setHead(uhcPlayer.getBukkitPlayer().getInventory().getHelmet());
         UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBody(uhcPlayer.getBukkitPlayer().getInventory().getChestplate());
         UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setLeggins(uhcPlayer.getBukkitPlayer().getInventory().getLeggings());
-        UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBoots(uhcPlayer.getBukkitPlayer().getInventory().getBoots());
+        UHC.getInstance().getUhcGame().getUhcConfig().getStarterStuffConfig().setBoots(uhcPlayer.getBukkitPlayer().getInventory().getBoots());*/
 
-        uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §aL'inventaire de départ a été modifié avec succès !");
+        uhcPlayer.sendClassicMessage(" §aL'inventaire de départ a été modifié avec succès !");
 
-        // Effectue le changement de mode et téléporte le joueur
         uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
         uhcPlayer.getBukkitPlayer().teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
 
-        // Nettoie l'inventaire du joueur
         uhcPlayer.getBukkitPlayer().getInventory().clear();
         uhcPlayer.getBukkitPlayer().getInventory().setHelmet(null);
         uhcPlayer.getBukkitPlayer().getInventory().setChestplate(null);
@@ -71,7 +92,6 @@ public class SaveCommand extends Command {
 
         uhcPlayer.setEditing(false);
 
-        // Donne les objets d'attente au joueur
         PlayersUtils.giveWaitingStuff(uhcPlayer.getBukkitPlayer());
 
         return false;

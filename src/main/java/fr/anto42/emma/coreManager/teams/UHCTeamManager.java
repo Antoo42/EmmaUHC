@@ -23,6 +23,9 @@ public class UHCTeamManager {
     private boolean activated = false;
     private int slots = 2;
 
+    private int maxTeams = 28;
+    private boolean randomTeam = false;
+
     private List<UHCTeam> uhcTeams = new ArrayList<>();
     public List<UHCTeam> getUhcTeams() {
         return uhcTeams;
@@ -54,8 +57,8 @@ public class UHCTeamManager {
         uuid = uuid + "-";
         uuid = uuid + RandomStringUtils.random(4, false, true);
 
-        Team team = score.registerNewTeam(uuid.toString());
-        score.getTeam(uuid.toString()).setPrefix(prefix);
+        Team team = score.registerNewTeam(uuid);
+        score.getTeam(uuid).setPrefix(prefix);
 
         UHCTeam uhcTeam = new UHCTeam(name, color, prefix, dyeColor, colorNumber, uuid, team);
         this.uhcTeams.add(uhcTeam);
@@ -67,7 +70,52 @@ public class UHCTeamManager {
     public void createTeams(){
         getUhcTeams().clear();
 
-        //Hearts
+        String[] baseColors = {
+                "Rouge", "Orange", "Jaune", "Vert", "Bleue", "Violet", "Rose"
+        };
+
+        String[] colorVariants = {
+                " Alpha", " Beta", " Gamma", " Delta", " Epsilon", " Zeta", " Eta", " Theta", " Iota", " Kappa",
+                " Lambda", " Mu", " Nu", " Xi", " Omicron", " Pi", " Rho", " Sigma", " Tau", " Upsilon",
+                " Phi", " Chi", " Psi", " Oméga"
+        };
+
+
+        String[] symbols = {"♥", "♦", "♠", "♣", "★", "☀", "☁", "⚡", "❄"};
+
+        String[] colorCodes = {"§c", "§6", "§e", "§a", "§9", "§5", "§d"};
+
+        DyeColor[] dyeColors = {
+                DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.BLUE, DyeColor.PURPLE, DyeColor.PINK
+        };
+
+        int[] colorData = {14, 1, 4, 5, 3, 10, 6};
+
+        int teamCount = 0;
+
+        for (String symbol : symbols) {
+            for (int i = 0; i < baseColors.length; i++) {
+                createNewTeam(baseColors[i] + " " + symbol, colorCodes[i] + symbol + " ", dyeColors[i], colorData[i], colorCodes[i]);
+                teamCount++;
+            }
+        }
+
+        if (teamCount < 200) {
+            for (String variant : colorVariants) {
+                for (String symbol : symbols) {
+                    for (int i = 0; i < baseColors.length; i++) {
+                        createNewTeam(baseColors[i] + variant + " " + symbol, colorCodes[i] + variant + " " + symbol + " ", dyeColors[i], colorData[i], colorCodes[i]);
+                        teamCount++;
+                    }
+                }
+            }
+        }
+
+
+
+        System.out.println(getUhcTeams().size() + " teams created");
+
+        /*//Hearts
         createNewTeam("Rouge ♥","§c♥ ", DyeColor.RED, 14, "§c");
         createNewTeam("Orange ♥","§6♥ ", DyeColor.ORANGE, 1,"§6");
         createNewTeam("Jaune ♥","§e♥ ", DyeColor.YELLOW, 4,"§e");
@@ -101,7 +149,7 @@ public class UHCTeamManager {
         createNewTeam("Vert ♣","§a♣ ", DyeColor.LIME, 5,"§a");
         createNewTeam("Cyan ♣","§b♣ ", DyeColor.LIGHT_BLUE, 3,"§b");
         createNewTeam("Bleue ♣","§9♣ ", DyeColor.BLUE, 11,"§9");
-        createNewTeam("Rose ♣","§d♣ ", DyeColor.PINK, 6,"§d");
+        createNewTeam("Rose ♣","§d♣ ", DyeColor.PINK, 6,"§d");*/
     }
 
 
@@ -122,8 +170,6 @@ public class UHCTeamManager {
             }
         }
 
-        if (uhcTeams.isEmpty())
-            createNewTeam("Jaune ✓","§e§l✓ ", DyeColor.YELLOW, 4,"§e");
 
 
         return uhcTeams;
@@ -131,18 +177,27 @@ public class UHCTeamManager {
 
     public UHCTeam getRandomFreeTeam() {
         List<UHCTeam> uhcTeams = new ArrayList<>();
+        int a = 0;
 
-        for (UHCTeam uhcTeam : getUhcTeams()) {
+        List<UHCTeam> sortedTeams = new ArrayList<>(getUhcTeams());
+        sortedTeams.sort((team1, team2) -> Integer.compare(team2.getPlayersAmount(), team1.getPlayersAmount()));
+
+        for (UHCTeam uhcTeam : sortedTeams) {
+            if (a >= maxTeams) break;
             if (uhcTeam.getPlayersAmount() > 0 && uhcTeam.getPlayersAmount() < getSlots()) {
                 uhcTeams.add(uhcTeam);
             }
+            a++;
         }
 
+        a = 0;
         if (uhcTeams.isEmpty()) {
-            for (UHCTeam uhcTeam : getUhcTeams()) {
+            for (UHCTeam uhcTeam : sortedTeams) {
+                if (a >= maxTeams) break;
                 if (uhcTeam.getPlayersAmount() == 0) {
                     uhcTeams.add(uhcTeam);
                 }
+                a++;
             }
         }
 
@@ -154,14 +209,15 @@ public class UHCTeamManager {
     }
 
 
+
     public String getDisplayFormat(){
         if (!isActivated())
             return "FFA";
         else
-            return "To" + slots;
+            return "To" + slots + " §7(" + getMaxTeams() + ")";
     }
 
-    private boolean friendlyFire = false;
+    private boolean friendlyFire = true;
 
     public boolean isFriendlyFire() {
         return friendlyFire;
@@ -194,5 +250,21 @@ public class UHCTeamManager {
 
     public List<UHCTeam> getInitialTeams() {
         return initialTeams;
+    }
+
+    public int getMaxTeams() {
+        return maxTeams;
+    }
+
+    public void setMaxTeams(int maxTeams) {
+        this.maxTeams = maxTeams;
+    }
+
+    public boolean isRandomTeam() {
+        return randomTeam;
+    }
+
+    public void setRandomTeam(boolean randomTeam) {
+        this.randomTeam = randomTeam;
     }
 }

@@ -2,10 +2,7 @@ package fr.anto42.emma.coreManager.commands;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.UHCManager;
-import fr.anto42.emma.coreManager.listeners.customListeners.BorderMovementEvent;
-import fr.anto42.emma.coreManager.listeners.customListeners.LateEvent;
-import fr.anto42.emma.coreManager.listeners.customListeners.PvPEvent;
-import fr.anto42.emma.coreManager.listeners.customListeners.RolesEvent;
+import fr.anto42.emma.coreManager.listeners.customListeners.*;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.votes.VoteSystem;
@@ -23,8 +20,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class HCommand extends Command {
@@ -43,41 +43,47 @@ public class HCommand extends Command {
         Player player = ((Player) sender);
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
         if(!uhcPlayer.equals(uhc.getUhcData().getHostPlayer()) && !uhc.getUhcData().getCoHostList().contains(uhcPlayer) && !uhcPlayer.isUHCOp()){
-            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas faire ça !");
+            uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas faire ça !");
             return true;
         }
-        if(args.length == 0 || args[0].equalsIgnoreCase("help")){
-            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §7Liste des commandes disponibles:");
+        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+            uhcPlayer.sendClassicMessage(" §7Liste des commandes disponibles:");
             uhcPlayer.sendMessage("");
+
             uhcPlayer.sendMessage("§8§l» §6/h config§7: Ouvrez, par le biais d'une commande, le menu de configuration.");
+            uhcPlayer.sendMessage("§8§l» §6/h name <nom>: §7Renommez votre partie avec style (§acodes couleurs supportés !§7).");
+            uhcPlayer.sendMessage("§8§l» §6/h stop: §7Stoppez le serveur de jeu. §c(⚠ Irréversible !)");
+
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h add/remove/list§7: Ajoutez, retirez ou consultez à votre guise les Hosts de la partie.");
+
+            uhcPlayer.sendMessage("§8§l» §6/h add/remove/list§7: Gérez la liste des Hosts de la partie.");
+            uhcPlayer.sendMessage("§8§l» §6/h say <message>: §7Faites une annonce globale aux joueurs.");
+
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h name <nom>: §7Renomez votre partie comme bon vous le semble §a(Fonctionne avec les codes couleurs !)");
-            uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h say <message>: §7Faîtes votre plus belle annonce en destination des joueurs de votre partie.");
-            uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h force <PvP/border>: §7Forcez l'activation du PvP ou la mise en mouvement de la bordure.");
-            uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h give <item> <montant>: §7Donnez à tout les joueurs un item ciblé.");
-            uhcPlayer.sendMessage("");
+
+            uhcPlayer.sendMessage("§8§l» §6/h force <PvP/border/roles>: §7Forcez l'activation du PvP ou de la bordure.");
+            uhcPlayer.sendMessage("§8§l» §6/h heal:§7 Soignez tous les joueurs au maximum.");
+            uhcPlayer.sendMessage("§8§l» §6/h give <item> <montant>: §7Distribuez un item à tous les joueurs.");
             uhcPlayer.sendMessage("§8§l» §6/h chat: §7Activez/désactivez le chat.");
+            uhcPlayer.sendMessage("§8§l» §6/h groupes set <montant>/warn: §7Régulez les groupes de joueurs.");
+
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h late <Player>:§7 Ajoutez un joueur à la partie en cours de route.");
-            uhcPlayer.sendMessage("");
+
+            uhcPlayer.sendMessage("§8§l» §6/h late <Player>:§7 Ajoutez un joueur en cours de partie.");
             uhcPlayer.sendMessage("§8§l» §6/h revive <Player>:§7 Ramenez un joueur à la vie !");
+            uhcPlayer.sendMessage("§8§l» §6/h kick <Player>: §7Expulsez un joueur de la partie.");
+
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h heal:§7 Remettez tout les joueurs sur le même pied d'estale en les soignant au maxiumum.");
+
+            uhcPlayer.sendMessage("§8§l» §6/h vote <sujet>: §7Démarrez un vote/sondage de 30 secondes sur un sujet.");
+
             uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h groupes set <montant>/warn: §7Le système parfait pour rappeler à l'ordre les joueurs de la partie qui sont tous groupés !");
-            uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h vote <sujet>: §7Démarrez un vote/sondage durant 30 secondes sur le sujet que vous souhaitez !");
-            uhcPlayer.sendMessage("");
+
             uhcPlayer.sendMessage("§8§l» §c/spec help: §7Consultez les commandes de spectateur.");
-            uhcPlayer.sendMessage("");
-            uhcPlayer.sendMessage("§8§l» §6/h stop: §7Stoppez le serveur de jeu. §c(⚠Irréversible !)");
+
             uhcPlayer.sendMessage("");
         }
+
         else if (args[0].equalsIgnoreCase("add")){
             if (uhcPlayer != uhc.getUhcData().getHostPlayer() && !uhcPlayer.getBukkitPlayer().isOp()){
                 uhcPlayer.sendClassicMessage("§cSeul l'host de la partie peut faire ça !");
@@ -142,7 +148,7 @@ public class HCommand extends Command {
                 return true;
             }
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cErreur de syntaxe ! §3(/h force <pvp/border/roles>)");
+                uhcPlayer.sendClassicMessage(" §cErreur de syntaxe ! §3(/h force <pvp/border/roles>)");
             } else if (args[1].equalsIgnoreCase("pvp")){
                 if (uhc.getUhcData().isPvp())
                     return true;
@@ -170,7 +176,7 @@ public class HCommand extends Command {
             uhcPlayer.sendClassicMessage("§7Voici la liste des joueurs de la partie:");
             uhcPlayer.sendMessage("");
             uhc.getUhcData().getUhcPlayerList().forEach(uhcPlayer1 -> {
-                uhcPlayer.sendMessage("§8§l» §e" + uhcPlayer1.getName() + " §3(" + uhcPlayer1.getUuid() + ") " + (uhcPlayer1.getBukkitPlayer() != null ? "§aConnecté" : ""));
+                uhcPlayer.sendMessage("§8§l» §e" + uhcPlayer1.getName() + (uhcPlayer1.getBukkitPlayer() != null ? " §aConnecté" : ""));
             });
         } else if (args[0].equalsIgnoreCase("give")){
             if (!uhc.getGameState().equals(GameState.PLAYING)) {
@@ -222,7 +228,7 @@ public class HCommand extends Command {
         }
         else if (args[0].equalsIgnoreCase("stop")){
             if (uhcPlayer != uhc.getUhcData().getHostPlayer() && !uhcPlayer.isUHCOp()){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cCette commande est restreinte à l'Host de la partie.");
+                uhcPlayer.sendClassicMessage(" §cCette commande est restreinte à l'Host de la partie.");
                 return true;
             }
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le serveur §e" + Bukkit.getServerName() + "§7 a été arrêté par §c" + uhcPlayer.getName() + "§7.");
@@ -234,34 +240,34 @@ public class HCommand extends Command {
                 return true;
             }
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur.");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur connecté.");
                 return true;
             }
             UHCPlayer uhctarget = UHC.getUHCPlayer(target);
             if (uhc.getUhcData().getUhcPlayerList().contains(uhctarget)){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas ajouter un joueur qui est déjà dans la partie !");
+                uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas ajouter un joueur qui est déjà dans la partie !");
                 return true;
             }
-            Bukkit.getPluginManager().callEvent(new LateEvent(uhcPlayer));
+            Bukkit.getPluginManager().callEvent(new LateEvent(uhctarget));
         }
         else if (args[0].equalsIgnoreCase("revive")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur.");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur connecté.");
                 return true;
             }
             UHCPlayer uhctarget = UHC.getUHCPlayer(target);
             if (uhctarget.getPlayerState() == UHCPlayerStates.ALIVE){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous ne pouvez pas réssucité un joueur qui n'est pas encore mort !");
+                uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas réssucité un joueur qui n'est pas encore mort !");
                 return true;
             }
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §a" + uhctarget.getName() + "§7 a été réssucité !");
@@ -272,6 +278,7 @@ public class HCommand extends Command {
             if (uhctarget.getPreviousTeam() != null && uhctarget.getPreviousTeam().isAlive()) {
                 uhctarget.joinTeam(uhctarget.getPreviousTeam());
             }
+            Bukkit.getPluginManager().callEvent(new ReviveEvent(uhctarget));
         }
         else if (args[0].equalsIgnoreCase("heal")){
             if (!uhc.getGameState().equals(GameState.PLAYING)) {
@@ -286,11 +293,11 @@ public class HCommand extends Command {
         }
         else if (args[0].equalsIgnoreCase("groupes") || args[0].equalsIgnoreCase("groups")){
             if (!uhc.getUhcConfig().isGroupSystem()){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cLe système de groupe est désactivé !");
+                uhcPlayer.sendClassicMessage(" §cLe système de groupe est désactivé !");
                 return true;
             }
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §7Gestion des groupes:");
+                uhcPlayer.sendClassicMessage(" §7Gestion des groupes:");
                 uhcPlayer.sendMessage("");
                 uhcPlayer.sendMessage("§8§l» §6§l/h groups set <nombre>§7: Définnissez la taille des groupes.");
                 uhcPlayer.sendMessage("");
@@ -300,7 +307,7 @@ public class HCommand extends Command {
                 fr.anto42.emma.utils.players.GameUtils.warnGroups();
             }else if (args[1].equalsIgnoreCase("set")){
                 if (args.length == 2){
-                    uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cErreur de syntaxe ! (/h groups set <montant>");
+                    uhcPlayer.sendClassicMessage(" §cErreur de syntaxe ! (/h groups set <montant>");
                     return true;
                 }
                 fr.anto42.emma.utils.players.GameUtils.setGroupsLimit(Integer.parseInt(args[2]));
@@ -309,7 +316,7 @@ public class HCommand extends Command {
         }
         else if (args[0].equalsIgnoreCase("name")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVous devez indiquer le nom de votre partie ! §3(/h name <name>)");
+                uhcPlayer.sendClassicMessage(" §cVous devez indiquer le nom de votre partie ! §3(/h name <name>)");
                 return true;
             }
             StringBuilder sb = new StringBuilder();
@@ -321,16 +328,21 @@ public class HCommand extends Command {
                 uhcPlayer.sendClassicMessage("§cVous ne pouvez pas définir un nom de partie donc la longueur est supérieure à 32 caractères !");
                 return true;
             }
+            if (sb.toString().contains(" - ")) {
+                uhcPlayer.sendClassicMessage("§cVous ne pouvez pas définir un nom comportant un \"-\" !");
+                return true;
+            }
             uhc.getUhcConfig().setUHCName(sb.toString().replace("&", "§"));
-            uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §7Votre partie est désormais sous le nom suivant: §a" + sb.toString());
+            uhcPlayer.sendClassicMessage(" §7Votre partie est désormais sous le nom suivant: §a" + sb.toString());
         }
         else if (args[0].equalsIgnoreCase("vote")){
-            if (VoteSystem.getInstance().isVote()){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cUn vote est déjà en cours !");
+            VoteSystem voteSystem = uhcManager.getVoteSystem();
+            if (voteSystem.isVote()){
+                uhcPlayer.sendClassicMessage(" §cUn vote est déjà en cours !");
                 return true;
             }
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVeuillez indiquer sur quoi le vote portera §3(/h vote <sujet>)");
+                uhcPlayer.sendClassicMessage(" §cVeuillez indiquer sur quoi le vote portera §3(/h vote <sujet>)");
                 return true;
             }
             StringBuilder stringBuilder = new StringBuilder();
@@ -338,11 +350,11 @@ public class HCommand extends Command {
             for (String arg : args) {
                 stringBuilder.append(arg).append(" ");
             }
-            VoteSystem.getInstance().startVote(stringBuilder.toString());
+            voteSystem.startVote(stringBuilder.toString());
         }
         else if (args[0].equalsIgnoreCase("say") || args[0].equalsIgnoreCase("bc")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cVeuillez indiquer un message à transmettre ! §3(/h say <message>)");
+                uhcPlayer.sendClassicMessage(" §cVeuillez indiquer un message à transmettre ! §3(/h say <message>)");
                 return true;
             }
             StringBuilder stringBuilder = new StringBuilder();
@@ -357,12 +369,12 @@ public class HCommand extends Command {
         }
         else if (args[0].equalsIgnoreCase("kick")) {
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur.");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getPrefix() + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendClassicMessage(" §cMerci de préciser un joueur connecté.");
                 return true;
             }
             target.kickPlayer("§cVous avez été kick de la partie.");
@@ -411,7 +423,7 @@ public class HCommand extends Command {
 
             }
             if (args[1].equalsIgnoreCase("list")){
-                if (UHC.getInstance().getUhcGame().getUhcData().getPreWhitelist().size() == 0){
+                if (UHC.getInstance().getUhcGame().getUhcData().getPreWhitelist().isEmpty()){
                     uhcPlayer.sendClassicMessage("§cAucun joueur n'est présent dans la whitelist.");
                     return true;
                 }
@@ -419,7 +431,7 @@ public class HCommand extends Command {
                 UHC.getInstance().getUhcGame().getUhcData().getPreWhitelist().forEach(s1 -> {
                     uhcPlayer.sendMessage("§8§l» §e" + s1);
                 });
-
+                return true;
             }
             uhcPlayer.sendClassicMessage("§7Gestion de la whitelist:");
             uhcPlayer.sendMessage("");
@@ -431,4 +443,53 @@ public class HCommand extends Command {
         } else uhcPlayer.sendClassicMessage("§cCommande non trouvée ! §3(/h help)");
         return false;
     }
+
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
+        List<String> commands = Arrays.asList(
+                "config", "name", "stop", "add", "remove", "list", "say", "force",
+                "heal", "give", "chat", "groupes", "late", "revive", "kick", "vote"
+        );
+
+        if (args.length == 1) {
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+        } else if (args.length == 2) {
+            switch (args[0].toLowerCase()) {
+                case "name":
+                    completions.add("<nom>");
+                    break;
+                case "force":
+                    completions.addAll(Arrays.asList("PvP", "border", "roles"));
+                    break;
+                case "give":
+                    completions.add("<item>");
+                    break;
+                case "groupes":
+                    completions.addAll(Arrays.asList("set", "warn"));
+                    break;
+                case "late":
+                case "add":
+                case "remove":
+                case "revive":
+                case "kick":
+                    Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                    break;
+                case "vote":
+                    completions.add("<sujet>");
+                    break;
+            }
+        } else if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("give")) {
+                completions.add("<montant>");
+            } else if (args[0].equalsIgnoreCase("groupes") && args[1].equalsIgnoreCase("set")) {
+                completions.add("<montant>");
+            }
+        }
+
+        Collections.sort(completions);
+        return completions;
+    }
+
 }

@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimeBomb extends UHCScenario {
-    public TimeBomb(ScenarioManager scenarioManager, int page) {
-        super("TimeBomb", new ItemStack(Material.CHEST), scenarioManager, page);
+    public TimeBomb(ScenarioManager scenarioManager) {
+        super("TimeBomb", new ItemStack(Material.CHEST), scenarioManager);
         setConfigurable(true);
         setkInventory(new TimeBombGUI(this).getkInventory());
         setScenarioType(ScenarioType.PVP);

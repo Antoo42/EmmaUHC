@@ -1,6 +1,10 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.rules;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.uis.config.EnchantsConfigGUI;
+import fr.anto42.emma.coreManager.uis.config.SettingsConfigGUI;
+import fr.anto42.emma.coreManager.uis.config.StuffConfigGUI;
+import fr.anto42.emma.coreManager.uis.config.TimerConfigGUI;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.SoundUtils;

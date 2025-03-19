@@ -30,10 +30,12 @@ sayPrefix: "&b&lANNONCE &8&l»"
 discordPrefix: "&9&lDISCORD &8&l»"
 
 #Discord
-announceWebhook: "https://discord.com/api/webhooks/1085709711711670324/TM3r-dCAjm5EKNFrJXNmvoMQPa8oY7GHGF4jIo8Md8lZZctJZHsdym4bhrP5VwmG5tw9"
-winWebhook: ""
-avatarURL: ""
-logWebhook: ""
+discordbot: false
+discordToken: ""
+discordChatChannelId: ""
+discordAnnounceChannelId: ""
+discordWinChannelId: ""
+discordLogsChannelId: ""
 
 bleachuhc:
   role:
