@@ -2,7 +2,7 @@ package fr.anto42.emma.coreManager.votes;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.chat.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

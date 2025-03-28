@@ -2,7 +2,7 @@ package fr.anto42.emma.coreManager.tasks;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,7 +14,7 @@ public class NoSpecLagTask extends BukkitRunnable {
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             GameMode mode = onlinePlayer.getGameMode();
-            if (mode != GameMode.SPECTATOR && mode != GameMode.CREATIVE) {
+            if (mode != GameMode.SPECTATOR) {
                 continue;
             }
 

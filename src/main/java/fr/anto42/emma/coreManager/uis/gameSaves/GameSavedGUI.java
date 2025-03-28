@@ -51,9 +51,9 @@ public class GameSavedGUI {
             }
         }
 
-        KItem back = new KItem(new ItemCreator(SkullList.LEFT_AROOW.getItemStack()).name("§8┃ §cRevenir en arrière").lore("", "§8┃ §cVous ne trouvez pas §fce que vous souhaitez ?", "§8┃ §aPas de soucis§f, revenez en arrière !", "", "§8§l» §6Cliquez §fpour fermer.").get());
-        back.addCallback((kInventoryRepresentation, itemStack, player5, kInventoryClickContext) -> {
-            player.closeInventory();
+        KItem back = new KItem(new ItemCreator(SkullList.LEFT_AROOW.getItemStack()).name("§8┃ §cFermer le menu").lore("", "§8§l» §6Cliquez §fpour fermer.").get());
+        back.addCallback((kInventoryRepresentation, itemStack, player1, kInventoryClickContext) -> {
+            player1.closeInventory();
         });
         this.kInventory.setElement(49, back);
 

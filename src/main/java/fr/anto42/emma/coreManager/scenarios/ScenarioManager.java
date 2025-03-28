@@ -21,6 +21,7 @@ public class ScenarioManager {
         getInitialScenarioList().add(new BetaZombies(this));
         getInitialScenarioList().add(new BigCrack(this));
         getInitialScenarioList().add(new BlockRemover(this));
+        getInitialScenarioList().add(new BowAimBot(this));
         getInitialScenarioList().add(new BowSwap(this));
         getInitialScenarioList().add(new CatEyes(this));
         getInitialScenarioList().add(new CutClean(this));

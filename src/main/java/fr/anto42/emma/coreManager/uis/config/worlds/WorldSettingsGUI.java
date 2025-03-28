@@ -1,12 +1,11 @@
 package fr.anto42.emma.coreManager.uis.config.worlds;
 
 import fr.anto42.emma.UHC;
-import fr.anto42.emma.coreManager.worldManager.OrePopulator;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.coreManager.worldManager.WorldPopulator;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
@@ -41,7 +40,7 @@ public class WorldSettingsGUI {
         });
         this.kInventory.setElement(49, back);
 
-        KItem boost = new KItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fAfin que le boost prenne effet,", "§8┃ §fvous devez prégener la carte de jeu", "", "§8§l» §6Clique-gauche §fpour ajouter 25%.", "§8§l» §6Clique-droit §fpour retirer 25%.").get());
+        KItem boost = new KItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fL'outil parfait pour miner moins longtemps", "", "§c§o  Afin que le boost prenne effet,", "§c§o  vous devez prégener la carte de jeu", "", "§8§l» §6Clique-gauche §fpour ajouter 25%.", "§8§l» §6Clique-droit §fpour retirer 25%.").get());
         boost.addCallback((kInventory1, item, player, clickContext) -> {
             if (clickContext.getClickType().isLeftClick()) {
                 if (uhc.getUhcConfig().getBoostMultiplier() >= 3000)
@@ -52,7 +51,7 @@ public class WorldSettingsGUI {
                     return;
                 uhc.getUhcConfig().setBoostMultiplier(uhc.getUhcConfig().getBoostMultiplier() - 25);
             }
-            boost.setItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fAfin que le boost prenne effet,", "§8┃ §fvous devez prégener la carte de jeu", "", "§8§l» §6Clique-gauche §fpour ajouter 25%.", "§8§l» §6Clique-droit §fpour retirer 25%.").get());
+            boost.setItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fL'outil parfait pour miner moins longtemps", "", "§c§o  Afin que le boost prenne effet,", "§c§o  vous devez prégener la carte de jeu", "", "§8§l» §6Clique-gauche §fpour ajouter 25%.", "§8§l» §6Clique-droit §fpour retirer 25%.").get());
         });
         this.kInventory.setElement(21, boost);
 

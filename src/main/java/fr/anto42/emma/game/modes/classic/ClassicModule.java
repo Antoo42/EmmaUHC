@@ -7,13 +7,11 @@ import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class ClassicModule extends Module {

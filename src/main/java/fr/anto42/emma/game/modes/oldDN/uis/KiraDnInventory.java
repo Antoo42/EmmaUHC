@@ -8,7 +8,7 @@ import fr.anto42.emma.game.modes.oldDN.roles.Mello;
 import fr.anto42.emma.game.modes.oldDN.roles.Shinigami;
 import fr.anto42.emma.game.modes.oldDN.utils.TimerActionbarTask;
 import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;

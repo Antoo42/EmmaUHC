@@ -1,4 +1,4 @@
-package fr.anto42.emma.utils;
+package fr.anto42.emma.utils.data;
 
 import net.minecraft.server.v1_8_R3.Scoreboard;
 import org.bukkit.Bukkit;

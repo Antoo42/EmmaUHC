@@ -6,7 +6,7 @@ import fr.anto42.emma.coreManager.Module;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.game.modes.oldDN.impl.DNRole;
 import fr.anto42.emma.game.modes.oldDN.DNModule;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 

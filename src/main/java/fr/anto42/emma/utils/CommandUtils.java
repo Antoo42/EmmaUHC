@@ -1,5 +1,6 @@
 package fr.anto42.emma.utils;
 
+import fr.anto42.emma.utils.data.SimpleReflection;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
@@ -18,7 +19,7 @@ public class CommandUtils {
     public static void unregisterCommand(String fallback, Command command) {
         try {
             SimpleCommandMap commandMap = ((CraftServer)Bukkit.getServer()).getCommandMap();
-            Map<String, Command> commands = (Map)SimpleReflection.getFieldValue(commandMap, "knownCommands");
+            Map<String, Command> commands = (Map) SimpleReflection.getFieldValue(commandMap, "knownCommands");
             Command removed = (Command)commands.remove(fallback + ":" + command.getName());
             if (removed != null && removed == command) {
                 removed.unregister(commandMap);

@@ -17,7 +17,7 @@ import fr.anto42.emma.game.modes.oldDN.utils.GameUtils;
 import fr.anto42.emma.game.modes.oldDN.utils.NearHealthView;
 import fr.anto42.emma.game.modes.oldDN.roles.investigator.Inverstigator;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

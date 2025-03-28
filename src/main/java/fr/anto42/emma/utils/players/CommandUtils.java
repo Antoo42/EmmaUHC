@@ -1,6 +1,6 @@
 package fr.anto42.emma.utils.players;
 
-import fr.anto42.emma.utils.SimpleReflection;
+import fr.anto42.emma.utils.data.SimpleReflection;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;

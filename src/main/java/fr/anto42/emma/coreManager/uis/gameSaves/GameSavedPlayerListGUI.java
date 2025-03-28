@@ -71,9 +71,14 @@ public class GameSavedPlayerListGUI {
                 lore.add(" §8§l» §7Événements");
                 gameSave.getEvents().stream()
                         .filter(s -> s.contains(playerStats.getName()))
-                        .forEach(s -> lore.add("  §8§l» §c" + SaveSerializationManager.fromEventString(s).getTimer() + "§f" + SaveSerializationManager.fromEventString(s).getString()));
+                        .forEach(s -> lore.add("  §8§l» §e" + SaveSerializationManager.fromEventString(s).getTimer() + "§f: " + SaveSerializationManager.fromEventString(s).getString()));
                 lore.add("");
+                lore.add("§8§l» §6Cliquez §fpour voir les messages envoyés par ce joueur.");
                 return lore;
+            });
+
+            kItem.addCallback((kInventory1, item, player1, clickContext) -> {
+                new MessagesSentByPlayerGUI(playerStats.getName(), getkInventory(), gameSave).getkInventory().open(player1);
             });
 
             this.kInventory.setElement(slot++, kItem);

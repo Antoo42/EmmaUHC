@@ -1,6 +1,8 @@
 package fr.anto42.emma.coreManager.worldManager;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.worldManager.giantCaves.GCConfig;
+import fr.anto42.emma.coreManager.worldManager.giantCaves.GiantCavePopulator;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.chat.Title;
 import fr.anto42.emma.utils.gameSaves.EventType;
@@ -32,6 +34,7 @@ public class Generator {
         world.setGameRuleValue("randomTickSpeed", "0");
         prepareQueue();
         startGeneration();
+        giantCavePopulator = new GiantCavePopulator(UHC.getInstance(), new GCConfig());
     }
 
     private void prepareQueue() {
@@ -102,13 +105,16 @@ public class Generator {
         }, 0L, 1L);
     }
     OrePopulator orePopulator = UHC.getInstance().getWorldManager().getOrePopulator();
+    GiantCavePopulator giantCavePopulator;
+    Random random = new Random();
     private void generateChunk(int x, int z) {
         Bukkit.getScheduler().runTask(UHC.getInstance(), () -> {
             try {
                 Chunk chunk = world.getChunkAt(world.getBlockAt(x, 64, z));
                 chunk.load(true);
+                orePopulator.populate(chunk.getWorld(), random, chunk);
+                //giantCavePopulator.populate(chunk.getWorld(), new Random(), chunk);
                 chunk.load(false);
-                orePopulator.populate(chunk.getWorld(), new Random(), chunk);
                 completedChunks++;
                 if (completedChunks % 100 == 0) {
                     updateProgress();

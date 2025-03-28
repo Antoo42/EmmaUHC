@@ -4,7 +4,6 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.roles.Camp;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.chat.Title;
 import org.bukkit.*;

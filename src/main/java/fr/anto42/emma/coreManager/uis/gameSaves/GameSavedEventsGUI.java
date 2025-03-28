@@ -59,7 +59,7 @@ public class GameSavedEventsGUI {
             Event event = filteredEvents.get(i);
             KItem kItem = new KItem(new ItemCreator(Material.PAPER)
                     .name("§8§l» §7" + event.getString())
-                    .lore("", "§8§l» §fType: §c" + event.getEventType().getString(), "§8§l» §fTimer de jeu: §e" + event.getTimer(), "§8§l» §fDate: §b" + event.getDate())
+                    .lore("", "§8§l» §7Type: §c" + event.getEventType().getString(), "§8§l» §7Timer de jeu: §e" + event.getTimer(), "§8§l» §7Date: §3" + event.getDate())
                     .get());
 
             this.kInventory.setElement(slot++, kItem);

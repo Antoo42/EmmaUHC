@@ -4,7 +4,7 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.ScenarioType;
 import fr.anto42.emma.coreManager.scenarios.UHCScenario;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;

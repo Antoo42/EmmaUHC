@@ -19,7 +19,7 @@ import fr.anto42.emma.game.modes.deathNote.impl.DNRole;
 import fr.anto42.emma.game.modes.deathNote.roles.*;
 import fr.anto42.emma.game.modes.deathNote.uis.KiraMainGUI;
 import fr.anto42.emma.game.modes.deathNote.utils.InvestigatorPowers;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import org.bukkit.Bukkit;

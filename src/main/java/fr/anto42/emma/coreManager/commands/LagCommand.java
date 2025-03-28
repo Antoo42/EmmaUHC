@@ -31,7 +31,7 @@ public class LagCommand extends Command {
 
         sender.sendMessage(UHC.getInstance().getPrefix() + " §7Informations serveur:");
         sender.sendMessage("  §8┃ §fTPS §8§l» " + formatTPS(tps) + " " + analyzeTPS(tps));
-        sender.sendMessage("  §8┃ §fPING §8§l» " + formatPing(ping) + " " + analyzePing(ping));
+        sender.sendMessage("  §8┃ §fPING §8§l» " + formatPing(ping) + "ms " + analyzePing(ping));
         sender.sendMessage("  §8┃ §fJoueurs §8§l» §a" + Bukkit.getOnlinePlayers().size() + "§f/§a" + Bukkit.getMaxPlayers());
         sender.sendMessage("  §8┃ §fRAM utilisée §8§l» §e" + formatMemory(usedMemory) + " MB §8(§fMax: " + formatMemory(maxMemory) + " MB§8)");
         sender.sendMessage("  §8┃ §fPerformances générales §8§l» " + analyzePerformance(tps, ping, usedMemory, maxMemory));

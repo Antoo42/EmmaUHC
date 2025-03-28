@@ -6,7 +6,7 @@ import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
 import fr.anto42.emma.coreManager.uis.SavesGUI;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.saves.ItemStackToString;
 import fr.anto42.emma.utils.skulls.SkullList;

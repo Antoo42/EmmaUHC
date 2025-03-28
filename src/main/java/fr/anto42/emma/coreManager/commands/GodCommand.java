@@ -19,13 +19,13 @@ public class GodCommand extends Command {
         if(UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == uhcPlayer || UHC.getInstance().getUhcGame().getUhcData().getSpecList().contains(uhcPlayer) || uhcPlayer.isUHCOp() || UHC.getInstance().getUhcGame().getUhcData().getCoHostList().contains(uhcPlayer)){
             if(uhcPlayer.isUHCOp()){
                 uhcPlayer.setUHCOp(false);
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous n'êtes plus opérateur de la partie !");
+                uhcPlayer.sendModMessage("§7Vous n'êtes plus opérateur de la partie !");
             }else{
                 uhcPlayer.setUHCOp(true);
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous êtes désormais opérateur de la partie !");
+                uhcPlayer.sendModMessage("§7Vous êtes désormais opérateur de la partie !");
             }
         }else
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous n'avez pas les permissions afin d'effectuer cette commande.");
+            uhcPlayer.sendModMessage("§7Vous n'avez pas les permissions afin d'effectuer cette commande.");
 
         return false;
     }

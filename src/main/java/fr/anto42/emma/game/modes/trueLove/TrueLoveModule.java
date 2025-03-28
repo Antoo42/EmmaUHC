@@ -10,11 +10,9 @@ import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.modes.trueLove.uis.TrueLoveGUI;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class TrueLoveModule extends Module {

@@ -1,12 +1,15 @@
 package fr.anto42.emma.coreManager.scenarios.scFolder;
 
+import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.ScenarioType;
 import fr.anto42.emma.coreManager.scenarios.UHCScenario;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.materials.OreType;
 import fr.anto42.emma.utils.materials.UniversalMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -15,8 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Optional;
+import java.util.*;
 
 public class VeinMiner extends UHCScenario {
     public VeinMiner(ScenarioManager scenarioManager) {
@@ -26,28 +30,21 @@ public class VeinMiner extends UHCScenario {
     }
 
     private static final BlockFace[] BLOCK_FACES = new BlockFace[]{
-            BlockFace.DOWN,
-            BlockFace.UP,
-            BlockFace.SOUTH,
-            BlockFace.NORTH,
-            BlockFace.EAST,
-            BlockFace.WEST
+            BlockFace.DOWN, BlockFace.UP, BlockFace.SOUTH,
+            BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST
     };
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent e){
-        if (!isActivated())
-            return;
+    public void onBlockBreak(BlockBreakEvent e) {
+        if (!isActivated()) return;
         Player player = e.getPlayer();
 
-        if (!player.isSneaking()){
-            return;
-        }
+        if (!player.isSneaking()) return;
 
         Block block = e.getBlock();
         ItemStack tool = player.getItemInHand();
 
-        if (block.getType() == UniversalMaterial.GLOWING_REDSTONE_ORE.getType()){
+        if (block.getType() == UniversalMaterial.GLOWING_REDSTONE_ORE.getType()) {
             block.setType(Material.REDSTONE_ORE);
         }
 
@@ -55,77 +52,55 @@ public class VeinMiner extends UHCScenario {
         if (!oreType.isPresent() || !oreType.get().isCorrectTool(tool.getType())) {
             return;
         }
-
         Vein vein = new Vein(block);
-        vein.process();
 
-        int amount = vein.getOres() /* getVeinMultiplier(oreType.get())*/;
+        List<Block> blocksToBreak = new ArrayList<>(vein.blocks);
+
+        new BukkitRunnable() {
+            int index = 0;
+
+            @Override
+            public void run() {
+                if (index >= blocksToBreak.size()) {
+                    cancel();
+                    return;
+                }
+
+                Block b = blocksToBreak.get(index);
+                SoundUtils.playSoundToPlayer(e.getPlayer(), Sound.DIG_STONE);
+                b.setType(Material.AIR);
+                index++;
+            }
+        }.runTaskTimer(UHC.getInstance(), 3L, 3L);
+
+        int amount = blocksToBreak.size()-1;
         ItemStack drops = new ItemStack(oreType.get().getDrop(), amount);
-        Location loc = player.getLocation().getBlock().getLocation().add(.5,.5,.5);
+        Location loc = player.getLocation().getBlock().getLocation().add(.5, .5, .5);
         loc.getWorld().dropItem(loc, drops);
 
-        int xp = oreType.get().getXpPerBlock() * vein.getOres();
+        int xp = oreType.get().getXpPerBlock() * amount;
         if (xp != 0) {
             ExperienceOrb orb = (ExperienceOrb) block.getLocation().getWorld().spawnEntity(block.getLocation(), EntityType.EXPERIENCE_ORB);
             orb.setExperience(amount);
         }
-
-
-        boolean calculateToolDamage = true;
-        tool.setDurability((short) (tool.getDurability() + vein.getOres()));
     }
 
-    /*private int getVeinMultiplier(OreType oreType) {
-        int multiplier = 1;
-        if (getScenarioManager().isEnabled(Scenario.TRIPLE_ORES)) {
-            multiplier *= 3;
-        }
-        if (getScenarioManager().isEnabled(Scenario.DOUBLE_ORES)) {
-            multiplier *= 2;
-        }
-        if ((oreType == OreType.GOLD || oreType == OreType.NETHER_GOLD) && getScenarioManager().isEnabled(Scenario.DOUBLE_GOLD)) {
-            multiplier *= 2;
-        }
-        return multiplier;
-    }*/
-
     private static class Vein {
-        private final Block startBlock;
+        private final Set<Block> blocks = new HashSet<>();
         private final Material type;
-        private int ores;
 
         public Vein(Block startBlock) {
-            this.startBlock = startBlock;
             this.type = startBlock.getType();
-            ores = 0;
+            findVein(startBlock);
         }
 
-        public void process() {
-            getVeinBlocks(startBlock, type, 2, 10);
-        }
+        private void findVein(Block block) {
+            if (block.getType() != type || blocks.contains(block)) return;
 
-        public int getOres() {
-            return ores;
-        }
+            blocks.add(block);
 
-        private void getVeinBlocks(Block block, Material type, int i, int maxBlocks) {
-            if (maxBlocks == 0) return;
-
-            if (block.getType() == UniversalMaterial.GLOWING_REDSTONE_ORE.getType()) {
-                block.setType(Material.REDSTONE_ORE);
-            }
-
-            if (block.getType() == type) {
-                block.setType(Material.AIR);
-                ores++;
-                i = 2;
-            }else {
-                i--;
-            }
-            if (i > 0 && ores < 20) {
-                for (BlockFace face : BLOCK_FACES) {
-                    getVeinBlocks(block.getRelative(face), type, i, maxBlocks-1);
-                }
+            for (BlockFace face : BLOCK_FACES) {
+                findVein(block.getRelative(face));
             }
         }
     }

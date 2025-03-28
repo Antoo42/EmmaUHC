@@ -62,13 +62,16 @@ public class GameSavedDetailsGUI {
                 lore.add("");
                 lore.add(" §8§l» §7Evenements");
                 gameSave.getEvents().stream().filter(s -> s.contains(player.getName())).forEach(s -> {
-                    lore.add("  §8§l» §c" + SaveSerializationManager.fromEventString(s).getTimer() + "§f" + SaveSerializationManager.fromEventString(s).getString());
+                    lore.add("  §8§l» §e" + SaveSerializationManager.fromEventString(s).getTimer() + "§f: " + SaveSerializationManager.fromEventString(s).getString());
                 });
-
+                lore.add("");
+                lore.add("§8§l» §6Cliquez §fpour voir les messages envoyés par ce joueur.");
+                stats.addCallback((kInventory1, item, player2, clickContext) -> {
+                    new MessagesSentByPlayerGUI(playerStats.getName(), getkInventory(), gameSave).getkInventory().open(player2);
+                });
             } else {
                 lore.add("§8§l» §cAucune donnée disponible.");
             }
-            lore.add("");
             return lore;
         });
 
@@ -82,7 +85,7 @@ public class GameSavedDetailsGUI {
         });
         this.kInventory.setElement(22, playersList);
 
-        KItem eventsList = new KItem(new ItemCreator(Material.BOOK).name("§8┃ §fListe des events de la partie").lore("", "§8┃ §fObtenez des informations sur la partie", "", "§8§l» §6§lCliquez§f pour ouvrir.").get());
+        KItem eventsList = new KItem(new ItemCreator(Material.PAPER).name("§8┃ §fListe des events de la partie").lore("", "§8┃ §fObtenez des informations sur la partie", "", "§8§l» §6§lCliquez§f pour ouvrir.").get());
         eventsList.addCallback((kInventory1, item, player1, clickContext) -> {
             new GameSavedEventsGUI(gameSave, getkInventory(), 0, null).getkInventory().open(player1);
         });

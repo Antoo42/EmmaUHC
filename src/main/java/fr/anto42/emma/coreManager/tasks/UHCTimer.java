@@ -7,7 +7,7 @@ import fr.anto42.emma.coreManager.listeners.customListeners.RolesEvent;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -25,7 +25,9 @@ public class CreditsCommand extends Command {
         uhcPlayer.sendMessage("  §8§l» §7KInventory par §b@Blendman974");
         uhcPlayer.sendMessage("  §8§l» §7Cityworld par §b@echurchill");
         uhcPlayer.sendMessage("");
-        uhcPlayer.sendMessage("§8§l» §7Optimisation et relecture assistées par intelligence artificielle.");
+        uhcPlayer.sendMessage("§8§l» §aLes messages sont analysés par une intelligence artificielle: §bPerspective");
+        uhcPlayer.sendMessage("");
+        uhcPlayer.sendMessage("§8§l» §7Optimisation du code et relecture assistées par intelligence artificielle.");
 
         return false;
     }

@@ -3,7 +3,7 @@ package fr.anto42.emma.coreManager.commands;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.game.GameState;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,8 +11,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.List;
 
 public class SetHostComand extends Command {
 

@@ -7,13 +7,8 @@ import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.modes.deathNote.impl.DNRole;
 import fr.anto42.emma.game.modes.deathNote.utils.InvestigationResultType;
-import fr.anto42.emma.utils.SoundUtils;
-import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.players.PlayersUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 

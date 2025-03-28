@@ -4,6 +4,7 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import org.apache.commons.lang.RandomStringUtils;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,6 +120,10 @@ public class GameSave {
 
     public void registerEvent(EventType eventType, String eventString) {
         getEvents().add("event=Type=" + eventType.toString() + "|string=" + eventString + "|date=" + new Date() + "|gameTimer=" + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
+    }
+
+    public void registerChat(Player sender, double score, String chat) {
+        getChat().add("chat=sender=" + sender.getName() + "|string=" + chat + "|score=" + score + "|date=" + new Date() + "|gameTimer=" + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
     }
 
     public Event getEventFromString(String string) {

@@ -2,6 +2,7 @@ package fr.anto42.emma.game.modes.stp;
 
 import fr.anto42.emma.game.modes.stp.listeners.PreStartListener;
 import fr.anto42.emma.game.modes.stp.listeners.SwitchListeners;
+import fr.anto42.emma.game.modes.stp.uis.SwitchConfigGUI;
 import fr.anto42.emma.game.modes.stp.uis.SwitchGUI;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.Module;
@@ -12,12 +13,11 @@ import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
+import fr.anto42.emma.utils.skulls.SkullList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,14 +29,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SwitchModule extends Module {
     public SwitchModule() {
-        super("§e§lSWITCH", "SwitchThePatrick", new ItemCreator(Material.BOW).get());
+        super("§e§lSWITCH", "SwitchThePatrick", SkullList.TIMER.getItemStack());
         super.setDev("Anto42_");
         super.setConfigurable(true);
         super.getDesc().add("§8┃ §fLes équipes seront §arenouvelées§f dans ce mode de jeu");
         super.getDesc().add("§8┃ §foù toutes les §cx minutes§f, certains équipiers");
         super.getDesc().add("§8┃ §féchangeront d'équipes avec d'autres.");
         super.setkInventory(new SwitchGUI(this).getkInventory());
+        setConfigGUI(new SwitchConfigGUI(this).getkInventory());
         super.setUhcScoreboard(new SwitchScoreboard(this));
+
     }
 
     private int timer = 20*60;

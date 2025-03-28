@@ -1,4 +1,4 @@
-package fr.anto42.emma.utils;
+package fr.anto42.emma.utils.players;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

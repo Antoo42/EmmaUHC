@@ -5,7 +5,7 @@ import fr.anto42.emma.coreManager.listeners.customListeners.TryStartEvent;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.modes.oldDN.utils.GameUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

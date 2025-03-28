@@ -2,18 +2,13 @@ package fr.anto42.emma.coreManager.worldManager;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.utils.Cuboid;
-import fr.anto42.emma.utils.SchematicUtils;
-import me.daddychurchill.CityWorld.CityWorld;
 import me.daddychurchill.CityWorld.CityWorldGenerator;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

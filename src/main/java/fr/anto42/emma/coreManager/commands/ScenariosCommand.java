@@ -3,7 +3,7 @@ package fr.anto42.emma.coreManager.commands;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.uis.rules.ScenariosActivatedGUI;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

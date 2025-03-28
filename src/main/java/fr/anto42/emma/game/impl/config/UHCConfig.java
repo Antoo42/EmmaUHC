@@ -22,7 +22,7 @@ public class UHCConfig {
     }
 
 
-    private int boostMultiplier = 100;
+    private int boostMultiplier = 150;
 
     public int getBoostMultiplier() {
         return boostMultiplier;

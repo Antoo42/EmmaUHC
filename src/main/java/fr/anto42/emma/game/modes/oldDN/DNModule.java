@@ -24,6 +24,7 @@ import fr.anto42.emma.utils.*;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.CommandUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;

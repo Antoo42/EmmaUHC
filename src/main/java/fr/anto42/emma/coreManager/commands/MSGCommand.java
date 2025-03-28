@@ -49,7 +49,7 @@ public class MSGCommand extends Command {
         UHC.getInstance().getUhcGame().getUhcData().getSpyList().forEach(uhcPlayer1 -> {
             uhcPlayer1.sendMessage("§b§lMSG §e(" + uhcPlayer + " §8§l» §e" + uhcTarget + ")§7: "+ stringBuilder.toString());
         });
-        UHC.getInstance().getGameSave().getChat().add(uhcPlayer.getName() + " » " + uhcTarget.getName() + ": " + stringBuilder);
+        //UHC.getInstance().getGameSave().getChat().add(uhcPlayer.getName() + " » " + uhcTarget.getName() + ": " + stringBuilder);
         UHC.getInstance().getMessageManager().recentlyMessaged.put(uhcTarget.getBukkitPlayer(), uhcPlayer.getBukkitPlayer());
         return false;
     }

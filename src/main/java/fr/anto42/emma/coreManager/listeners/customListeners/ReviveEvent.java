@@ -14,7 +14,7 @@ public class ReviveEvent extends UHCEvent{
 
     }
 
-    public UHCPlayer getRevived() {
+    public UHCPlayer getUHCPlayer() {
         return revived;
     }
 }

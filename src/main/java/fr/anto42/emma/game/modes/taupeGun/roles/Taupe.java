@@ -8,7 +8,7 @@ import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.modes.taupeGun.impl.TRole;
 import fr.anto42.emma.game.modes.taupeGun.utils.GameUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;

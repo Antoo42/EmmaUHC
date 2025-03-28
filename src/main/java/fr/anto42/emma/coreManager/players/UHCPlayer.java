@@ -3,14 +3,13 @@ package fr.anto42.emma.coreManager.players;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.roles.Role;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
@@ -152,7 +151,7 @@ public class UHCPlayer {
 
     public void sendModMessage(String string) {
         if (getBukkitPlayer() == null) return;
-        getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7" + string);
+        getBukkitPlayer().sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + "§7 " + string);
     }
 
 

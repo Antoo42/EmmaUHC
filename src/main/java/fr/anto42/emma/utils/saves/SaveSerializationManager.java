@@ -3,6 +3,7 @@ package fr.anto42.emma.utils.saves;
 import com.google.gson.*;
 import fr.anto42.emma.coreManager.players.PlayerStats;
 import fr.anto42.emma.game.impl.config.UHCConfig;
+import fr.anto42.emma.utils.chat.ChatSave;
 import fr.anto42.emma.utils.gameSaves.Event;
 import fr.anto42.emma.utils.gameSaves.EventType;
 import fr.anto42.emma.utils.gameSaves.GameSave;
@@ -153,5 +154,35 @@ public class SaveSerializationManager {
 
 
         return new Event(type, string, date, timer);
+    }
+
+
+    private static String[] getChatString(String chatString) {
+        if (!chatString.startsWith("chat=")) {
+            throw new IllegalArgumentException("La chaîne de chat ne commence pas par 'chat='");
+        }
+
+        String data = chatString.substring("chat=".length());
+
+        String[] parts = data.split("\\|");
+
+        if (parts.length != 5) {
+            throw new IllegalArgumentException("Le format de la chaîne d'event est invalide");
+        }
+        return parts;
+    }
+
+    public static ChatSave fromChatString(String chatString) {
+        String[] parts = getChatString(chatString);
+
+        String sender = parts[0].split("=")[1];
+        String string = parts[1].split("=")[1];
+        double scoreAI = Double.parseDouble(parts[2].split("=")[1]);
+        String date = parts[3].split("=")[1];
+        String timer = parts[4].split("=")[1];
+
+
+
+        return new ChatSave(sender, scoreAI, string, date, timer);
     }
 }

@@ -16,10 +16,13 @@ import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.impl.config.StuffConfig;
 import fr.anto42.emma.utils.Cuboid;
 import fr.anto42.emma.utils.TimeUtils;
+import fr.anto42.emma.utils.chat.MessageChecker;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.GameUtils;
 import fr.anto42.emma.utils.players.InventoryUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
@@ -52,7 +55,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.UUID;
 
 public class CoreListeners implements Listener {
     private final UHC uhcCore = UHC.getInstance();
@@ -82,6 +90,8 @@ public class CoreListeners implements Listener {
     @EventHandler
     public void onStart(StartEvent event) {
         Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
+            if (uhc.getGameState() != GameState.PLAYING)
+                return;
             uhc.getUhcData().setEpisode(uhc.getUhcData().getEpisode() + 1);
             Bukkit.getPluginManager().callEvent(new EpisodeEvent());
         }, TimeUtils.minutes(uhc.getUhcConfig().getEpisode()), TimeUtils.minutes(uhc.getUhcConfig().getEpisode()));
@@ -145,7 +155,7 @@ public class CoreListeners implements Listener {
 
                     a.set(packet, new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n  §6/helpop §8┃ §6/rules §8┃ §6/lag \n"));
                     b.set(packet, new ChatComponentText(" \n  §8┃ §7Ping: §a" + formatPing(((CraftPlayer) player).getHandle().ping) +
-                            "  §8┃ §7TPS: §a" + formatTPS(MinecraftServer.getServer().recentTps[0]) + "  \n"));
+                            "ms §8┃ §7TPS: §a" + formatTPS(MinecraftServer.getServer().recentTps[0]) + "  \n"));
 
                     ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -222,6 +232,11 @@ public class CoreListeners implements Listener {
                 player.teleport(WorldManager.getSpawnLocation());
             }
         }, 1L);
+
+        Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
+            uhcPlayer.sendClassicMessage("§cVos messages seront analysés par une intelligence artificielle pour détecter tout contenu toxique.");
+            uhcPlayer.sendClassicMessage("§cEn jouant sur ce serveur, vous consentez que vos messages soient stockés à des fins de modération.");
+        }, 20L);
     }
 
 
@@ -327,6 +342,8 @@ public class CoreListeners implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
+        if (event.getItem() == null)
+            return;
         if (event.getItem() != null && event.getItem().getType().equals(Material.BED) && !uhcCore.getUhcGame().getGameState().equals(GameState.PLAYING)){
             event.getPlayer().kickPlayer("§cà plus !");
         }
@@ -334,12 +351,14 @@ public class CoreListeners implements Listener {
             uhcCore.getUhcManager().getConfigMainGUI().open(event.getPlayer());
         if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §6§lRègles de la partie"))
             new RulesGUI().getkInventory().open(event.getPlayer());
-        if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §b§lHistorique de partie"))
+        if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §a§lHistorique de parties"))
             new GameSavedGUI(event.getPlayer(), true, "all", 0).getkInventory().open(event.getPlayer());
         else if (event.getItem() != null && event.getItem().getType() == Material.BANNER && uhc.getGameState() == GameState.WAITING ||event.getItem() != null && event.getItem().getType() == Material.BANNER && uhc.getGameState() == GameState.STARTING)
             new SelectTeamGUI(0).getkInventory().open(event.getPlayer());
         else if (event.getItem() != null && event.getItem().getType() == Material.MILK_BUCKET && !uhc.getUhcConfig().isMilkBukket())
             event.setCancelled(true);
+        else if (event.getItem().getType() == uhcCore.getUhcManager().getGamemode().getItemStack().getType() && event.getItem().getItemMeta().getDisplayName().contains("Configuration du module"))
+            uhcCore.getUhcManager().getGamemode().getConfigGUI().open(event.getPlayer());
     }
 
     @EventHandler
@@ -436,9 +455,25 @@ public class CoreListeners implements Listener {
         }, 100L);
     }
 
+    private final HashMap<UUID, Long> lastMessageTime = new HashMap<>();
+    private static final long MESSAGE_COOLDOWN = 1500;
+
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
+    public void onChat(AsyncPlayerChatEvent event) throws Exception {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
+        UUID playerUUID = event.getPlayer().getUniqueId();
+        long currentTime = System.currentTimeMillis();
+
+        if (lastMessageTime.containsKey(playerUUID)) {
+            long lastTime = lastMessageTime.get(playerUUID);
+            if (currentTime - lastTime < MESSAGE_COOLDOWN) {
+                event.setCancelled(true);
+                uhcPlayer.sendClassicMessage("§cVeuillez patienter avant d'envoyer un autre message.");
+                SoundUtils.playSoundToPlayer(uhcPlayer.getBukkitPlayer(), Sound.VILLAGER_NO);
+                return;
+            }
+        }
+        lastMessageTime.put(playerUUID, currentTime);
 
         if (!uhc.getUhcData().isChat()) {
             event.setCancelled(true);
@@ -466,19 +501,38 @@ public class CoreListeners implements Listener {
             return;
         }
 
+
+        String message = event.getMessage().startsWith("!") ? event.getMessage().substring(1) : event.getMessage();
+        double score = MessageChecker.getToxicityScore(event.getMessage());
+        if (score > MessageChecker.scoreAILimit) {
+            event.setCancelled(true);
+            sendMessageToChannel(UHC.getInstance().getDiscordManager().getChatChannelId(), "**DELETE**: `" + event.getPlayer().getDisplayName() + ": (" + score + ") " + message + "`");
+            uhcPlayer.sendModMessage("§cVotre message a été supprimé après une analyse jugée toxique. §7(§eScoreAI§7: §a" + score * 100 + "%§7)");
+            UHC.getInstance().getGameSave().registerChat(uhcPlayer.getBukkitPlayer(), score, message);
+            SoundUtils.playSoundToPlayer(event.getPlayer(), Sound.VILLAGER_NO);
+            return;
+        }
+
         String prefix = uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getColor() + uhcPlayer.getUhcTeam().getPrefix() + " " : "";
         String rolePrefix = isHost ? "§6§lHOST §8┃ §6" : isSpectator ? "§c§lSPEC §8┃ §c" : "§7";
-        String message = event.getMessage().startsWith("!") ? event.getMessage().substring(1) : event.getMessage();
 
         if (isGamePlaying && isTeamChatActive && event.getMessage().startsWith("!")) {
             event.setFormat("§7(ALL) §8┃ " + rolePrefix + prefix + uhcPlayer.getName() + " §8§l» §f" + message);
         } else {
             event.setFormat(rolePrefix + uhcPlayer.getName() + " §8§l» §f" + message);
         }
-
-        UHC.getInstance().getGameSave().getChat().add(uhcPlayer.getName() + ": " + event.getMessage());
+        sendMessageToChannel(UHC.getInstance().getDiscordManager().getChatChannelId(), "`" + event.getPlayer().getDisplayName() + ": (" + score + ") " + event.getMessage() + "`");
+        UHC.getInstance().getGameSave().registerChat(uhcPlayer.getBukkitPlayer(), score, message);
     }
 
+    private void sendMessageToChannel(String channelId, String text) {
+        TextChannel channel = UHC.getInstance().getDiscordManager().getDiscordBot().getTextChannelById(channelId);
+        if (channel != null) {
+            channel.sendMessage(text).queue();
+        } else {
+            System.out.println("Salon introuvable !");
+        }
+    }
 
     @EventHandler
     public void onWeather(WeatherChangeEvent event){
@@ -752,7 +806,7 @@ public class CoreListeners implements Listener {
     }
 
     @EventHandler
-    public void onAchivement(PlayerAchievementAwardedEvent event){
+    public void onAchievement(PlayerAchievementAwardedEvent event){
         event.setCancelled(true);
     }
 
@@ -789,23 +843,20 @@ public class CoreListeners implements Listener {
         }
     }
 
-    public boolean canTakeItem(ItemStack item, Player player,Inventory inventaire) {
-        if (inventaire.contains(item) && inventaire.getTitle().contains(player.getName()) && inventaire.getViewers().contains(player)) {
-            return true;
-        }
-        return false;
+    public boolean canTakeItem(ItemStack item, Player player,Inventory inventory) {
+        return inventory.contains(item) && inventory.getTitle().contains(player.getName()) && inventory.getViewers().contains(player);
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer((Player) event.getWhoClicked());
-        Inventory inventaire = uhcPlayer.getBackupInventory();
+        Inventory inventory = uhcPlayer.getBackupInventory();
         ItemStack current = event.getCurrentItem();
-        if (event.getInventory().equals(inventaire)) {
+        if (event.getInventory().equals(inventory)) {
             event.setCancelled(true);
-            if (event.getCurrentItem() != null && canTakeItem(event.getCurrentItem(), (Player) event.getWhoClicked(),inventaire)) {
+            if (event.getCurrentItem() != null && canTakeItem(event.getCurrentItem(), (Player) event.getWhoClicked(),inventory)) {
                 if(uhcPlayer.getBukkitPlayer().getInventory().firstEmpty() != -1){
-                    inventaire.remove(current);
+                    inventory.remove(current);
                     uhcPlayer.getBukkitPlayer().getInventory().addItem(current);
                 }else{
                     uhcPlayer.getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " §c§nAttention ! §cVotre inventaire est plein ! Par conséquent, vous ne pouvez pas récupérer des items dans votre inventaire de backup !");

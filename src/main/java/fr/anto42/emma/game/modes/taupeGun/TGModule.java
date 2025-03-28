@@ -17,14 +17,12 @@ import fr.anto42.emma.game.modes.taupeGun.roles.SuperTaupe;
 import fr.anto42.emma.game.modes.taupeGun.roles.Taupe;
 import fr.anto42.emma.game.modes.taupeGun.uis.TGConfigGUI;
 import fr.anto42.emma.game.modes.taupeGun.utils.GameUtils;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.CommandUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class TGModule extends Module {

@@ -10,7 +10,9 @@ import fr.anto42.emma.coreManager.uis.PlayerInvSeeGUI;
 import fr.anto42.emma.coreManager.uis.SpecInfoGUI;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.chat.InteractiveMessage;
+import fr.anto42.emma.utils.chat.InteractiveMessageBuilder;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import org.bukkit.Bukkit;
@@ -30,8 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SpecCommand extends Command {
     public SpecCommand() {
         super("spec");
-        super.getAliases().add("spectator");
-        super.getAliases().add("spectateur");
+        super.getAliases().add("mod");
     }
 
 
@@ -43,11 +44,11 @@ public class SpecCommand extends Command {
     public boolean execute(CommandSender sender, String s, String[] args) {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(((Player) sender));
         if(!uhc.getUhcData().getSpecList().contains(uhcPlayer) && !uhcPlayer.isUHCOp() && !uhc.getUhcData().getCoHostList().contains(uhcPlayer) && uhc.getUhcData().getHostPlayer() != uhcPlayer){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cVous ne pouvez pas faire ça !");
+            uhcPlayer.sendModMessage("§cVous ne pouvez pas faire ça !");
             return true;
         }
         if(args.length == 0 || args[0].equalsIgnoreCase("help")){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Liste des commandes disponibles:");
+            uhcPlayer.sendModMessage("§7Liste des commandes disponibles:");
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec add/remove/list§7: Ajoutez, retirez ou consultez la liste des spectateurs de la partie.");
             uhcPlayer.sendMessage("");
@@ -67,6 +68,8 @@ public class SpecCommand extends Command {
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec kill <Player>§7: Tuez le joueur indiquer.");
             uhcPlayer.sendMessage("");
+            uhcPlayer.sendMessage("§8§l» §c/spec info <Player>§7: Ouvrez le menu de modération du joueur.");
+            uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec viewoffline§7: Regardez les joueurs hors-ligne.");
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec killoffline§7: Tuez un joueur déconnecté.");
@@ -76,14 +79,14 @@ public class SpecCommand extends Command {
             uhcPlayer.sendMessage("§8§l» §c/god§7: Devenez opérateur de la partie.");
             uhcPlayer.sendMessage("");
         }else if (args[0].equalsIgnoreCase("add")){
-            if (uhcPlayer.getBukkitPlayer().hasPermission("emma.manageSpec") || uhc.getUhcData().getHostPlayer() == uhcPlayer || uhc.getUhcData().getCoHostList().contains(uhcPlayer)){
+            if (uhcPlayer.getBukkitPlayer().hasPermission("emma.manageSpec") || uhcPlayer.isHost()){
                 if (args.length == 1){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un joueur.");
                     return true;
                 }
                 Player target = Bukkit.getPlayer(args[1]);
                 if (target == null){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                     return true;
                 }
                 UHCPlayer uhctarget = UHC.getUHCPlayer(target);
@@ -92,9 +95,9 @@ public class SpecCommand extends Command {
                 uhctarget.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
                 uhc.getUhcData().getSpecList().add(uhctarget);
                 uhc.getUhcData().getUhcPlayerList().remove(uhctarget);
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous avez ajouté §a" + uhctarget.getName() + " §7à la liste des spectateurs.");
+                uhcPlayer.sendModMessage("§7Vous avez ajouté §a" + uhctarget.getName() + " §7à la liste des spectateurs.");
                 SoundUtils.playSoundToPlayer(uhctarget.getBukkitPlayer(), Sound.ORB_PICKUP);
-                uhctarget.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous avez été ajouté comme §aspectateur §7à la partie. Consultez dès à présent les commandes mises à votre disposition en utilisant le §b/spec help§7.");
+                uhctarget.sendModMessage("§7Vous avez été ajouté comme §aspectateur §7à la partie. Consultez dès à présent les commandes mises à votre disposition en utilisant le §b/spec help§7.");
             }
         }else if(args[0].equalsIgnoreCase("recap") || args[0].equalsIgnoreCase("events")) {
             uhcPlayer.sendModMessage("Voici un récap de toute la partie:");
@@ -107,12 +110,12 @@ public class SpecCommand extends Command {
         else if (args[0].equalsIgnoreCase("remove")){
             if (uhcPlayer.getBukkitPlayer().hasPermission("emma.manageSpec") || uhc.getUhcData().getHostPlayer() == uhcPlayer || uhc.getUhcData().getCoHostList().contains(uhcPlayer)){
                 if (args.length == 1){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un joueur.");
                     return true;
                 }
                 Player target = Bukkit.getPlayer(args[1]);
                 if (target == null){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                     return true;
                 }
                 UHCPlayer uhctarget = UHC.getUHCPlayer(target);
@@ -120,9 +123,9 @@ public class SpecCommand extends Command {
                     return true;
                 uhc.getUhcData().getSpecList().remove(uhctarget);
                 uhc.getUhcData().getUhcPlayerList().add(uhctarget);
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous avez retiré §a" + uhctarget.getName() + " §7de la liste des spectateurs.");
+                uhcPlayer.sendModMessage("§7Vous avez retiré §a" + uhctarget.getName() + " §7de la liste des spectateurs.");
                 SoundUtils.playSoundToPlayer(uhctarget.getBukkitPlayer(), Sound.ORB_PICKUP);
-                uhctarget.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous avez été retiré des §aspectateurs §7de la partie.");
+                uhctarget.sendModMessage("§7Vous avez été retiré des §aspectateurs §7de la partie.");
                 if (!uhc.getGameState().equals(GameState.PLAYING)) {
                     uhctarget.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
                     if (uhc.getGameState() == GameState.WAITING || uhc.getGameState() == GameState.STARTING)
@@ -131,8 +134,8 @@ public class SpecCommand extends Command {
             }
         }else if (args[0].equalsIgnoreCase("list")){
             if (uhc.getUhcData().getSpecList().isEmpty())
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cAucun spectateur n'est présent.");
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Voici la liste des spectateurs de la partie:");
+                uhcPlayer.sendModMessage("§cAucun spectateur n'est présent.");
+            uhcPlayer.sendModMessage("§7Voici la liste des spectateurs de la partie:");
             uhc.getUhcData().getSpecList().forEach(uhcPlayer1 -> {
                 uhcPlayer.sendMessage("§8§l» §e" + uhcPlayer1.getName() + " §3(" + uhcPlayer1.getUuid() + ")" + (Bukkit.getPlayer(uhcPlayer1.getUuid()).isOnline() ? "§aConnecté" : "§cHors-ligne"));
             });
@@ -150,76 +153,83 @@ public class SpecCommand extends Command {
             }
         }else if (args[0].equalsIgnoreCase("role")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur. §3(/spec role <Player>)");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur. §3(/spec role <Player>)");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                 return true;
             }
             UHCPlayer uhctarget = UHC.getUHCPlayer(target);
             if (uhctarget.getRole() == null)
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Le joueur §a" + uhctarget.getName() + "§7 ne possède §caucun§7 rôle.");
+                uhcPlayer.sendModMessage("§7Le joueur §a" + uhctarget.getName() + "§7 ne possède §caucun§7 rôle.");
             else
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Le joueur §a" + uhctarget.getName() + "§7 est§c" + uhctarget.getRole().getName() +" §7.");
+                uhcPlayer.sendModMessage("§7Le joueur §a" + uhctarget.getName() + "§7 est§c" + uhctarget.getRole().getName() +" §7.");
         }else if (args[0].equalsIgnoreCase("inv") || args[0].equalsIgnoreCase("seeinv") || args[0].equalsIgnoreCase("inventory")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur. §3(/spec inv <Player>)");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur. §3(/spec inv <Player>)");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                 return true;
             }
             new PlayerInvSeeGUI(target).getkInventory().open(uhcPlayer.getBukkitPlayer());
         } else if (args[0].equalsIgnoreCase("spy")){
             if (!uhc.getUhcData().getSpecList().contains(uhcPlayer)){
                 uhc.getUhcData().getSpecList().remove(uhcPlayer);
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous venez de §cdésactivé §7le mode espion.");
+                uhcPlayer.sendModMessage("§7Vous venez de §cdésactivé §7le mode espion.");
                 return true;
             } else{
                 uhc.getUhcData().getSpecList().add(uhcPlayer);
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Vous venez d'§aactivé §7le mode espion.");
+                uhcPlayer.sendModMessage("§7Vous venez d'§aactivé §7le mode espion.");
                 return true;
             }
         } else if (args[0].equalsIgnoreCase("tp")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur. §3(/spec tp <Player>)");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur. §3(/spec tp <Player>)");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                 return true;
             }
             uhcPlayer.getBukkitPlayer().teleport(target.getLocation());
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §aVous venez de vous téléporter sur §3" + target.getDisplayName() + "§a.");
+            uhcPlayer.sendModMessage("§aVous venez de vous téléporter sur §3" + target.getDisplayName() + "§a.");
         } else if (args[0].equalsIgnoreCase("teams")) {
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Gestionnaire d'équipes:");
+                uhcPlayer.sendModMessage("§7Gestionnaire d'équipes:");
                 uhcPlayer.sendMessage("");
                 uhcPlayer.sendMessage("§8§l» §c/spec teams list§7: Affiche les équipes en vie.");
-                uhcPlayer.sendMessage("§8§l» §c/spec teams move <Player, UUID(équipe)> §7: Déplacez un joueur d'équipe par le biais de l'UUID de l'équipe cible.");
+                uhcPlayer.sendMessage("§8§l» §c/spec teams move <Player, UUID(équipe)> §7: Changez un joueur d'équipe par le biais de l'UUID de l'équipe cible.");
                 uhcPlayer.sendMessage("§8§l» §c/spec teams kill <UUID> §7: Eliminez manuellement une équipe. Cela fera quitter tout les joueurs de cette dernière.");
                 uhcPlayer.sendMessage("");
                 return true;
             }
+            StringBuilder stringBuilder = new StringBuilder();
             if (args[1].equalsIgnoreCase("list")){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Liste des équipes en vie:");
+                uhcPlayer.sendModMessage("§7Liste des équipes en vie:");
                 UHCTeamManager.getInstance().getUhcTeams().forEach(uhcTeam -> {
-                    uhcPlayer.sendMessage("§8§l» §a" + uhcTeam.getDisplayName() + " §8┃ §3" + uhcTeam.getUuid());
+                    stringBuilder.setLength(0);
+                    stringBuilder.append("§8§l» §7Joueurs dans l'équipe:").append("\n\n");
+                    uhcTeam.getUhcPlayerList().forEach(uhcPlayer1 -> {
+                        stringBuilder.append("§8┃ §f").append(uhcPlayer1.getName());
+                    });
+                    new InteractiveMessage().add(new InteractiveMessageBuilder("§8§l» §a" + uhcTeam.getDisplayName() + " §8┃ §3" + uhcTeam.getUuid()).setHoverMessage(stringBuilder.toString()).build()).sendMessage(uhcPlayer.getBukkitPlayer());
+                    //uhcPlayer.sendMessage("§8§l» §a" + uhcTeam.getDisplayName() + " §8┃ §3" + uhcTeam.getUuid());
                 });
             }else if (args[1].equalsIgnoreCase("move") || args[1].equalsIgnoreCase("put")){
                 uhcTeam = null;
                 if (args.length == 2){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur ainsi que l'UUID d'une équipe.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un joueur ainsi que l'UUID d'une équipe.");
                     return true;
                 }
                 Player target = Bukkit.getPlayer(args[2]);
                 if (target == null){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                     return true;
                 }
                 UHCPlayer uhctarget = UHC.getUHCPlayer(target);
@@ -229,13 +239,13 @@ public class SpecCommand extends Command {
                         uhcTeam = uhcTeam1;
                 });
                 if (uhcTeam == null){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un UUID valide. Vous pouvez consulter ces derniers à l'aide de la commande §b/spec teams list§c.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un UUID valide. Vous pouvez consulter ces derniers à l'aide de la commande §b/spec teams list§c.");
                     return true;
                 }
                 uhctarget.joinTeam(uhcTeam);
             } else if (args[1].equalsIgnoreCase("kill")){
                 if (args.length == 2){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un UUID valide. Vous pouvez consulter ces derniers à l'aide de la commande §b/spec teams list§c.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un UUID valide. Vous pouvez consulter ces derniers à l'aide de la commande §b/spec teams list§c.");
                     return true;
                 }
                 String uuid = args[2];
@@ -244,31 +254,31 @@ public class SpecCommand extends Command {
                         uhcTeam = uhcTeam1;
                 });
                 if (uhcTeam == null){
-                    uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un UUID valide. Vous pouvez consulter ces derniers à l'aide de la commande §b/spec teams list§c.");
+                    uhcPlayer.sendModMessage("§cMerci de préciser un UUID valide. Vous pouvez consulter ces derniers à l'aide de la commande §b/spec teams list§c.");
                     return true;
                 }
                 uhcTeam.destroy();
             }
         }else if (args[0].equalsIgnoreCase("kill")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur. §3(/spec kill <Player>)");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur. §3(/spec kill <Player>)");
                 return true;
             }
             Player target = Bukkit.getPlayer(args[1]);
             if (target == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur connecté.");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
                 return true;
             }
             target.setHealth(0);
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §aVous venez de tuer §3" + target.getDisplayName() + "§a.");
+            uhcPlayer.sendModMessage("§aVous venez de tuer §3" + target.getDisplayName() + "§a.");
         }else if (args[0].equalsIgnoreCase("viewoffline") || args[0].equalsIgnoreCase("seeoffline")){
-            uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §7Voici la liste des joueurs déconnectés:");
+            uhcPlayer.sendModMessage("§7Voici la liste des joueurs déconnectés:");
             uhc.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer1 -> uhcPlayer1.getBukkitPlayer() == null).forEach(uhcPlayer1 -> {
                 uhcPlayer.sendMessage("§8§l» §a" + uhcPlayer1.getName() + " §8┃ §3" + uhcPlayer1.getUuid());
             });
         }else if (args[0].equalsIgnoreCase("killoffline")){
             if (args.length == 1){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur. §3(/spec killoffline <Player>)");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur. §3(/spec killoffline <Player>)");
                 return true;
             }
             String name = args[1];
@@ -276,10 +286,11 @@ public class SpecCommand extends Command {
             uhc.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer1 -> uhcPlayer1.getBukkitPlayer() == null).forEach(uhcPlayer1 -> {
                 if (name.equals(uhcPlayer1.getName())){
                     target.set(uhcPlayer1);
+                    target.set(uhcPlayer1);
                 }
             });
             if (target.get() == null){
-                uhcPlayer.sendMessage(UHC.getInstance().getConfig().getString("modPrefix").replace("&", "§") + " §cMerci de préciser un joueur déconnecté encore dans la partie. §3(/spec killoffline <Player>)");
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur déconnecté encore dans la partie. §3(/spec killoffline <Player>)");
                 return true;
             }
             Bukkit.getServer().getPluginManager().callEvent(new DeathEvent(target.get(), null));
@@ -332,7 +343,7 @@ public class SpecCommand extends Command {
             uhcTarget.unFreeze();
             uhcTarget.getBukkitPlayer().setWalkSpeed(0.2F);
             uhcPlayer.sendModMessage("§cVous avez §b§lunfreeze §a" + uhcTarget.getName() + "§c.");
-        } else if (args[0].equalsIgnoreCase("info")) {
+        } else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("profile")) {
             uhcPlayer.sendModMessage("§cCette foncionnalité est en cours de développement !");
             if(args.length == 1) {
                 uhcPlayer.sendModMessage("§cVeuillez indiquez un joueur ! §3(/spec info <Player>)");
@@ -359,7 +370,7 @@ public class SpecCommand extends Command {
         if (args.length == 1) {
             List<String> subCommands = Arrays.asList(
                     "add", "remove", "list", "config", "chat", "inv", "role", "spy", "teams",
-                    "tp", "kill", "viewoffline", "killoffline", "recap", "events"
+                    "tp", "kill", "viewoffline", "killoffline", "recap", "events", "info", "profil"
             );
             StringUtil.copyPartialMatches(args[0], subCommands, completions);
         } else if (args.length == 2) {

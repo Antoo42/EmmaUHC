@@ -1,17 +1,26 @@
 package fr.anto42.emma.coreManager.scenarios.scFolder;
 
+import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.ScenarioType;
 import fr.anto42.emma.coreManager.scenarios.UHCScenario;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.materials.UniversalMaterial;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Timber extends UHCScenario implements Listener {
     public Timber(ScenarioManager scenarioManager) {
@@ -20,40 +29,57 @@ public class Timber extends UHCScenario implements Listener {
         setScenarioType(ScenarioType.MINNING);
     }
 
+    private static final BlockFace[] BLOCK_FACES = {
+            BlockFace.UP, BlockFace.NORTH, BlockFace.SOUTH,
+            BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN
+    };
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if (!isActivated())
-            return;
+        if (!isActivated()) return;
         Block block = e.getBlock();
+        Player player = e.getPlayer();
 
-        if (UniversalMaterial.isLog(block.getType())) {
-            int brokenLogs = breakTree(block, 2);
-            ItemStack tool = e.getPlayer().getItemInHand();
-            if (UniversalMaterial.isAxe(tool.getType())) {
-                tool.setDurability((short) (tool.getDurability() + brokenLogs));
+        if (!UniversalMaterial.isLog(block.getType())) return;
+
+        TimberTree tree = new TimberTree(block);
+
+        List<Block> blocksToBreak = new ArrayList<>(tree.blocks);
+
+        new BukkitRunnable() {
+            int index = 0;
+
+            @Override
+            public void run() {
+                if (index >= blocksToBreak.size()) {
+                    cancel();
+                    return;
+                }
+
+                Block b = blocksToBreak.get(index);
+                b.breakNaturally();
+                index++;
+                SoundUtils.playSoundToPlayer(player, Sound.DIG_WOOD);
             }
-        }
+        }.runTaskTimer(UHC.getInstance(), 3L, 3L);
     }
 
-    private int breakTree(Block block, int i) {
-        int broken = 0;
-        if (UniversalMaterial.isLog(block.getType())){
-            block.breakNaturally();
-            broken++;
-            i = 2;
-        }else {
-            i--;
-        }
-        if (i > 0){
-            for (BlockFace face : BlockFace.values()) {
-                if (face.equals(BlockFace.DOWN) || face.equals(BlockFace.UP) || face.equals(BlockFace.NORTH) ||
-                        face.equals(BlockFace.EAST) || face.equals(BlockFace.SOUTH) || face.equals(BlockFace.WEST)) {
-                    broken += breakTree(block.getRelative(face), i);
-                }
-            }
+    private static class TimberTree {
+        private final Set<Block> blocks = new HashSet<>();
+        private final Material type;
+
+        public TimberTree(Block startBlock) {
+            this.type = startBlock.getType();
+            findTreeBlocks(startBlock);
         }
 
-        return broken;
+        private void findTreeBlocks(Block block) {
+            if (block.getType() != type || blocks.contains(block)) return;
+            blocks.add(block);
+
+            for (BlockFace face : BLOCK_FACES) {
+                findTreeBlocks(block.getRelative(face));
+            }
+        }
     }
 }

@@ -21,14 +21,10 @@ import fr.anto42.emma.utils.gameSaves.GameSave;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import fr.blendman974.kinventory.KInventoryManager;
 import me.daddychurchill.CityWorld.CityWorld;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +58,7 @@ public final class UHC extends JavaPlugin {
 
     private GameSave gameSave;
     private String ip;
+
     @Override
     public void onEnable() {
         getLogger().info("");
@@ -74,27 +71,38 @@ public final class UHC extends JavaPlugin {
         ip = getConfig().getString("ip");
         cityWorldPlugin = ((CityWorld) Bukkit.getPluginManager().getPlugin("CityWorld"));
 
+        getLogger().info("§eInitialisation des gestionnaires...");
+
         KInventoryManager.init(this);
         BiomeChanger.init();
+
         worldManager = new WorldManager();
         worldManager.init();
+        getLogger().info("§aWorldManager initialisé.");
 
         enchantsManager = new EnchantsManager();
         saveSerializationManager = new SaveSerializationManager();
-        PluginManager pluginManager = Bukkit.getPluginManager();
+        getLogger().info("§aEnchantsManager et SaveSerializationManager initialisés.");
 
+        PluginManager pluginManager = Bukkit.getPluginManager();
         uhcGame = new UHCGame();
         uhcManager = new UHCManager();
+        getLogger().info("§aUHCGame et UHCManager initialisés.");
+
         if (getConfig().getBoolean("discordbot")) {
             discordManager = new DiscordManager();
             pluginManager.registerEvents(new DiscordEvents(), this);
-
+            getLogger().info("§aDiscordManager activé et événements enregistrés.");
         }
+
         messageManager = new MessageManager();
         pluginManager.registerEvents(new CoreListeners(), this);
+        getLogger().info("§aMessageManager et CoreListeners enregistrés.");
 
+        getLogger().info("§eEnregistrement des commandes en cours...");
 
         CommandUtils.registerCommand("uhc", new SetHostComand());
+        //CommandUtils.registerCommand("uhc", new ColorCommand());
         CommandUtils.registerCommand("uhc", new CreditsCommand());
         CommandUtils.registerCommand("uhc", new HCommand());
         CommandUtils.registerCommand("uhc", new SaveCommand());
@@ -108,7 +116,6 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new VoteCommand());
         CommandUtils.registerCommand("uhc", new EnchantConfiguration());
         CommandUtils.registerCommand("uhc", new LagCommand());
-        CommandUtils.registerCommand("uhc", new LagCommand());
         CommandUtils.registerCommand("uhc", new TCCommand());
         CommandUtils.registerCommand("uhc", new ScenariosCommand());
         CommandUtils.registerCommand("uhc", new DevCommand());
@@ -118,24 +125,31 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new WinTest());
         CommandUtils.registerCommand("uhc", new StatsCommand());
 
+        getLogger().info("§aToutes les commandes ont été enregistrées avec succès.");
+
         scheduledExecutorService = Executors.newScheduledThreadPool(16);
         executorMonoThread = Executors.newScheduledThreadPool(1);
         scoreboardManager = new ScoreboardManager();
+        getLogger().info("§aGestionnaires d'exécution et ScoreboardManager initialisés.");
 
         UHCTeamManager.getInstance().createTeams();
+        getLogger().info("§aUHCTeamManager : équipes créées.");
 
         loadServerVersion();
         getUhcGame().getUhcData().setWhiteList(getConfig().getBoolean("whiteListOnTheStart"));
+        getLogger().info("§aVersion du serveur chargée et whitelist définie.");
 
         gameSave = new GameSave();
+        getLogger().info("§aGameSave initialisé.");
 
         Bukkit.getScheduler().runTaskTimer(this, this::updateTabList, 2L, 2L);
-
+        getLogger().info("§aMise à jour du TabList programmée.");
 
         getLogger().info("");
-        getLogger().info("§a§lSuccessfuly initialize UHCCore");
+        getLogger().info("§a§lSuccessfully initialized UHCCore");
         getLogger().info("");
     }
+
 
     public void updateTabList() {
         if (UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == null)
@@ -148,7 +162,7 @@ public final class UHC extends JavaPlugin {
                 p.setPlayerListName((uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getPrefix() : "") + "§7" + p.getName() + "§e (" + healthPercent + "%)");
             }
             else {
-                p.setPlayerListName((uhcPlayer.isHost() ? "§6§lHOST §8┃ " : "") + (uhcPlayer.isSpec() ? "§c§lSPEC §8┃ " : "") + (uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getDisplayName() : "§7") + " " + p.getName());
+                p.setPlayerListName((uhcPlayer.isHost() ? "§6§lHOST §8┃ " : "") + (uhcPlayer.isSpec() ? "§c§lSPEC §8┃ " : "") + (uhcPlayer.getUhcTeam() != null ? uhcPlayer.getUhcTeam().getDisplayName() : "§f") + " " + p.getName());
             }
         }
     }

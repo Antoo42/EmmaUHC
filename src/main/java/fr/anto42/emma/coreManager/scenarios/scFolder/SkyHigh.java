@@ -8,7 +8,7 @@ import fr.anto42.emma.coreManager.scenarios.UHCScenario;
 import fr.anto42.emma.coreManager.scenarios.uis.SkyHighGUI;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.skulls.SkullList;
 import org.bukkit.Bukkit;

@@ -5,7 +5,7 @@ import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
 import fr.anto42.emma.coreManager.uis.rules.ScenariosActivatedGUI;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;

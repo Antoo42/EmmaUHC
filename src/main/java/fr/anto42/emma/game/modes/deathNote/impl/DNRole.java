@@ -5,7 +5,7 @@ import fr.anto42.emma.coreManager.players.roles.Camp;
 import fr.anto42.emma.coreManager.players.roles.Role;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.game.modes.deathNote.utils.InvestigationResultType;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import org.bukkit.Material;

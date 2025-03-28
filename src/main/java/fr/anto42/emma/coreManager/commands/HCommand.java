@@ -9,9 +9,9 @@ import fr.anto42.emma.coreManager.votes.VoteSystem;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.*;
+import fr.anto42.emma.utils.chat.MessageChecker;
 import fr.anto42.emma.utils.materials.ItemCreator;
-import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -19,13 +19,14 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static fr.anto42.emma.utils.chat.MessageChecker.*;
 
 public class HCommand extends Command {
     private final UHCGame uhc = UHC.getInstance().getUhcGame();
@@ -361,6 +362,16 @@ public class HCommand extends Command {
             args[0] = args[0].replace(args[0], "");
             for (String arg : args) {
                 stringBuilder.append(arg).append(" ");
+            }
+            try {
+                double score = getToxicityScore(stringBuilder.toString());
+                if (score >= scoreAILimit) {
+                    uhcPlayer.sendModMessage("§cL'annonce n'a pas été envoyé en raison de mots déplacés. §7(Score: " + score + ")");
+                    SoundUtils.playSoundToPlayer(player, Sound.VILLAGER_NO);
+                    return true;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(UHC.getInstance().getConfig().getString("sayPrefix").replace("&", "§") + " §e" + uhcPlayer.getBukkitPlayer().getDisplayName() + ": §c" + stringBuilder.toString());

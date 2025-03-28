@@ -12,7 +12,7 @@ import fr.anto42.emma.game.modes.deathNote.utils.GameUtils;
 import fr.anto42.emma.game.modes.deathNote.utils.InvestigatorPowers;
 import fr.anto42.emma.game.modes.deathNote.utils.MeloType;
 import fr.anto42.emma.game.modes.oldDN.utils.TimerActionbarTask;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.blendman974.kinventory.inventories.KInventory;

@@ -1,7 +1,7 @@
 package fr.anto42.emma.utils.gameSaves;
 
 public enum EventType {
-    CORE("Core"), DEATHS("PvP"), ROLE("Rôle");
+    CORE("EmmaCore"), DEATHS("PvP"), ROLE("Role");
 
 
     private final String type;

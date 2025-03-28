@@ -9,7 +9,7 @@ import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.NetworkUtils;
+import fr.anto42.emma.utils.data.NetworkUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.gameSaves.GameSaveCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;

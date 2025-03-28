@@ -2,6 +2,7 @@ package fr.anto42.emma.utils.discord;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
+import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -9,35 +10,48 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
 
 import java.awt.*;
 
 public class DiscordEvents extends ListenerAdapter implements Listener {
     private final DiscordManager discordManager = UHC.getInstance().getDiscordManager();
-    @EventHandler
-    public void onChat(PlayerChatEvent event) {
-        sendMessageToChannel(discordManager.getChatChannelId(), event.getPlayer().getDisplayName() + ": " + event.getMessage());
-    }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
 
+        if (message.equalsIgnoreCase("!game")) {
+            StringBuilder string = new StringBuilder();
+            UHCGame uhcGame = UHC.getInstance().getUhcGame();
+            string.append("**Nom de la partie**: ").append(uhcGame.getUhcConfig().getUHCName()).append("\n");
+            string.append("**Mode de jeu**: ").append(UHC.getInstance().getUhcManager().getGamemode().getDiscordName()).append("\n");
+            string.append("**Host**: `").append(uhcGame.getUhcData().getHostName()).append("`").append("\n");
+            string.append("**Statut**: ").append(uhcGame.getGameState().getString()).append("\n");
+            string.append("**Joueurs de la partie**: ").append(Bukkit.getOnlinePlayers().size()).append("`\n");
+            uhcGame.getUhcData().getUhcPlayerList().forEach(uhcPlayer -> {
+                string.append("» ").append(uhcPlayer.getName()).append(uhcPlayer.isHost() ? " (host)" : "").append(uhcPlayer.isSpec() ? " (spec)" : "").append("\n");
+            });
+            string.append("`");
+            string.append("**Events de la partie:**").append("\n");
+            UHC.getInstance().getGameSave().getEvents().forEach(s -> {
+                string.append("`").append(SaveSerializationManager.fromEventString(s).getTimer()).append(" » ").append(SaveSerializationManager.fromEventString(s).getString()).append("`").append("\n");
+            });
+            string.append("\n");
+            string.append("\n**Serveur**:").append(Bukkit.getServerName());
+            event.getChannel().sendMessage(string).queue();
+        }
         if (message.equals("!ping")) {
             event.getChannel().sendMessage("Pong!").queue();
         }
-        if (message.equals("!events")){
+        if (message.equals("!events")) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("**Voici la liste des évenements de la partie:**\n");
             UHC.getInstance().getGameSave().getEvents().forEach(s -> {
-                stringBuilder.append("`").append(SaveSerializationManager.fromEventString(s).getTimer() + " » " + SaveSerializationManager.fromEventString(s).getString()).append("`").append("\n");
+                stringBuilder.append("`").append(SaveSerializationManager.fromEventString(s).getTimer()).append(" » ").append(SaveSerializationManager.fromEventString(s).getString()).append("`").append("\n");
             });
             event.getChannel().sendMessage(stringBuilder).queue();
         }

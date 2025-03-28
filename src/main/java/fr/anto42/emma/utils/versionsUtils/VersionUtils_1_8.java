@@ -1,7 +1,7 @@
 package fr.anto42.emma.utils.versionsUtils;
 
 
-import fr.anto42.emma.utils.NMSUtils;
+import fr.anto42.emma.utils.data.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

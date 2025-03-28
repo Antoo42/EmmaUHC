@@ -52,29 +52,17 @@ public class GameSaveCreator {
         TextChannel channel = UHC.getInstance().getDiscordManager().getDiscordBot().getTextChannelById(UHC.getInstance().getDiscordManager().getLogChannelId());
 
         if (channel != null) {
-            StringBuilder message = new StringBuilder();
-            message.append("Une nouvelle partie vient de se terminer : " + gameSave.getGameID() +".\n");
-            message.append("`").append("GameName: ").append(gameSave.getGameName()).append("\n")
-                    .append("Winner: ").append(gameSave.getWinner()).append("\n")
-                    .append("Host: ").append(gameSave.getHost()).append("\n")
-                    .append("Date: ").append(gameSave.getDate().toString()).append("\n")
-                    .append("Module: ").append(gameSave.getModule()).append("\n")
-                    .append("Timer: ").append(TimeUtils.getFormattedTime(gameSave.getTimer())).append("\n")
-                    .append("World Type: ").append(gameSave.getWorldType()).append("\n\n")
-                    .append("Events\n");
+            String message = "Une nouvelle partie vient de se terminer : " + gameSave.getGameID() + ".\n" +
+                    "`" + "GameName: " + gameSave.getGameName() + "\n" +
+                    "Winner: " + gameSave.getWinner() + "\n" +
+                    "Host: " + gameSave.getHost() + "\n" +
+                    "Date: " + gameSave.getDate().toString() + "\n" +
+                    "Module: " + gameSave.getModule() + "\n" +
+                    "Timer: " + TimeUtils.getFormattedTime(gameSave.getTimer()) + "\n" +
+                    "World Type: " + gameSave.getWorldType() + "\n\n" +
+                    "\nServeur: " + Bukkit.getServerName() + "`";
 
-            for (String event : gameSave.getEvents()) {
-                message.append("- ").append(event).append("\n");
-            }
-
-            message.append("\nPlayerDatas:\n");
-            for (String playerData : gameSave.getUhcPlayerList()) {
-                message.append("- ").append(playerData).append("\n");
-            }
-
-            message.append("\nServeur: ").append(Bukkit.getServerName()).append("`");
-
-            channel.sendMessage(message.toString()).queue();
+            channel.sendMessage(message).queue();
         } else {
             System.out.println("Salon introuvable avec l'ID : " + UHC.getInstance().getDiscordManager().getLogChannelId());
         }

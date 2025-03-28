@@ -4,11 +4,13 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.UHCManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.utils.materials.ItemCreator;
+import fr.anto42.emma.utils.players.PlayersUtils;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,9 @@ public class GameModeGUI {
                         uhcManager.setGamemode(module);
                         uhcManager.getGamemode().onLoad();
                         Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu sélectionné par l'Host est " + module.getName() + "§7 !");
+                        for (Player player1 : Bukkit.getOnlinePlayers()) {
+                            PlayersUtils.giveWaitingStuff(player1);
+                        }
                         new GameModeGUI().getkInventory().open(player);
                     }
                     else if (kInventoryClickContext.getClickType().isRightClick())
@@ -89,6 +94,9 @@ public class GameModeGUI {
                         uhcManager.getGamemode().onLoad();
                         Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le nouveau mode de jeu sélectionné par l'Host est " + module.getName() + "§7 !");
                         new GameModeGUI().getkInventory().open(player);
+                        for (Player player1 : Bukkit.getOnlinePlayers()) {
+                            PlayersUtils.giveWaitingStuff(player1);
+                        }
                     }
                 });
             }

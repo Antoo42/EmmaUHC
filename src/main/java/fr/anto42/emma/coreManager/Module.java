@@ -19,6 +19,7 @@ public abstract class Module {
     private UHCScoreboard uhcScoreboard;
     private boolean available = true;
     private String version = "V1.0";
+    private KInventory configGUI;
 
 
 
@@ -114,5 +115,13 @@ public abstract class Module {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public KInventory getConfigGUI() {
+        return configGUI;
+    }
+
+    public void setConfigGUI(KInventory configGUI) {
+        this.configGUI = configGUI;
     }
 }

@@ -12,7 +12,7 @@ import fr.anto42.emma.game.modes.taupeGun.roles.SuperTaupe;
 import fr.anto42.emma.game.modes.taupeGun.roles.Taupe;
 import fr.anto42.emma.game.modes.taupeGun.utils.GameUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.chat.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;

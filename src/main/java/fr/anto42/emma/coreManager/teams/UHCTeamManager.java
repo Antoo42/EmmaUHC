@@ -23,7 +23,7 @@ public class UHCTeamManager {
     private boolean activated = false;
     private int slots = 2;
 
-    private int maxTeams = 28;
+    private int maxTeams = 27;
     private boolean randomTeam = false;
 
     private List<UHCTeam> uhcTeams = new ArrayList<>();
@@ -53,9 +53,9 @@ public class UHCTeamManager {
 
     public UHCTeam createNewTeam(String name, String prefix, DyeColor dyeColor, int colorNumber, String color){
         Scoreboard score = Bukkit.getScoreboardManager().getMainScoreboard();
-        String uuid = RandomStringUtils.random(4, true, false);
+        String uuid = RandomStringUtils.random(6, true, false);
         uuid = uuid + "-";
-        uuid = uuid + RandomStringUtils.random(4, false, true);
+        uuid = uuid + RandomStringUtils.random(6, false, true);
 
         Team team = score.registerNewTeam(uuid);
         score.getTeam(uuid).setPrefix(prefix);
@@ -63,7 +63,7 @@ public class UHCTeamManager {
         UHCTeam uhcTeam = new UHCTeam(name, color, prefix, dyeColor, colorNumber, uuid, team);
         this.uhcTeams.add(uhcTeam);
         this.initialTeams.add(uhcTeam);
-        System.out.println("Succes in the creation of the team: " + prefix + " (" + name + ")");
+        //System.out.println("Succes in the creation of the team: " + prefix + " (" + name + ")");
         return uhcTeam;
     }
 
@@ -71,7 +71,7 @@ public class UHCTeamManager {
         getUhcTeams().clear();
 
         String[] baseColors = {
-                "Rouge", "Orange", "Jaune", "Vert", "Bleue", "Violet", "Rose"
+                "Rouge", "Orange", "Jaune", "Vert", "Cyan", "Bleue", "Violet", "Rose", "Gris"
         };
 
         String[] colorVariants = {
@@ -83,13 +83,13 @@ public class UHCTeamManager {
 
         String[] symbols = {"♥", "♦", "♠", "♣", "★", "☀", "☁", "⚡", "❄"};
 
-        String[] colorCodes = {"§c", "§6", "§e", "§a", "§9", "§5", "§d"};
+        String[] colorCodes = {"§c", "§6", "§e", "§a", "§b", "§9", "§5", "§d", "§7"};
 
         DyeColor[] dyeColors = {
-                DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.BLUE, DyeColor.PURPLE, DyeColor.PINK
+                DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.LIME, DyeColor.CYAN, DyeColor.BLUE, DyeColor.PURPLE, DyeColor.PINK, DyeColor.GRAY
         };
 
-        int[] colorData = {14, 1, 4, 5, 3, 10, 6};
+        int[] colorData = {14, 1, 4, 5, 9, 3, 2, 6, 8};
 
         int teamCount = 0;
 

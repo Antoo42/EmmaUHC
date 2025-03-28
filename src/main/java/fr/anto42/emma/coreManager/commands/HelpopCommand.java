@@ -3,7 +3,7 @@ package fr.anto42.emma.coreManager.commands;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.game.UHCGame;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.chat.InteractiveMessage;
 import fr.anto42.emma.utils.chat.InteractiveMessageBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;

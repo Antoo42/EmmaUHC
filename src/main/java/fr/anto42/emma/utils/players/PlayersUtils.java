@@ -7,7 +7,6 @@ import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.utils.ArmorStandUtils;
 import fr.anto42.emma.utils.Cuboid;
-import fr.anto42.emma.utils.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.chat.InteractiveMessage;
 import fr.anto42.emma.utils.chat.InteractiveMessageBuilder;
@@ -101,10 +100,13 @@ public class PlayersUtils {
                 player.getInventory().setItem(0, new ItemCreator(Material.BANNER).bannerColor(UHC.getUHCPlayer(player).getUhcTeam().getDyeColor()).name("§8§l» §e§lSélection des équipes").get());
             }
         player.getInventory().setItem(1, new ItemCreator(SkullList.CHEST.getItemStack()).name("§8§l» §6§lRègles de la partie").get());
-        player.getInventory().setItem(2, new ItemCreator(SkullList.MASCOTTE_COMPUTER.getItemStack()).name("§8§l» §b§lHistorique de partie").get());
+        player.getInventory().setItem(6, new ItemCreator(SkullList.BOOKSHELF.getItemStack()).name("§8§l» §a§lHistorique de parties").get());
         player.getInventory().setItem(8, new ItemCreator(Material.BED).name("§8§l» §c§lRetourner au Hub").get());
         if (UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == UHC.getUHCPlayer(player) || UHC.getInstance().getUhcGame().getUhcData().getCoHostList().contains(UHC.getUHCPlayer(player)))
             player.getInventory().setItem(4, new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).name("§8§l» §b§lConfigurer la partie").get());
+        if (UHC.getInstance().getUhcManager().getGamemode().getConfigGUI() != null) {
+            player.getInventory().setItem(2, new ItemCreator(UHC.getInstance().getUhcManager().getGamemode().getItemStack()).name("§8§l» §d§lConfiguration du module").get());
+        }
     }
 
     public static void randomTp(Player player, World world){

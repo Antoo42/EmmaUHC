@@ -22,7 +22,11 @@ public class SelectTeamGUI {
         this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lSélection de l'équipe - Page " + (page + 1));
 
         KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 4).get());
-        for (int i : new int[]{0, 1, 9, 8, 7, 17, 36, 44, 45, 46, 52, 53}) {
+        for (int i = 0; i < 9; i++) {
+            this.kInventory.setElement(i, glass);
+            this.kInventory.setElement(45 + i, glass);
+        }
+        for (int i = 36; i < 45; i++) {
             this.kInventory.setElement(i, glass);
         }
 
@@ -56,14 +60,15 @@ public class SelectTeamGUI {
             this.kInventory.setElement(3, leaveTeam);
             this.kInventory.setElement(5, random);
             List<UHCTeam> teams = uhcTeamManager.getUhcTeams();
-            int teamsPerPage = 28;
+            int teamsPerPage = 27;
             int startIndex = page * teamsPerPage;
             int maxTeams = uhcTeamManager.getMaxTeams();
             int endIndex = Math.min(startIndex + teamsPerPage, Math.min(maxTeams, teams.size()));
-            final int[] slot = {10};
+            final int[] slot = {9};
             for (int i = startIndex; i < endIndex; i++) {
                 UHCTeam uhcTeam = teams.get(i);
                 List<String> lore = new ArrayList<>();
+                lore.add("§3" + uhcTeam.getUuid());
                 lore.add("");
                 lore.add("§8§l» §fJoueurs de cette équipe:");
                 if (uhcTeam.getUhcPlayerList().isEmpty()) lore.add("§8┃ §cAucun");
@@ -83,9 +88,6 @@ public class SelectTeamGUI {
                 });
                 this.kInventory.setElement(slot[0], teamItem);
                 slot[0]++;
-                while (slot[0] == 17 || slot[0] == 18 || slot[0] == 26 || slot[0] == 27 || slot[0] == 35 || slot[0] == 36 || slot[0] == 44) {
-                    slot[0]++;
-                }
             }
 
             if (page > 0) {

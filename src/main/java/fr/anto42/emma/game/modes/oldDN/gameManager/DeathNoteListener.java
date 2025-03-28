@@ -5,7 +5,7 @@ import fr.anto42.emma.coreManager.listeners.customListeners.StartEvent;
 import fr.anto42.emma.game.modes.oldDN.DNModule;
 import fr.anto42.emma.game.modes.oldDN.roles.Kira;
 import fr.anto42.emma.utils.players.PlayersUtils;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;

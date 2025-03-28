@@ -1,4 +1,4 @@
-package fr.anto42.emma.utils;
+package fr.anto42.emma.utils.data;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

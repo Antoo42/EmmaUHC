@@ -2,10 +2,9 @@ package fr.anto42.emma.game.modes.deathNote.uis;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
-import fr.anto42.emma.game.modes.deathNote.DeathNoteModule;
 import fr.anto42.emma.game.modes.deathNote.roles.Mello;
 import fr.anto42.emma.game.modes.deathNote.utils.MeloType;
-import fr.anto42.emma.utils.SoundUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
