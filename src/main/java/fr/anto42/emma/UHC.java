@@ -104,6 +104,7 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new SetHostComand());
         //CommandUtils.registerCommand("uhc", new ColorCommand());
         CommandUtils.registerCommand("uhc", new CreditsCommand());
+        CommandUtils.registerCommand("uhc", new TeamsVoteKickCommand());
         CommandUtils.registerCommand("uhc", new HCommand());
         CommandUtils.registerCommand("uhc", new SaveCommand());
         CommandUtils.registerCommand("uhc", new GodCommand());

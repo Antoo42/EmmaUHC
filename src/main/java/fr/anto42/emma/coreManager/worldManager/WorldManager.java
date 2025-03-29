@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class WorldManager {
@@ -42,6 +43,13 @@ public class WorldManager {
         return strings[1];
     }
 
+    public static String getWorldType(World world) {
+        String string = world.getName();
+        String[] strings = string.split("-");
+        return strings[1];
+    }
+
+
     public void createCustomSpawn() {
         World world = Bukkit.getWorld((String) fileConfiguration.get("worldName"));
         Bukkit.getLogger().info("UHC: Custom spawn set to the world: " + world.getName());
@@ -62,6 +70,7 @@ public class WorldManager {
     }
 
     public void createGameWorld() {
+        worldList.clear();
         random = new Random().nextInt(99999);
         String worldName = "worldUHC-world-" + random;
 
@@ -125,6 +134,7 @@ public class WorldManager {
     }
 
     public void createSuperflatWorld() {
+        worldList.clear();
         random = new Random().nextInt(99999);
         String worldName = "worldUHC-superflat-" + random;
 
@@ -171,6 +181,7 @@ public class WorldManager {
     }
 
     public void createRoofedWorld() {
+        worldList.clear();
         random = new Random().nextInt(99999);
         String worldName = "worldUHC-roofed-" + random;
 
@@ -210,6 +221,7 @@ public class WorldManager {
     }
 
     public void createCityWorld(CityWorldGenerator.WorldStyle worldStyle) {
+        worldList.clear();
         random = new Random().nextInt(99999);
         String worldName = "worldUHC-cityWorld_" + worldStyle + "-" + random;
 
@@ -237,6 +249,21 @@ public class WorldManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.teleport(getSpawnLocation());
         }
+    }
+
+    public static ChatColor translateWorldType(World world) {
+        if (world.getEnvironment() == World.Environment.NORMAL) return ChatColor.GREEN;
+        if (world.getEnvironment() == World.Environment.NETHER) return ChatColor.RED;
+        else return ChatColor.DARK_AQUA;
+    }
+
+    public static String getPregenStatus(World world) {
+        if (inGeneration != null && Objects.equals(inGeneration.getName(), world.getName())) return "§6en cours de prégénération";
+        else if (getToGenerate().contains(world)) return "§6dans la file d'attente";
+        else if (world.getEnvironment().equals(World.Environment.NORMAL) && UHC.getInstance().getUhcGame().getUhcData().isPreloadFinished()) return "§a✔";
+        else if (world.getEnvironment().equals(World.Environment.NETHER) && UHC.getInstance().getUhcGame().getUhcData().isNetherPreload()) return "§a✔";
+        else if (world.getEnvironment().equals(World.Environment.THE_END) && UHC.getInstance().getUhcGame().getUhcData().isEndPreload()) return "§a✔";
+        else return "§c✘";
     }
 
     private final OrePopulator orePopulator = new OrePopulator();

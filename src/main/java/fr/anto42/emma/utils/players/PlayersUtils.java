@@ -105,7 +105,7 @@ public class PlayersUtils {
         if (UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == UHC.getUHCPlayer(player) || UHC.getInstance().getUhcGame().getUhcData().getCoHostList().contains(UHC.getUHCPlayer(player)))
             player.getInventory().setItem(4, new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).name("§8§l» §b§lConfigurer la partie").get());
         if (UHC.getInstance().getUhcManager().getGamemode().getConfigGUI() != null) {
-            player.getInventory().setItem(2, new ItemCreator(UHC.getInstance().getUhcManager().getGamemode().getItemStack()).name("§8§l» §d§lConfiguration du module").get());
+            player.getInventory().setItem(2, new ItemCreator(UHC.getInstance().getUhcManager().getGamemode().getItemStack()).name("§8§l» §d§lConfiguration du module").lore("").get());
         }
     }
 

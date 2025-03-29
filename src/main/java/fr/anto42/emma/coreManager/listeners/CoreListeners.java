@@ -9,7 +9,7 @@ import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.uis.gameSaves.GameSavedGUI;
 import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
-import fr.anto42.emma.coreManager.uis.SelectTeamGUI;
+import fr.anto42.emma.coreManager.uis.teams.SelectTeamGUI;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
@@ -40,9 +40,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -55,11 +55,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.UUID;
 
 public class CoreListeners implements Listener {
@@ -354,7 +351,7 @@ public class CoreListeners implements Listener {
         if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §a§lHistorique de parties"))
             new GameSavedGUI(event.getPlayer(), true, "all", 0).getkInventory().open(event.getPlayer());
         else if (event.getItem() != null && event.getItem().getType() == Material.BANNER && uhc.getGameState() == GameState.WAITING ||event.getItem() != null && event.getItem().getType() == Material.BANNER && uhc.getGameState() == GameState.STARTING)
-            new SelectTeamGUI(0).getkInventory().open(event.getPlayer());
+            new SelectTeamGUI(UHC.getUHCPlayer(event.getPlayer()), 0).getkInventory().open(event.getPlayer());
         else if (event.getItem() != null && event.getItem().getType() == Material.MILK_BUCKET && !uhc.getUhcConfig().isMilkBukket())
             event.setCancelled(true);
         else if (event.getItem().getType() == uhcCore.getUhcManager().getGamemode().getItemStack().getType() && event.getItem().getItemMeta().getDisplayName().contains("Configuration du module"))
@@ -638,15 +635,15 @@ public class CoreListeners implements Listener {
 
     private final StuffConfig stuffConfig = uhc.getUhcConfig().getStuffConfig();
     @EventHandler
-    public void onCraft(CraftItemEvent event){
+    public void onCraft(PrepareItemCraftEvent event){
         if (event.getRecipe().getResult().getType() == Material.DIAMOND_HELMET && !stuffConfig.isDiamondHelmet()){
-            event.setCancelled(true);
+            event.getInventory().setResult(new ItemStack(Material.AIR));
         }else if (event.getRecipe().getResult().getType() == Material.DIAMOND_CHESTPLATE && !stuffConfig.isDiamondChesp()){
-            event.setCancelled(true);
+            event.getInventory().setResult(new ItemStack(Material.AIR));
         }else if (event.getRecipe().getResult().getType() == Material.DIAMOND_LEGGINGS && !stuffConfig.isDiamondLeggins()){
-            event.setCancelled(true);
+            event.getInventory().setResult(new ItemStack(Material.AIR));
         }else if (event.getRecipe().getResult().getType() == Material.DIAMOND_BOOTS && !stuffConfig.isDiamondBoots()){
-            event.setCancelled(true);
+            event.getInventory().setResult(new ItemStack(Material.AIR));
         }
     }
 

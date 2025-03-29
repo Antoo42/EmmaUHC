@@ -2,8 +2,13 @@ package fr.anto42.emma.coreManager.players;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.roles.Role;
+import fr.anto42.emma.coreManager.teams.KickPlayer;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
+import fr.anto42.emma.utils.chat.InteractiveMessage;
+import fr.anto42.emma.utils.chat.InteractiveMessageBuilder;
 import fr.anto42.emma.utils.players.SoundUtils;
+import kotlin.reflect.KClassesImplKt;
+import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -85,6 +90,7 @@ public class UHCPlayer {
         this.uhcTeam = uhcTeam;
         uhcTeam.getUhcPlayerList().add(this);
         uhcTeam.getTeam().addEntry(this.getName());
+        setKickPlayer(null);
     }
 
     public void leaveTeam(){
@@ -97,6 +103,7 @@ public class UHCPlayer {
             setPreviousTeam(uhcTeam);
             uhcTeam = null;
         }
+        setKickPlayer(null);
     }
 
     public void sendEffect (PotionEffect potionEffect) {
@@ -146,7 +153,7 @@ public class UHCPlayer {
     public void sendClassicMessage(String string){
         if (getBukkitPlayer() == null)
             return;
-        getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " " + string);
+        getBukkitPlayer().sendMessage(UHC.getInstance().getPrefix() + " §7" + string);
     }
 
     public void sendModMessage(String string) {
@@ -376,5 +383,26 @@ public class UHCPlayer {
             return;
         }
         getBukkitPlayer().setLevel(level);
+    }
+
+    private KickPlayer kickPlayer;
+
+    public KickPlayer getKickPlayer() {
+        return kickPlayer;
+    }
+
+    public void setKickPlayer(KickPlayer kickPlayer) {
+        this.kickPlayer = kickPlayer;
+    }
+
+
+    public void startKickPlayer(UHCPlayer starter) {
+        if (uhcTeam == null)
+            return;
+        uhcTeam.getUhcPlayerList().forEach(uhcPlayer -> {
+            new InteractiveMessage().add(new InteractiveMessageBuilder("§cUn vote d'exclusion sur §e" + getName() + " §cvient d'être lancé ! Cliquez §eici§c pour voter.").setClickAction(ClickEvent.Action.RUN_COMMAND, "/teamsvotekick " + getName()).build()).sendMessage(uhcPlayer.getBukkitPlayer());
+        });
+        setKickPlayer(new KickPlayer(this));
+        getKickPlayer().addYesVote(starter);
     }
 }

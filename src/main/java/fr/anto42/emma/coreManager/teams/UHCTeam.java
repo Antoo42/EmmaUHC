@@ -116,4 +116,10 @@ public class UHCTeam {
     public int getColorNumber() {
         return colorNumber;
     }
+
+    public void broadcastMessage(String message) {
+        getUhcPlayerList().forEach(uhcPlayer -> {
+            uhcPlayer.sendClassicMessage(message);
+        });
+    }
 }

@@ -1,4 +1,4 @@
-package fr.anto42.emma.coreManager.uis;
+package fr.anto42.emma.coreManager.uis.teams;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
@@ -18,7 +18,7 @@ public class SelectTeamGUI {
     private final KInventory kInventory;
     private final UHCTeamManager uhcTeamManager = UHCTeamManager.getInstance();
 
-    public SelectTeamGUI(int page) {
+    public SelectTeamGUI(UHCPlayer uhcPlayer1, int page) {
         this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §6§lSélection de l'équipe - Page " + (page + 1));
 
         KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 4).get());
@@ -33,6 +33,24 @@ public class SelectTeamGUI {
         KItem back = new KItem(new ItemCreator(SkullList.LEFT_AROOW.getItemStack()).name("§8┃ §cFermer le menu").lore("", "§8§l» §6Cliquez §fpour fermer.").get());
         back.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> player.closeInventory());
         this.kInventory.setElement(48, back);
+
+        if (uhcPlayer1.getUhcTeam() != null) {
+            UHCTeam uhcTeam = uhcPlayer1.getUhcTeam();
+            KItem myTeam = new KItem(new ItemCreator(Material.BANNER).bannerColor(uhcTeam.getDyeColor()).name(uhcTeam.getDisplayName()).get());
+            List<String> lore = new ArrayList<>();
+            lore.add("§3" + uhcTeam.getUuid());
+            lore.add("");
+            lore.add("§8§l» §fJoueurs de cette équipe:");
+            if (uhcTeam.getUhcPlayerList().isEmpty()) lore.add("§8┃ §cAucun");
+            else uhcTeam.getUhcPlayerList().forEach(uhcPlayer -> lore.add("§8┃ §7" + uhcPlayer.getName()));
+            lore.add("");
+            lore.add("§8§l» §6Cliquez §fpour ouvrir.");
+            myTeam.setDescription(lore);
+            myTeam.addCallback((kInventory1, item, player, clickContext) -> {
+                new TeamPlayersGUI(uhcTeam, getkInventory()).getkInventory().open(player);
+            });
+            this.kInventory.setElement(0, myTeam);
+        }
 
         KItem leaveTeam = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §cQuitter votre équipe").lore("", "§8┃ §fVotre équipe actuelle §cne vous plaît pas §f?", "§8┃ §aAucun soucis§f, quittez cette dernière !", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         leaveTeam.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
@@ -81,7 +99,7 @@ public class SelectTeamGUI {
                     UHCPlayer uhcPlayer = UHC.getUHCPlayer(player);
                     if (!uhcTeam.getUhcPlayerList().contains(uhcPlayer) && uhcTeam.getPlayersAmount() < uhcTeamManager.getSlots()) {
                         uhcPlayer.joinTeam(uhcTeam);
-                        new SelectTeamGUI(page).getkInventory().open(player);
+                        new SelectTeamGUI(uhcPlayer, page).getkInventory().open(player);
                         player.getInventory().clear();
                         PlayersUtils.giveWaitingStuff(player);
                     }
@@ -92,13 +110,13 @@ public class SelectTeamGUI {
 
             if (page > 0) {
                 KItem previousPage = new KItem(new ItemCreator(Material.ARROW).name("§8┃ §fPage précédente").lore("", "§8§l» §6Cliquez §fpour revenir.").get());
-                previousPage.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> new SelectTeamGUI(page - 1).getkInventory().open(player));
+                previousPage.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> new SelectTeamGUI(uhcPlayer1,page - 1).getkInventory().open(player));
                 this.kInventory.setElement(2, previousPage);
             }
 
             if (endIndex < Math.min(maxTeams, teams.size())) {
                 KItem nextPage = new KItem(new ItemCreator(Material.ARROW).name("§8┃ §fPage suivante").lore("", "§8§l» §6Cliquez §fpour avancer.").get());
-                nextPage.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> new SelectTeamGUI(page + 1).getkInventory().open(player));
+                nextPage.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> new SelectTeamGUI(uhcPlayer1, page + 1).getkInventory().open(player));
                 this.kInventory.setElement(6, nextPage);
             }
         }

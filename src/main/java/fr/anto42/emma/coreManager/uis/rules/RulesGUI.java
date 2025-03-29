@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.uis.rules;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.Module;
 import fr.anto42.emma.coreManager.uis.config.EnchantsConfigGUI;
 import fr.anto42.emma.coreManager.uis.config.SettingsConfigGUI;
 import fr.anto42.emma.coreManager.uis.config.StuffConfigGUI;
@@ -13,6 +14,10 @@ import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RulesGUI {
     private final KInventory kInventory;
@@ -33,7 +38,26 @@ public class RulesGUI {
         });
         this.kInventory.setElement(49, back);
 
-        KItem gamemode = new KItem(new ItemCreator(SkullList.GIFT.getItemStack()).name("§8┃ §fMode de jeu").lore("", "§8§l» §fStatut: §6" + UHC.getInstance().getUhcManager().getGamemode().getName(), "").get());
+        Module module = UHC.getInstance().getUhcManager().getGamemode();
+        KItem gamemode = new KItem(new ItemCreator(module.getItemStack()).name("§8┃ §fMode de jeu").get());
+        List<String> strings = new ArrayList<>();
+        strings.add("§8" + module.getVersion());
+        strings.add("");
+        if (!module.getDesc().isEmpty() && module.isAvailable()) {
+            strings.addAll(module.getDesc());
+        } else strings.add("§8┃ §cAucune information.");
+        strings.add("");
+        if (module.getDev() != null) {
+            strings.add("§8┃ §fDéveloppeur: §b" + module.getDev());
+            strings.add("");
+        }
+        if (module.getConfigGUI() != null) {
+            strings.add("§8§l» §6Cliquez §fpour ouvrir.");
+            gamemode.addCallback((kInventory1, item, player, clickContext) -> {
+                module.getConfigGUI().open(player);
+            });
+        }
+        gamemode.setDescription(strings);
         kInventory.setElement(11, gamemode);
 
         KItem scenarios = new KItem(new ItemCreator(Material.BOOK).name("§8┃ §fScenarios").lore("", "§8┃ §6Consultez §fles différents scénarios activés dans la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
@@ -66,7 +90,15 @@ public class RulesGUI {
         });
         kInventory.setElement(33, diamondParts);
 
-        KItem worldConfig = new KItem(new ItemCreator(SkullList.EARTH.getItemStack()).name("§8┃ §fSpécifités du monde de jeu §7(" + WorldManager.getGameWorld().getName() + ")").lore("", "§8┃ §fRetrouvez-ici les spécificités du monde", "§8┃ §fde la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
+        KItem worldConfig = new KItem(new ItemCreator(SkullList.EARTH.getItemStack()).name("§8┃ §fSpécifités du monde de jeu").lore().get());
+        List<String> lore = new ArrayList<>();
+        lore.add("");
+        for (World world : WorldManager.getWorldList()) {
+            lore.add("§8§l» " + WorldManager.translateWorldType(world) + WorldManager.getWorldType(world) + "§7: " + WorldManager.getPregenStatus(world));
+        }
+        lore.add("");
+        lore.add("§8§l» §6Cliquez §fpour ouvrir.");
+        worldConfig.setDescription(lore);
         worldConfig.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             new WorldConfigInRulesGUI().getkInventory().open(player);
         });

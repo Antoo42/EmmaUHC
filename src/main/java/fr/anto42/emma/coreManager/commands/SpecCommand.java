@@ -344,9 +344,9 @@ public class SpecCommand extends Command {
             uhcTarget.getBukkitPlayer().setWalkSpeed(0.2F);
             uhcPlayer.sendModMessage("§cVous avez §b§lunfreeze §a" + uhcTarget.getName() + "§c.");
         } else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("profile")) {
-            uhcPlayer.sendModMessage("§cCette foncionnalité est en cours de développement !");
+            //uhcPlayer.sendModMessage("§cCette foncionnalité est en cours de développement !");
             if(args.length == 1) {
-                uhcPlayer.sendModMessage("§cVeuillez indiquez un joueur ! §3(/spec info <Player>)");
+                uhcPlayer.sendModMessage("§cVeuillez indiquez un joueur connecté ! §3(/spec info <Player>)");
                 return true;
             }
             Player player = Bukkit.getPlayer(args[1]);
