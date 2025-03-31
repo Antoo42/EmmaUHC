@@ -2,6 +2,7 @@ package fr.anto42.emma.game.modes.slaveMarket;
 
 import fr.anto42.emma.coreManager.Module;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,5 +24,10 @@ public class SlaveModule extends Module {
     @Override
     public void winTester() {
         
+    }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
     }
 }

@@ -11,6 +11,7 @@ import fr.anto42.emma.game.modes.trueLove.uis.TrueLoveGUI;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import fr.anto42.emma.utils.TimeUtils;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -135,5 +136,10 @@ public class TrueLoveModule extends Module {
             PlayersUtils.finishToSpawn();
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
         }
+    }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
     }
 }

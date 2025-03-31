@@ -11,7 +11,7 @@ public abstract class Module {
     private final String name;
     private final String discordName;
     private final ItemStack itemStack;
-    private boolean configurable = true;
+    private boolean configurable = false;
     private String docLink;
     private KInventory kInventory;
     private List<String> desc = new ArrayList<>();
@@ -117,9 +117,7 @@ public abstract class Module {
         this.version = version;
     }
 
-    public KInventory getConfigGUI() {
-        return configGUI;
-    }
+    public abstract KInventory getConfigGUI();
 
     public void setConfigGUI(KInventory configGUI) {
         this.configGUI = configGUI;

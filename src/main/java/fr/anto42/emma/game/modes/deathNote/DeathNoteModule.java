@@ -23,6 +23,7 @@ import fr.anto42.emma.utils.CommandUtils;
 import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -127,6 +128,11 @@ public class DeathNoteModule extends Module {
             UHC.getInstance().getDiscordManager().sendWin(null);
             announceEnd();
         }
+    }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
     }
 
 

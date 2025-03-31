@@ -21,6 +21,7 @@ import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.CommandUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -125,6 +126,11 @@ public class TGModule extends Module {
             Bukkit.broadcastMessage("§7");
             announceEnd();
         }
+    }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
     }
 
 

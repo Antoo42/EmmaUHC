@@ -150,8 +150,8 @@ public class CoreListeners implements Listener {
                     a.setAccessible(true);
                     b.setAccessible(true);
 
-                    a.set(packet, new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n  §6/helpop §8┃ §6/rules §8┃ §6/lag \n"));
-                    b.set(packet, new ChatComponentText(" \n  §8┃ §7Ping: §a" + formatPing(((CraftPlayer) player).getHandle().ping) +
+                    a.set(packet, new ChatComponentText("\n §8§l» §b§lUHC §8§l« \n \n   §6/helpop §8┃ §6/rules §8┃ §6/lag\n"));
+                    b.set(packet, new ChatComponentText(" \n   §7Ping: §a" + formatPing(((CraftPlayer) player).getHandle().ping) +
                             "ms §8┃ §7TPS: §a" + formatTPS(MinecraftServer.getServer().recentTps[0]) + "  \n"));
 
                     ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);

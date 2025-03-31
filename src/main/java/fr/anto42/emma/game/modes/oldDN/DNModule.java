@@ -25,6 +25,7 @@ import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.CommandUtils;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import fr.anto42.emma.utils.players.SoundUtils;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -212,6 +213,12 @@ public class DNModule extends Module {
             announceEnd();
         }
     }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
+    }
+
     void announceEnd() {
         for(Player player : Bukkit.getOnlinePlayers()){
             UHCPlayer uhcPlayer  = UHC.getUHCPlayer(player);

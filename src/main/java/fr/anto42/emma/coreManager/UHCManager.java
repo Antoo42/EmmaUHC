@@ -3,17 +3,17 @@ package fr.anto42.emma.coreManager;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.ScenarioType;
-import fr.anto42.emma.coreManager.uis.*;
+import fr.anto42.emma.coreManager.uis.AdminGUI;
 import fr.anto42.emma.coreManager.uis.config.*;
 import fr.anto42.emma.coreManager.uis.config.worlds.BorderConfigGUI;
 import fr.anto42.emma.coreManager.uis.config.worlds.WorldSettingsGUI;
 import fr.anto42.emma.coreManager.votes.VoteSystem;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
+import fr.anto42.emma.game.modes.bingo.BingoModule;
 import fr.anto42.emma.game.modes.classic.ClassicModule;
-import fr.anto42.emma.game.modes.coldWar.ColdWarUHC;
 import fr.anto42.emma.game.modes.deathNote.DeathNoteModule;
-import fr.anto42.emma.game.modes.oldDN.DNModule;
 import fr.anto42.emma.game.modes.lg.LGModule;
+import fr.anto42.emma.game.modes.oldDN.DNModule;
 import fr.anto42.emma.game.modes.stp.SwitchModule;
 import fr.anto42.emma.game.modes.taupeGun.TGModule;
 import fr.anto42.emma.game.modes.trueLove.TrueLoveModule;
@@ -49,13 +49,13 @@ public class UHCManager {
         ClassicModule module = new ClassicModule();
         this.moduleList.add(module);
         setGamemode(module);
-        moduleList.add(new ColdWarUHC());
         moduleList.add(new DeathNoteModule());
         moduleList.add(new DNModule());
         moduleList.add(new LGModule());
         moduleList.add(new SwitchModule());
         moduleList.add(new TGModule());
         moduleList.add(new TrueLoveModule());
+        moduleList.add(new BingoModule());
         voteSystem = new VoteSystem();
     }
 

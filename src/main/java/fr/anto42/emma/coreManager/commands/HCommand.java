@@ -271,7 +271,6 @@ public class HCommand extends Command {
                 uhcPlayer.sendClassicMessage(" §cVous ne pouvez pas réssucité un joueur qui n'est pas encore mort !");
                 return true;
             }
-            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §a" + uhctarget.getName() + "§7 a été réssucité !");
             uhc.getUhcData().getUhcPlayerList().add(uhctarget);
             uhctarget.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
             fr.anto42.emma.utils.players.PlayersUtils.randomTp(uhctarget.getBukkitPlayer(), WorldManager.getGameWorld());

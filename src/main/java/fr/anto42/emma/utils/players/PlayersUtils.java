@@ -74,6 +74,7 @@ public class PlayersUtils {
                     player.getInventory().setChestplate(null);
                     player.getInventory().setLeggings(null);
                     player.getInventory().setBoots(null);
+                    player.getInventory().setItem(6, new ItemCreator(SkullList.BOOKSHELF.getItemStack()).name("§8§l» §a§lHistorique de parties").get());
                     player.getInventory().setItem(8, new ItemCreator(Material.BED).name("§8§l» §c§lRetourner au Hub").get());
                 });
             }, 5L);

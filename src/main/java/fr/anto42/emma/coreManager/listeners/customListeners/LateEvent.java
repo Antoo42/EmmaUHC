@@ -11,7 +11,7 @@ public class LateEvent extends UHCEvent {
 
     public LateEvent(UHCPlayer uhcPlayer) {
         this.uhcPlayer = uhcPlayer;
-        UHC.getInstance().getGameSave().registerEvent(EventType.CORE,uhcPlayer.getName() + "est ajouté à la partie à " + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
+        UHC.getInstance().getGameSave().registerEvent(EventType.CORE,uhcPlayer.getName() + "est ajouté à la partie");
     }
 
     public UHCPlayer getUhcPlayer() {

@@ -6,7 +6,7 @@ import fr.anto42.emma.utils.gameSaves.EventType;
 
 public class EpisodeEvent extends UHCEvent {
     public EpisodeEvent() {
-        UHC.getInstance().getGameSave().registerEvent(EventType.CORE, "Nouvel épisode à " + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
+        UHC.getInstance().getGameSave().registerEvent(EventType.CORE, "Nouvel épisode");
 
     }
 }

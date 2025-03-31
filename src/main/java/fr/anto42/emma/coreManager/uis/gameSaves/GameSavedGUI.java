@@ -131,7 +131,7 @@ public class GameSavedGUI {
 
                         lore.add(" §8§l» §7Evenements");
                         finalGameSave.getEvents().stream().filter(s -> s.contains(player.getName())).forEach(s -> {
-                            lore.add("  §8§l» §c" + SaveSerializationManager.fromEventString(s).getTimer() + "§f" + SaveSerializationManager.fromEventString(s).getString());
+                            lore.add("  §8§l» §e" + SaveSerializationManager.fromEventString(s).getTimer() + "§f: " + SaveSerializationManager.fromEventString(s).getString());
                         });
                     } else {
                         lore.add("§8§l» §7Aucune donnée disponible.");

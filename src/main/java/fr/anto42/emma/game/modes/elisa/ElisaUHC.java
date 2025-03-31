@@ -1,6 +1,7 @@
 package fr.anto42.emma.game.modes.elisa;
 
 import fr.anto42.emma.coreManager.Module;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,5 +15,10 @@ public class ElisaUHC extends Module {
         //setkInventory(new ElisaUHC().getkInventory());
         super.setUhcScoreboard(new ElisaScoreboard());
         super.setAvailable(false);
+    }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
     }
 }

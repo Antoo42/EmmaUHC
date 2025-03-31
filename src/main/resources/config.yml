@@ -1,6 +1,6 @@
 #Dev by Anto42_
 #Ip in the ScoreBoard and Tab
-ip: "anto42.fr"
+ip: "mc.example.com"
 
 #Choose to enable the custom whitelist on the start of your server (true or false)
 whiteListOnTheStart: true
@@ -12,11 +12,11 @@ customSpawn: false
 #d'éviter un maximum de conflits
 worldName: "world"
 #spawnLocation of the custom lobby
-x: 9.5
-y: 67
-z: 18.5
+x: 0
+y: 100
+z: 0
 pitch: 0
-yaw: 180
+yaw: 0
 
 #Choose to activate or not the privates messages (true or false)
 privatemessages: true

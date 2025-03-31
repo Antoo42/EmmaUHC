@@ -14,7 +14,7 @@ public class DeathEvent extends UHCEvent{
         if (killer != null) {
             this.killer = killer;
         };
-        UHC.getInstance().getGameSave().registerEvent(EventType.DEATHS,"Mort de :" + victim.getName() + ", cause: " +  (killer == null ? "PvE" : "tué par " + killer.getName()) + ", timer: " + TimeUtils.getFormattedTime(UHC.getInstance().getUhcGame().getUhcData().getTimer()));
+        UHC.getInstance().getGameSave().registerEvent(EventType.DEATHS,"Mort de :" + victim.getName() + ", cause: " +  (killer == null ? "PvE" : "tué par " + killer.getName()));
     }
 
     public UHCPlayer getVictim() {

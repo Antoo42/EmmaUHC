@@ -8,6 +8,7 @@ import fr.anto42.emma.game.modes.lg.listeners.LGListeners;
 import fr.anto42.emma.game.modes.lg.uis.LGConfigGUI;
 import fr.anto42.emma.game.modes.lg.utils.LGUtils;
 import fr.anto42.emma.utils.materials.ItemCreator;
+import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
@@ -45,6 +46,11 @@ public class LGModule extends Module {
     //TODO win tester
     public void winTester() {
 
+    }
+
+    @Override
+    public KInventory getConfigGUI() {
+        return null;
     }
 
     //GETTER AND SETTER
