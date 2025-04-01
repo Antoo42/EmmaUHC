@@ -6,6 +6,7 @@ import fr.anto42.emma.utils.gameSaves.GameSave;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import fr.anto42.emma.utils.skulls.SkullList;
+import fr.anto42.emma.utils.skulls.SkullUtils;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
@@ -51,7 +52,7 @@ public class GameSavedPlayerListGUI {
         int slot = 9;
         for (int i = start; i < end; i++) {
             PlayerStats playerStats = UHC.getInstance().getSaveSerializationManager().fromString(playerDataList.get(i));
-            KItem kItem = new KItem(new ItemCreator(Material.PAPER)
+            KItem kItem = new KItem(new ItemCreator(SkullUtils.getCustomHead(playerStats.getName()))
                     .name("§8┃ §c" + playerStats.getName()).get());
 
             kItem.setDescription(player1 -> {

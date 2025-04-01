@@ -60,7 +60,6 @@ public class TimberPvP extends UHCScenario implements Listener{
                 Block b = blocksToBreak.get(index);
                 b.breakNaturally();
                 index++;
-                SoundUtils.playSoundToPlayer(player, Sound.DIG_WOOD);
             }
         }.runTaskTimer(UHC.getInstance(), 3L, 3L);
     }

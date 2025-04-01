@@ -10,6 +10,8 @@ import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,7 @@ public class ScenariosConfigGUI {
         }
 
         List<UHCScenario> scenarios = scenarioManager.getInitialScenarioList();
+        scenarios.sort(Comparator.comparing(UHCScenario::getName));
         if (actualType != ScenarioType.ALL) {
             scenarios = scenarios.stream().filter(s -> s.getScenarioType() == actualType).collect(Collectors.toList());
         }

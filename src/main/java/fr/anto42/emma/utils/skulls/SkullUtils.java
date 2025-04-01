@@ -2,6 +2,7 @@ package fr.anto42.emma.utils.skulls;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import fr.anto42.emma.utils.data.MojangAPI;
 import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -127,5 +128,34 @@ public class SkullUtils {
             head.setItemMeta(headMeta);
             return head;
         }
+    }
+
+
+    public static ItemStack getCustomHead(String playerName) {
+        String uuid = MojangAPI.getUUID(playerName);
+        String texture = (uuid != null) ? MojangAPI.getHeadTexture(uuid) : null;
+
+        if (texture == null) {
+            System.out.println("Joueur introuvable, utilisation de la tête par défaut.");
+            texture = SkullList.UNKNOWN_ELEMENT.getTextureHash();
+        }
+
+        ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+
+        GameProfile profile = new GameProfile(UUID.randomUUID(), playerName);
+        profile.getProperties().put("textures", new Property("textures", texture));
+
+        try {
+            Field profileField = skullMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(skullMeta, profile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        skull.setItemMeta(skullMeta);
+
+        return skull;
     }
 }

@@ -9,10 +9,10 @@ import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
 
-public class TrueLoveGUI {
+public class TrueLoveRulesGUI {
     private final KInventory kInventory;
 
-    public TrueLoveGUI(TrueLoveModule switchModule){
+    public TrueLoveRulesGUI(TrueLoveModule switchModule){
         this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §5§lTrueLove");
         for (int i = 0; i < 9; i++) {
             KItem glass = new KItem(new ItemCreator(Material.STAINED_GLASS_PANE, 1, (byte) 6).get());
@@ -24,18 +24,11 @@ public class TrueLoveGUI {
             this.kInventory.setElement(i, glass);
         }
         KItem back = new KItem(new ItemCreator(SkullList.LEFT_AROOW.getItemStack()).name("§8┃ §cRevenir en arrière").lore("", "§8┃ §cVous ne trouvez pas §fce que vous souhaitez ?", "§8┃ §aPas de soucis§f, revenez en arrière !", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
-        back.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> new GameModeGUI().getkInventory().open(player));
+        back.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> player.closeInventory());
         this.kInventory.setElement(49, back);
 
 
-        KItem timer = new KItem(new ItemCreator(Material.BOW).name("§8┃ §fRayon de cupidon").lore("", "§8§l» §fStatut: §c" + switchModule.getRadius() + "§f blocks", "","§8┃ §6Configurez §fle champ d'action du §dcupidon", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit §fpour retirer 1.").get());
-        timer.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
-            if (kInventoryClickContext.getClickType().isLeftClick())
-                switchModule.addRadius();
-            else if (kInventoryClickContext.getClickType().isRightClick())
-                switchModule.reduceRadius();
-            timer.setItem(new ItemCreator(Material.BOW).name("§8┃ §fRayon de cupidon").lore("", "§8§l» §fStatut: §c" + switchModule.getRadius() + "§f blocks", "","§8┃ §6Configurez §fle champ d'action du §dcupidon", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit §fpour retirer 1.").get());
-        });
+        KItem timer = new KItem(new ItemCreator(Material.BOW).name("§8┃ §fRayon de cupidon").lore("", "§8§l» §fStatut: §c" + switchModule.getRadius() + "§f blocks", "","§8┃ §6Configurez §fle champ d'action du §dcupidon", "").get());
         this.kInventory.setElement(22, timer);
     }
 

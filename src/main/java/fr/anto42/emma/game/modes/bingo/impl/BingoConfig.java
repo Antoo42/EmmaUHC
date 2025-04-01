@@ -10,4 +10,14 @@ public class BingoConfig {
     public void setCartSize(int cartSize) {
         this.cartSize = cartSize;
     }
+
+    private boolean firstWin = true;
+
+    public boolean isFirstWin() {
+        return firstWin;
+    }
+
+    public void setFirstWin(boolean firstWin) {
+        this.firstWin = firstWin;
+    }
 }

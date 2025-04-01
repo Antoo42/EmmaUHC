@@ -53,7 +53,7 @@ public class BingoGUI {
             if (material.getType().equals(Material.BEDROCK)) {
                 item = new KItem(new ItemCreator(Material.BEDROCK).name("§aCompleté").get());
             } else {
-                item = new KItem(new ItemCreator(material).name("§6" + material.getType().name()).get());
+                item = new KItem(new ItemCreator(material).name("§6" + material.getType().name().toLowerCase()).get());
             }
             this.kInventory.setElement(gridSlots[i], item);
         }

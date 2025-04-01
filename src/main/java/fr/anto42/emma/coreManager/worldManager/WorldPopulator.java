@@ -38,12 +38,9 @@ public class WorldPopulator {
                             block.setType(Material.AIR);
                             if (block.getLocation().add(0.0D, -1.0D, 0.0D).getBlock().getType().equals(Material.DIRT))
                                 block.getLocation().add(0.0D, -1.0D, 0.0D).getBlock().setType(Material.GRASS);
-                        } else if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.ICE || block.getType() == Material.PACKED_ICE) {
+                        } /*else if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA || block.getType() == Material.ICE || block.getType() == Material.PACKED_ICE) {
                             block.setType(Material.GRASS);
-                        }
-                        else if (block.getType() == Material.SAND) {
-                            block.setType(Material.GRASS);
-                        }
+                        }*/
                         //block.setBiome(Biome.PLAINS);
                     }
                 }

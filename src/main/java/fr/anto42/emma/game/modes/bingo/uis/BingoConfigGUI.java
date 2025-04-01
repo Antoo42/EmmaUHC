@@ -9,6 +9,7 @@ import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class BingoConfigGUI {
     private final KInventory kInventory;
@@ -47,7 +48,7 @@ public class BingoConfigGUI {
             radius.setItem(new ItemCreator(Material.COMPASS).name("§8┃ §fTaille de la carte").lore("", "§8§l» §fStatut: §c" + module.getBingoConfig().getCartSize(), "", "§8┃ §fConfigurer la taille de la carte", "§8┃ §fdu bingo", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit §fpour retirer 1.").get());
         });
 
-        this.kInventory.setElement(21, radius);
+        this.kInventory.setElement(20, radius);
 
         KItem bingo = new KItem(new ItemCreator(Material.NETHER_STAR).name("§8┃ §fGrille de bingo").lore("", "§8┃ §fConsultez la grille du bingo", "", "§8§l» §6Clique-gauche §fpour ouvrir.", "§8§l» §6Clique-droit §fpour §crecharger une grille.").get());
         bingo.addCallback((kInventory1, item, player, clickContext) -> {
@@ -57,7 +58,15 @@ public class BingoConfigGUI {
                 module.resetBingo();
             }
         });
-        this.kInventory.setElement(23, bingo);
+        this.kInventory.setElement(22, bingo);
+
+
+        KItem firstWin = new KItem(new ItemCreator(Material.REDSTONE_COMPARATOR).name("§8┃ §fUniquement un vainqueur").lore("", "§8§l» §fStatut: " + (module.getBingoConfig().isFirstWin() ? "§a✔" : "§cdésactivé"), "", "§8┃ §fChoisissez de finir la partie", "§8┃ §fdès qu'un joueur a finit son bingo", "§8┃ §fou laisser les joueurs finir le leur", "", "§8§l» §6Cliquez §fpour configurer.").get());
+        firstWin.addCallback((kInventory1, item, player, clickContext) -> {
+            module.getBingoConfig().setFirstWin(!module.getBingoConfig().isFirstWin());
+            firstWin.setItem(new ItemCreator(Material.REDSTONE_COMPARATOR).name("§8┃ §fUniquement un vainqueur").lore("", "§8§l» §fStatut: " + (module.getBingoConfig().isFirstWin() ? "§a✔" : "§cdésactivé"), "", "§8┃ §fChoisissez de finir la partie", "§8┃ §fdès qu'un joueur a finit son bingo", "§8┃ §fou laisser les joueurs finir le leur", "", "§8§l» §6Cliquez §fpour configurer.").get());
+        });
+        this.kInventory.setElement(24, firstWin);
     }
 
     public KInventory getkInventory() {

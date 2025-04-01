@@ -18,12 +18,14 @@ public class ScenarioManager {
     public ScenarioManager() {
         getInitialScenarioList().clear();
         getActivatedScenarios().clear();
+        getInitialScenarioList().add(new Backpack(this));
         getInitialScenarioList().add(new BetaZombies(this));
         getInitialScenarioList().add(new BigCrack(this));
         getInitialScenarioList().add(new BlockRemover(this));
         getInitialScenarioList().add(new BowAimBot(this));
         getInitialScenarioList().add(new BowSwap(this));
         getInitialScenarioList().add(new CatEyes(this));
+        getInitialScenarioList().add(new ChunkApocalypse(this));
         getInitialScenarioList().add(new CutClean(this));
         getInitialScenarioList().add(new DiamondBlood(this));
         getInitialScenarioList().add(new DoubleHealth(this));
@@ -64,6 +66,9 @@ public class ScenarioManager {
         getInitialScenarioList().add(new WeakestLink(this));
         getInitialScenarioList().add(new WebCage(this));
         getInitialScenarioList().add(new XHealths(this));
+        getInitialScenarioList().add(new Depths(this));
+        getInitialScenarioList().add(new NoSprint(this));
+        getInitialScenarioList().add(new Paranoia(this));
         UHC.getInstance().getUhcGame().getUhcConfig().getScenarios().forEach(s -> {
             for (UHCScenario uhcScenario : getInitialScenarioList()) {
                 if (uhcScenario.getName().equalsIgnoreCase(s))

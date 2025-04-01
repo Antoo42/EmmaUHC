@@ -39,7 +39,7 @@ public class RulesGUI {
         this.kInventory.setElement(49, back);
 
         Module module = UHC.getInstance().getUhcManager().getGamemode();
-        KItem gamemode = new KItem(new ItemCreator(module.getItemStack()).name("§8┃ §fMode de jeu").get());
+        KItem gamemode = new KItem(new ItemCreator(module.getItemStack()).name("§8┃ §f" + module.getName()).get());
         List<String> strings = new ArrayList<>();
         strings.add("§8" + module.getVersion());
         strings.add("");

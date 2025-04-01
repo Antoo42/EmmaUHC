@@ -34,7 +34,7 @@ public class BingoGenerator {
                 new ItemStack(Material.GRILLED_PORK), new ItemStack(Material.RABBIT_FOOT), new ItemStack(Material.EGG),
 
                 new ItemStack(Material.BONE), new ItemStack(Material.PAPER), new ItemStack(Material.BOOK),
-                new ItemStack(Material.INK_SACK), new ItemStack(Material.BOWL), new ItemStack(Material.FLOWER_POT),
+                new ItemStack(Material.INK_SACK), new ItemStack(Material.BOWL),
 
                 new ItemStack(Material.LEATHER_HELMET), new ItemStack(Material.LEATHER_CHESTPLATE),
                 new ItemStack(Material.LEATHER_LEGGINGS), new ItemStack(Material.LEATHER_BOOTS),
@@ -53,7 +53,7 @@ public class BingoGenerator {
 
                 new ItemStack(Material.GLASS), new ItemStack(Material.STAINED_GLASS),
 
-                new ItemStack(Material.DIAMOND_BLOCK), new ItemStack(Material.GOLD_BLOCK),new ItemStack(Material.LAPIS_BLOCK), new ItemStack(Material.EMERALD_BLOCK), new ItemStack(Material.IRON_BLOCK)
+                new ItemStack(Material.DIAMOND_BLOCK), new ItemStack(Material.GOLD_BLOCK),new ItemStack(Material.LAPIS_BLOCK), new ItemStack(Material.EMERALD_BLOCK), new ItemStack(Material.IRON_BLOCK), new ItemStack(Material.COAL_BLOCK)
                 );
     }
 

@@ -49,13 +49,13 @@ public class UHCManager {
         ClassicModule module = new ClassicModule();
         this.moduleList.add(module);
         setGamemode(module);
+        moduleList.add(new BingoModule());
         moduleList.add(new DeathNoteModule());
-        moduleList.add(new DNModule());
-        moduleList.add(new LGModule());
+        //moduleList.add(new DNModule());
+        //moduleList.add(new LGModule());
         moduleList.add(new SwitchModule());
         moduleList.add(new TGModule());
         moduleList.add(new TrueLoveModule());
-        moduleList.add(new BingoModule());
         voteSystem = new VoteSystem();
     }
 

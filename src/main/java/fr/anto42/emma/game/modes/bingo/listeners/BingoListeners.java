@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -88,20 +89,20 @@ public class BingoListeners implements Listener {
         checkBingo(event.getRecipe().getResult(), ((Player) event.getWhoClicked()));
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
         if (item != null) {
             checkBingo(item, (Player) event.getWhoClicked());
         }
-    }
+    }*/
 
-    @EventHandler
+    /*@EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         for (ItemStack item : event.getNewItems().values()) {
             checkBingo(item, (Player) event.getWhoClicked());
         }
-    }
+    }*/
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
@@ -109,9 +110,14 @@ public class BingoListeners implements Listener {
     }
 
     @EventHandler
+    public void onPickUp(PlayerPickupItemEvent event) {
+        checkBingo(event.getItem().getItemStack(), event.getPlayer());
+    }
+
+    /*@EventHandler
     public void onMove(InventoryMoveItemEvent event) {
         checkBingo(event.getItem(), null);
-    }
+    }*/
 
 
     /**

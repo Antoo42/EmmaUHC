@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class UHCScenario implements Listener {
     private final String name;
     private String desc;
-    private ScenarioType scenarioType;
+    private ScenarioType scenarioType = ScenarioType.OTHER;
     private final ItemStack itemStack;
     private boolean configurable = false;
     private KInventory kInventory;

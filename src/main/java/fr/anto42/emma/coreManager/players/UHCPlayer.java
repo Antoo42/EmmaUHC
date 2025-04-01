@@ -25,7 +25,7 @@ import java.util.UUID;
 public class UHCPlayer {
     private final UUID uuid;
     private final String name;
-    private UHCPlayerStates playerState;
+    private UHCPlayerStates playerState = UHCPlayerStates.NONE;
     private Role role;
     private Player player;
     private Boolean UHCOp = false;

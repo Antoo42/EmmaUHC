@@ -3,6 +3,7 @@ package fr.anto42.emma.coreManager.tasks;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.listeners.customListeners.StartEvent;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
+import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
@@ -183,10 +184,12 @@ public class StarterTask {
         uhc.setGameState(GameState.PLAYING);
         uhc.getUhcTimer().runTaskTimer(UHC.getInstance(), 0L, 20L);
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            Title.sendTitle(onlinePlayer, 0, 5*20, 20, "§8§l» §aGLHF", "§cEmmaUHC §7par §b@Anto42_");
+            Title.sendTitle(onlinePlayer, 0, 5*20, 20, "§8§l» §aGLHF §8§l«", "§cEmmaUHC §7par §b@Anto42_");
             SoundUtils.playSoundToPlayer(onlinePlayer, Sound.ANVIL_LAND);
         }
         uhc.getUhcData().getUhcPlayerList().forEach(p -> {
+            p.setPlayerState(UHCPlayerStates.ALIVE);
+            UHC.getInstance().getUhcGame().getUhcData().getPreWhitelist().add(p.getName());
             Player player = p.getBukkitPlayer();
             if (player != null) {
                 player.setLevel(0);

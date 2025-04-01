@@ -3,6 +3,7 @@ package fr.anto42.emma.game.modes.bingo;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.Module;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
+import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.modes.bingo.commands.BingoCommand;
@@ -15,14 +16,18 @@ import fr.anto42.emma.utils.TimeUtils;
 import fr.anto42.emma.utils.gameSaves.EventType;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
+import fr.anto42.emma.utils.players.SoundUtils;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BingoModule extends Module {
 
@@ -37,6 +42,10 @@ public class BingoModule extends Module {
         setkInventory(new BingoConfigGUI(this).getkInventory());
         setConfigurable(true);
         setConfigGUI(new BingoRulesGUI(this).getkInventory());
+        super.getDesc().add("§8┃ §fLes joueurs devront §acollectionner des objets§f pour");
+        super.getDesc().add("§8┃ §fremplir un §etableau de bingo§f généré aléatoirement.");
+        super.getDesc().add("§8┃ §6Le premier§f à compléter une ligne, colonne ou diagonale");
+        super.getDesc().add("§8┃ §6remportera§f la victoire !");
     }
 
 
@@ -48,7 +57,9 @@ public class BingoModule extends Module {
         this.bingoList.clear();
         this.bingoList.addAll(BingoGenerator.generateBingoGrid(getBingoConfig().getCartSize()));
         PlayersUtils.broadcastMessage("§cLa grille du bingo vient d'être réinisialisée.");
+        //BingoGenerator.displayBingoGrid(bingoList, bingoConfig.getCartSize());
     }
+
 
     @Override
     public void onStart() {
@@ -79,29 +90,73 @@ public class BingoModule extends Module {
             }
         }
     }
+
+    List<UHCPlayer> finished = new ArrayList<>();
     private final UHCGame uhcGame = UHC.getInstance().getUhcGame();
     public void testWin(Player player) {
-        if (hasBingo(player.getUniqueId())) {
-            uhcGame.setGameState(GameState.FINISH);
-            Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + player.getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a kill(s) !");
-            Bukkit.broadcastMessage("§7");
-            UHC.getInstance().getDiscordManager().sendWin(UHC.getUHCPlayer(player));
-            for(Player p : Bukkit.getOnlinePlayers()){
-                UHCPlayer uhcPlayer  = UHC.getUHCPlayer(p);
-                p.sendMessage("§8┃ §fRécapitulatif de votre partie:");
-                p.sendMessage("§7");
-                p.sendMessage("§8§l» §3Kills: §e" + uhcPlayer.getKills());
-                p.sendMessage("§8§l» §3Morts: §e" + uhcPlayer.getDeath());
-                if (uhcPlayer.getRole() != null)
-                    p.sendMessage("§8§l» §3Rôle: §e" + uhcPlayer.getRole().getName());
+        if (getBingoConfig().isFirstWin()) {
+            if (hasBingo(player.getUniqueId())) {
+                uhcGame.setGameState(GameState.FINISH);
+                Bukkit.broadcastMessage("§7");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + player.getName() + "§a pour sa victoire en " + UHC.getInstance().getUhcManager().getGamemode().getName() + "§a avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a kill(s) !");
+                Bukkit.broadcastMessage("§7");
+                UHC.getInstance().getDiscordManager().sendWin(UHC.getUHCPlayer(player));
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    UHCPlayer uhcPlayer  = UHC.getUHCPlayer(p);
+                    p.sendMessage("§8┃ §fRécapitulatif de votre partie:");
+                    p.sendMessage("§7");
+                    p.sendMessage("§8§l» §3Kills: §e" + uhcPlayer.getKills());
+                    p.sendMessage("§8§l» §3Morts: §e" + uhcPlayer.getDeath());
+                    if (uhcPlayer.getRole() != null)
+                        p.sendMessage("§8§l» §3Rôle: §e" + uhcPlayer.getRole().getName());
+                }
+
+                Bukkit.broadcastMessage("§7");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
+                Bukkit.broadcastMessage("§7");
+                PlayersUtils.finishToSpawn();
+                Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
+            }
+        } else {
+            if (hasBingo(player.getUniqueId())) {
+                finished.add(UHC.getUHCPlayer(player));
+                Bukkit.broadcastMessage("§7");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §aFélicitations au joueur " + player.getName() + "§a avoir finit sa grille à la §3" + finished.size() + " §aplace avec §b" + uhcGame.getUhcData().getUhcPlayerList().get(0).getKills() + "§a kill(s) !");
+                Bukkit.broadcastMessage("§7");
+                if (!uhcGame.getUhcConfig().getAllowSpec().equals("nobody")){
+                    player.setGameMode(GameMode.SPECTATOR);
+                    player.teleport(WorldManager.getCenterLoc());
+                } else {
+                    player.kickPlayer(UHC.getInstance().getPrefix() + " §7Je suis navré de devoir vous expulser car les spectateurs sont désactivés dans cette partie, néanmoins je vous attend pour revenir dès la prochaine partie !");
+                }
+                uhcGame.getUhcData().getUhcPlayerList().remove(UHC.getUHCPlayer(player));
+                SoundUtils.playSoundToAll(Sound.WITHER_SPAWN);
             }
 
-            Bukkit.broadcastMessage("§7");
-            Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
-            Bukkit.broadcastMessage("§7");
-            PlayersUtils.finishToSpawn();
-            Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
+            AtomicBoolean a = new AtomicBoolean(false);
+            UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().forEach(uhcPlayer -> {
+                if (!finished.contains(uhcPlayer))
+                    a.set(true);
+            });
+            if (!a.get()) {
+                uhcGame.setGameState(GameState.FINISH);
+                UHC.getInstance().getDiscordManager().sendWin(UHC.getUHCPlayer(player));
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    UHCPlayer uhcPlayer  = UHC.getUHCPlayer(p);
+                    p.sendMessage("§8┃ §fRécapitulatif de votre partie:");
+                    p.sendMessage("§7");
+                    p.sendMessage("§8§l» §3Kills: §e" + uhcPlayer.getKills());
+                    p.sendMessage("§8§l» §3Morts: §e" + uhcPlayer.getDeath());
+                    if (uhcPlayer.getRole() != null)
+                        p.sendMessage("§8§l» §3Rôle: §e" + uhcPlayer.getRole().getName());
+                }
+
+                Bukkit.broadcastMessage("§7");
+                Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §cArrêt automatique du serveur dans 5 minutes !");
+                Bukkit.broadcastMessage("§7");
+                PlayersUtils.finishToSpawn();
+                Bukkit.getScheduler().runTaskLater(UHC.getInstance(), Bukkit::shutdown, TimeUtils.minutes(5));
+            }
         }
     }
 

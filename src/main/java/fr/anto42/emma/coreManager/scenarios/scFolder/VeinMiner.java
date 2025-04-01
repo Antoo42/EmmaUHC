@@ -67,7 +67,6 @@ public class VeinMiner extends UHCScenario {
                 }
 
                 Block b = blocksToBreak.get(index);
-                SoundUtils.playSoundToPlayer(e.getPlayer(), Sound.DIG_STONE);
                 b.setType(Material.AIR);
                 index++;
             }

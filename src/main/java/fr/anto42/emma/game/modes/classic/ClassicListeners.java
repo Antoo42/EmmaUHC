@@ -42,7 +42,7 @@ public class ClassicListeners implements Listener {
                 UHCTeam uhcTeam1 = victim.getUhcTeam();
                 victim.leaveTeam();
                 Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
-                    if (uhcTeam1.getAliveUhcPlayers().size() == 0) {
+                    if (uhcTeam1.getAliveUhcPlayers().isEmpty()) {
                         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), uhcTeam1::destroy, 2);
                     }
                 }, 15);

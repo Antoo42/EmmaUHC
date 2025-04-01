@@ -8,6 +8,7 @@ import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.anto42.emma.game.modes.trueLove.uis.TrueLoveGUI;
+import fr.anto42.emma.game.modes.trueLove.uis.TrueLoveRulesGUI;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import fr.anto42.emma.utils.TimeUtils;
@@ -18,7 +19,7 @@ import org.bukkit.entity.Player;
 
 public class TrueLoveModule extends Module {
     public TrueLoveModule() {
-        super("§5§lTRUE-LOVE UHC", "True Love UHC", new ItemCreator(Material.DIAMOND).get());
+        super("§5§lTRUE-LOVE UHC", "True Love UHC", new ItemCreator(Material.DOUBLE_PLANT, 1, (short) 4).get());
         super.setDev("Anto42_");
         setConfigurable(true);
         setkInventory(new TrueLoveGUI(this).getkInventory());
@@ -140,6 +141,6 @@ public class TrueLoveModule extends Module {
 
     @Override
     public KInventory getConfigGUI() {
-        return null;
+        return new TrueLoveRulesGUI(this).getkInventory();
     }
 }

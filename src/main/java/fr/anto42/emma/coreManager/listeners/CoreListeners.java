@@ -220,6 +220,7 @@ public class CoreListeners implements Listener {
                     });
                 } else {
                     player.setGameMode(GameMode.SPECTATOR);
+                    sendSpecMessage(uhcPlayer);
                     player.teleport(WorldManager.getCenterLoc());
                 }
             }
@@ -236,6 +237,19 @@ public class CoreListeners implements Listener {
         }, 20L);
     }
 
+
+    private void sendSpecMessage(UHCPlayer uhcPlayer) {
+        uhcPlayer.sendClassicMessage("§e§lMODE SPECTATEUR");
+        uhcPlayer.sendMessage("");
+        uhcPlayer.sendMessage(" §8§l» §cMalheuresement, la partie a déjà démarrée§7, par conséquence, vous pouvez vous déplacer librement sur la carte.");
+        uhcPlayer.sendMessage("");
+        uhcPlayer.sendMessage(" §8§l» §a§lINFOS DE LA PARTIE");
+        uhcPlayer.sendMessage("");
+        uhcPlayer.sendMessage(" §8§l» §eTimer: §a" + TimeUtils.getFormattedTime(uhc.getUhcData().getTimer()));
+        uhcPlayer.sendMessage(" §8§l» §eJoueurs restants: §a" + uhc.getUhcData().getUhcPlayerList().size());
+        uhcPlayer.sendMessage(" §8§l» §eMode de jeu: " + uhcCore.getUhcManager().getGamemode().getName());
+        uhcPlayer.sendMessage("");
+    }
 
     @EventHandler
     public void onLate(LateEvent event){
