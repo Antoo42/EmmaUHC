@@ -2,6 +2,7 @@ package fr.anto42.emma.coreManager.uis.rules;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.Module;
+import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.uis.config.EnchantsConfigGUI;
 import fr.anto42.emma.coreManager.uis.config.SettingsConfigGUI;
 import fr.anto42.emma.coreManager.uis.config.StuffConfigGUI;
@@ -60,8 +61,7 @@ public class RulesGUI {
         gamemode.setDescription(strings);
         kInventory.setElement(11, gamemode);
 
-        KItem scenarios = new KItem(new ItemCreator(Material.BOOK).name("§8┃ §fScenarios").lore("", "§8┃ §6Consultez §fles différents scénarios activés dans la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
-
+        KItem scenarios = new KItem(new ItemCreator(Material.BOOK).name("§8┃ §fScenarios").lore("", "§8§l» §fStatut: " + UHC.getInstance().getUhcManager().getScenarioManager().getNumberScenarios() ,"", "§8┃ §6Consultez §fles différents scénarios activés dans la partie", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
         scenarios.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (UHC.getInstance().getUhcManager().getScenarioManager().getActivatedScenarios().isEmpty()){
                 UHC.getUHCPlayer(player).sendClassicMessage("§cAucun scénario n'est activé !");

@@ -55,6 +55,14 @@ public class WorldSettingsGUI {
         });
         this.kInventory.setElement(21, boost);
 
+        KItem doubleGold = new KItem(new ItemCreator(Material.GOLD_INGOT).name("§8┃ §fDouble gold").lore("", "§8§l» §fStatut: §a" + translate(uhc.getUhcConfig().isDoubleGold()), "", "§8┃ §fLes minerais de diamants donnent 2 golds", "§8┃ §fsi le joueur a sa limite de diamants minés", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
+        doubleGold.addCallback((kInventory1, item, player, clickContext) -> {
+            uhc.getUhcConfig().setDoubleGold(!uhc.getUhcConfig().isDoubleGold());
+            doubleGold.setItem(new ItemCreator(Material.GOLD_INGOT).name("§8┃ §fDouble gold").lore("", "§8§l» §fStatut: §a" + translate(uhc.getUhcConfig().isDoubleGold()), "", "§8┃ §fLes minerais de diamants donnent 2 golds", "§8┃ §fsi le joueur a sa limite de diamants minés", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
+        });
+        this.kInventory.setElement(23, doubleGold);
+
+
         KItem nether = new KItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "§8§l» §6Cliquez §fpour sélectionner.").get());
         nether.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             if (uhc.getUhcConfig().isNether()){
@@ -73,7 +81,7 @@ public class WorldSettingsGUI {
         });
         this.kInventory.setElement(33, createWorld);
 
-        KItem pregen = new KItem(new ItemCreator(SkullList.CYAN_BALL.getItemStack()).name("§8┃ §fPrégénération").lore("", "§8┃ §fAfin d'évitez les lags durant votre partie,", "§8┃ §fpré-chargez les mondes de la partie !", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
+        KItem pregen = new KItem(new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).name("§8┃ §fPrégénération").lore("", "§8┃ §fAfin d'évitez les lags durant votre partie,", "§8┃ §fpré-chargez les mondes de la partie !", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
         pregen.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
             new GenerationGUI().getkInventory().open(player);
         });

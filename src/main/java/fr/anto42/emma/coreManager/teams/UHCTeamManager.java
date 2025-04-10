@@ -208,6 +208,28 @@ public class UHCTeamManager {
         return uhcTeams.get(new Random().nextInt(uhcTeams.size()));
     }
 
+    public UHCTeam getRandomEmptyTeam() {
+        List<UHCTeam> emptyTeams = new ArrayList<>();
+
+        List<UHCTeam> sortedTeams = new ArrayList<>(getUhcTeams());
+        sortedTeams.sort((team1, team2) -> Integer.compare(team2.getPlayersAmount(), team1.getPlayersAmount()));
+
+        int a = 0;
+        for (UHCTeam uhcTeam : sortedTeams) {
+            if (a >= maxTeams) break;
+            if (uhcTeam.getPlayersAmount() == 0) {
+                emptyTeams.add(uhcTeam);
+            }
+            a++;
+        }
+
+        if (emptyTeams.isEmpty()) {
+            return null;
+        }
+
+        return emptyTeams.get(new Random().nextInt(emptyTeams.size()));
+    }
+
 
 
     public String getDisplayFormat(){

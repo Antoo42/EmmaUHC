@@ -41,6 +41,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
@@ -395,7 +396,7 @@ public class CoreListeners implements Listener {
                 case DIAMOND_ORE:
                     event.getBlock().getDrops().clear();
                     if (uhcPlayer.getDiamondMined() >= uhc.getUhcConfig().getDiamonLimit()) {
-                        uhcPlayer.safeGive(new ItemCreator(Material.GOLD_INGOT).get());
+                        uhcPlayer.safeGive(new ItemCreator(Material.GOLD_INGOT, (uhc.getUhcConfig().isDoubleGold() ? 2 : 1)).get());
                         uhcPlayer.getBukkitPlayer().giveExp(3 * uhc.getUhcConfig().getXpBoost());
                     }
                     uhcPlayer.setDiamondMined(uhcPlayer.getDiamondMined() + 1);
@@ -517,7 +518,7 @@ public class CoreListeners implements Listener {
         double score = MessageChecker.getToxicityScore(event.getMessage());
         if (score > MessageChecker.scoreAILimit) {
             event.setCancelled(true);
-            sendMessageToChannel(UHC.getInstance().getDiscordManager().getChatChannelId(), "**DELETE**: `" + event.getPlayer().getDisplayName() + ": (" + score + ") " + message + "`");
+            if (UHC.getInstance().getDiscordManager() != null) sendMessageToChannel(UHC.getInstance().getDiscordManager().getChatChannelId(), "**DELETE**: `" + event.getPlayer().getDisplayName() + ": (" + score + ") " + message + "`");
             uhcPlayer.sendModMessage("§cVotre message a été supprimé après une analyse jugée toxique. §7(§eScoreAI§7: §a" + score * 100 + "%§7)");
             UHC.getInstance().getGameSave().registerChat(uhcPlayer.getBukkitPlayer(), score, message);
             SoundUtils.playSoundToPlayer(event.getPlayer(), Sound.VILLAGER_NO);
@@ -532,7 +533,7 @@ public class CoreListeners implements Listener {
         } else {
             event.setFormat(rolePrefix + uhcPlayer.getName() + " §8§l» §f" + message);
         }
-        sendMessageToChannel(UHC.getInstance().getDiscordManager().getChatChannelId(), "`" + event.getPlayer().getDisplayName() + ": (" + score + ") " + event.getMessage() + "`");
+        if (UHC.getInstance().getDiscordManager() != null) sendMessageToChannel(UHC.getInstance().getDiscordManager().getChatChannelId(), "`" + event.getPlayer().getDisplayName() + ": (" + score + ") " + event.getMessage() + "`");
         UHC.getInstance().getGameSave().registerChat(uhcPlayer.getBukkitPlayer(), score, message);
     }
 
@@ -564,6 +565,14 @@ public class CoreListeners implements Listener {
 
     @EventHandler
     public void onInvMove(InventoryMoveItemEvent event){
+        if (uhc.getGameState() != GameState.PLAYING){
+            event.setCancelled(true);
+        }
+    }
+
+
+    @EventHandler
+    public void onDragInv(InventoryDragEvent event){
         if (uhc.getGameState() != GameState.PLAYING){
             event.setCancelled(true);
         }

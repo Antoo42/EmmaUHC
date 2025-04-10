@@ -52,7 +52,7 @@ public class GameSavedPlayerListGUI {
         int slot = 9;
         for (int i = start; i < end; i++) {
             PlayerStats playerStats = UHC.getInstance().getSaveSerializationManager().fromString(playerDataList.get(i));
-            KItem kItem = new KItem(new ItemCreator(SkullUtils.getCustomHead(playerStats.getName()))
+            KItem kItem = new KItem(new ItemCreator(Material.PAPER)
                     .name("§8┃ §c" + playerStats.getName()).get());
 
             kItem.setDescription(player1 -> {

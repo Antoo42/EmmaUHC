@@ -4,6 +4,7 @@ import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.scenarios.scFolder.*;
 import org.bukkit.Bukkit;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -69,6 +70,9 @@ public class ScenarioManager {
         getInitialScenarioList().add(new Depths(this));
         getInitialScenarioList().add(new NoSprint(this));
         getInitialScenarioList().add(new Paranoia(this));
+        getInitialScenarioList().add(new NoAbso(this));
+        getInitialScenarioList().add(new DoubleJump(this));
+        getInitialScenarioList().add(new BookCeption(this));
         UHC.getInstance().getUhcGame().getUhcConfig().getScenarios().forEach(s -> {
             for (UHCScenario uhcScenario : getInitialScenarioList()) {
                 if (uhcScenario.getName().equalsIgnoreCase(s))
@@ -105,6 +109,13 @@ public class ScenarioManager {
     public void disableScenario(UHCScenario uhcScenario){
         getActivatedScenarios().remove(uhcScenario);
         uhcScenario.onDisable();
+    }
+
+    public String getNumberScenarios() {
+        if (UHC.getInstance().getUhcGame().getUhcConfig().isHideScenarios()) {
+            return "§cScénarios cachés";
+        }
+        else return "§e" + getActivatedScenarios().size() + "§7/§b" + getInitialScenarioList().size();
     }
 
     public String getFormattedScenarios() {

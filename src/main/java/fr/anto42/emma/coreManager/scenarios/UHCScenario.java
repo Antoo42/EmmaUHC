@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.scenarios;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
 import fr.blendman974.kinventory.inventories.KInventory;
 import org.bukkit.event.Listener;
@@ -21,7 +22,7 @@ public abstract class UHCScenario implements Listener {
         setScenarioType(ScenarioType.OTHER);
         this.name = name;
         this.scenarioManager = scenarioManager;
-        this.desc = "§cAucune information.";
+        this.desc = "§8┃ §cAucune information.";
         this.itemStack = itemStack;
     }
 
@@ -46,7 +47,7 @@ public abstract class UHCScenario implements Listener {
     }
 
     public boolean isActivated(){
-        return scenarioManager.getActivatedScenarios().contains(this);
+        return scenarioManager.getActivatedScenarios().contains(this) && uhcGame.getGameState().equals(GameState.PLAYING);
     }
 
     public boolean isConfigurable() {

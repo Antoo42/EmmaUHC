@@ -39,7 +39,7 @@ public class WorldConfigInRulesGUI {
         this.kInventory.setElement(49, back);
 
         KItem nether = new KItem(new ItemCreator(Material.NETHERRACK).name("§8┃ §cNether").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isNether()), "", "§8┃ §fSouhaitez-vous activer le §cNether §f?", "", "", "§8§l» §cVous ne pouvez pas modifié cela.").get());
-        this.kInventory.setElement(21, nether);
+        this.kInventory.setElement(20, nether);
 
 
         KItem cleanCenter = new KItem(new ItemCreator(SkullList.CYAN_BALL.getItemStack()).name("§8┃ §fCentre propre").lore("", "§8§l» §fStatut: " + translate(WorldManager.isClean()), "", "§8┃ §fNettoyer le centre afin que ce dernier", "§8┃ §fsoit §asans eau","", "§c§o  Cette option n'est pas désactivable !", "", "§8§l» §cVous ne pouvez pas modifié cela.").get());
@@ -50,7 +50,7 @@ public class WorldConfigInRulesGUI {
         this.kInventory.setElement(31, roofed);
 
         KItem end = new KItem(new ItemCreator(SkullList.ENDERDRAGON_BALL.getItemStack()).name("§8┃ §3End").lore("", "§8§l» §fStatut: " + translate(uhc.getUhcConfig().isEnd()), "", "§8┃ §fSouhaitez-vous activer l'§3End §f?", "", "§8§l» §cVous ne pouvez pas modifié cela.").get());
-        this.kInventory.setElement(23, end);
+        this.kInventory.setElement(22, end);
 
         KItem initialSize = new KItem(new ItemCreator(SkullList.EARTH.getItemStack()).name("§8┃ §fTaille initiale").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getStartBorderSize() + "§f blocks", "", "§8┃ §fParamètrez le rayon initial de la bordure", "", "", "§8§l» §cVous ne pouvez pas modifié cela.").get());
         this.kInventory.setElement(11, initialSize);
@@ -63,6 +63,9 @@ public class WorldConfigInRulesGUI {
 
         KItem boost = new KItem(new ItemCreator(Material.DIAMOND_ORE).name("§8┃ §fBoost de minerais").lore("", "§8§l» §fStatut: §c" + uhc.getUhcConfig().getBoostMultiplier() + "%", "", "§8┃ §fL'outil parfait pour miner moins longtemps", "", "§c§o  Afin que le boost prenne effet,", "§c§o  vous devez prégener la carte de jeu", "", "§8§l» §cVous ne pouvez pas modifié cela.").get());
         this.kInventory.setElement(33, boost);
+
+        KItem doubleGold = new KItem(new ItemCreator(Material.GOLD_INGOT).name("§8┃ §fDouble gold").lore("", "§8§l» §fStatut: §a" + translate(uhc.getUhcConfig().isDoubleGold()), "", "§8┃ §fLes minerais de diamants donnent 2 golds", "§8┃ §fsi le joueur a sa limite de diamants minés", "", "§8§l» §cVous ne pouvez pas modifié cela.").get());
+        this.kInventory.setElement(24, doubleGold);
 
         KItem settings = new KItem(new ItemCreator(Material.REDSTONE_COMPARATOR).name("§8┃ §fParamètres").lore("", "§8┃ §fVous cherchez à §6paramétrer §fle déroulement de votre partie ?", "§8┃ §fVous êtes §aau bon endroit§f !", "","§8§l» §6Cliquez §fpour ouvrir").get());
         settings.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {

@@ -7,6 +7,7 @@ import fr.anto42.emma.coreManager.scenarios.UHCScenario;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 
 public class NoNameTag extends UHCScenario {
     public NoNameTag(ScenarioManager scenarioManager) {
@@ -25,4 +26,5 @@ public class NoNameTag extends UHCScenario {
             Bukkit.getOnlinePlayers().forEach(player -> player.setDisplayName(""));
         }, 0L, 30L);
     }
+
 }

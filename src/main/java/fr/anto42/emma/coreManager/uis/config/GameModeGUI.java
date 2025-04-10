@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.uis.config;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.Module;
 import fr.anto42.emma.coreManager.UHCManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.utils.materials.ItemCreator;
@@ -42,11 +43,13 @@ public class GameModeGUI {
     }
 
     private void setupGamemodes() {
-        uhcManager.getModuleList().forEach(module -> {
+        uhcManager.getModuleList().stream()
+                .sorted(Comparator.comparing(Module::getDiscordName))
+                .forEach(module -> {
             List<String> strings = new ArrayList<>();
             strings.add("§8" + module.getVersion());
             strings.add("");
-            strings.addAll(module.getDesc().isEmpty() ? Arrays.asList("§8┃ §cAucune information.") : module.getDesc());
+            strings.addAll(module.getDesc().isEmpty() ? Collections.singletonList("§8┃ §cAucune information.") : module.getDesc());
             strings.add("");
             strings.add("§8§l» §fStatut: " + (module == uhcManager.getGamemode() ? "§aactivé" : "§cdésactivé"));
             strings.add("");

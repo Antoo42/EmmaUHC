@@ -3,6 +3,7 @@ package fr.anto42.emma.coreManager.uis.teams;
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
+import fr.anto42.emma.game.modes.slaveMarket.SlaveModule;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.skulls.SkullList;
 import fr.blendman974.kinventory.inventories.KInventory;
@@ -59,6 +60,7 @@ public class TeamPlayersGUI {
             lore.add("§8§l» §6Cliquez §fpour exclure.");
             kItem.setDescription(lore);
             kItem.addCallback((kInventory1, item, player, clickContext) -> {
+                if (UHC.getInstance().getUhcManager().getGamemode() instanceof SlaveModule) return;
                 if (uhcPlayer.getKickPlayer() == null) {
                     if (UHC.getUHCPlayer(player).getUuid() == uhcPlayer.getUuid()) return;
                     uhcPlayer.startKickPlayer(UHC.getUHCPlayer(player));

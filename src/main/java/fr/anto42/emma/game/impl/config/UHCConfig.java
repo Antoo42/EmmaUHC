@@ -227,6 +227,16 @@ public class UHCConfig {
         this.diamonLimit = diamonLimit;
     }
 
+    private boolean doubleGold = false;
+
+    public boolean isDoubleGold() {
+        return doubleGold;
+    }
+
+    public void setDoubleGold(boolean doubleGold) {
+        this.doubleGold = doubleGold;
+    }
+
     private boolean bowLife = false;
 
     public boolean isBowLife() {
