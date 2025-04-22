@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoteSystem {
-    private VoteSystem instance;
+    private final VoteSystem instance;
 
     public VoteSystem() {
         instance = this;
@@ -69,9 +69,5 @@ public class VoteSystem {
 
     public boolean isVote() {
         return vote;
-    }
-
-    public void setVote(boolean vote) {
-        this.vote = vote;
     }
 }

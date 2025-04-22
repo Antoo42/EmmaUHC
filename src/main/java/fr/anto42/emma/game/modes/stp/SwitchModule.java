@@ -11,6 +11,7 @@ import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.UHCGame;
+import fr.anto42.emma.utils.gameSaves.EventType;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.PlayersUtils;
 import fr.anto42.emma.utils.TimeUtils;
@@ -213,6 +214,7 @@ public class SwitchModule extends Module {
 
             uhcPlayer.sendClassicMessage("§7Vous avez été échangé(e) avec §e" + uhcPlayer1.getName() + " §7(" + uhcPlayer.getUhcTeam().getDisplayName() + ")");
             uhcPlayer1.sendClassicMessage("§7Vous avez été échangé(e) avec §e" + uhcPlayer.getName() + " §7(" + uhcPlayer1.getUhcTeam().getDisplayName() + ")");
+            UHC.getInstance().getGameSave().registerEvent(EventType.MODULE, "switch de " + uhcPlayer.getName() + " et " + uhcPlayer1.getName());
 
         }
     }

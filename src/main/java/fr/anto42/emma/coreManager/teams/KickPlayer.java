@@ -11,7 +11,7 @@ public class KickPlayer {
     private final UHCPlayer target;
     private int yes = 0;
     private int no = 1;
-    private List<UHCPlayer> voted = new ArrayList<>();
+    private final List<UHCPlayer> voted = new ArrayList<>();
 
     public KickPlayer(UHCPlayer target) {
         this.target = target;
@@ -27,10 +27,6 @@ public class KickPlayer {
         return yes;
     }
 
-    public void setYes(int yes) {
-        this.yes = yes;
-    }
-
     public int getNo() {
         return no;
     }
@@ -41,10 +37,6 @@ public class KickPlayer {
 
     public List<UHCPlayer> getVoted() {
         return voted;
-    }
-
-    public void setVoted(List<UHCPlayer> voted) {
-        this.voted = voted;
     }
 
     public void addYesVote(UHCPlayer uhcPlayer) {
@@ -60,8 +52,8 @@ public class KickPlayer {
 
 
         UHCTeam uhcTeam = uhcPlayer.getUhcTeam();
-        double recquired = uhcTeam.getPlayersAmount()*0.6;
-        if (recquired <= yes) {
+        double required= uhcTeam.getPlayersAmount()*0.6;
+        if (required <= yes) {
             uhcTeam.broadcastMessage("§e" + target.getName() + " §c a été exclu !");
             target.leaveTeam();
         }

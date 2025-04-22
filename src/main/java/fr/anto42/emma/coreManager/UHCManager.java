@@ -12,8 +12,6 @@ import fr.anto42.emma.coreManager.worldManager.WorldManager;
 import fr.anto42.emma.game.modes.bingo.BingoModule;
 import fr.anto42.emma.game.modes.classic.ClassicModule;
 import fr.anto42.emma.game.modes.deathNote.DeathNoteModule;
-import fr.anto42.emma.game.modes.lg.LGModule;
-import fr.anto42.emma.game.modes.oldDN.DNModule;
 import fr.anto42.emma.game.modes.slaveMarket.SlaveModule;
 import fr.anto42.emma.game.modes.stp.SwitchModule;
 import fr.anto42.emma.game.modes.taupeGun.TGModule;

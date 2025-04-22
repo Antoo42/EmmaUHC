@@ -9,6 +9,7 @@ import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.GameState;
 import fr.anto42.emma.game.modes.taupeGun.impl.TRole;
 import fr.anto42.emma.game.modes.taupeGun.utils.GameUtils;
+import fr.anto42.emma.utils.gameSaves.EventType;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.players.SoundUtils;
 import org.bukkit.Bukkit;
@@ -78,6 +79,7 @@ public class SuperTaupe extends TRole {
             getUhcPlayer().joinTeam(getTaupeTeam());
             getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
             Bukkit.broadcastMessage("§6§lUHC §8§l» §c§l" + getUhcPlayer().getName() + "§7 se rèvéle être une §c§ltaupe §7!");
+            UHC.getInstance().getGameSave().registerEvent(EventType.ROLE,getUhcPlayer().getName() + " annonce être une taupe.");
             SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
             setReveal(true);
         } else {
@@ -85,6 +87,7 @@ public class SuperTaupe extends TRole {
             getUhcPlayer().joinTeam(UHCTeamManager.getInstance().createNewTeam("Super-Taupe", "§4§lS-TAUPE §4☠ ", DyeColor.RED, 14, "§4"));
             getUhcPlayer().safeGive(new ItemCreator(Material.GOLDEN_APPLE).get());
             Bukkit.broadcastMessage("§6§lUHC §8§l» §c§l" + getUhcPlayer().getName() + "§7 se rèvéle être une §4§lsuper taupe §7!");
+            UHC.getInstance().getGameSave().registerEvent(EventType.ROLE,getUhcPlayer().getName() + " annonce être une SUPER taupe.");
             SoundUtils.playSoundToAll(Sound.GHAST_SCREAM);
             setSuperReveal(true);
         }

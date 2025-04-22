@@ -238,7 +238,6 @@ public class CoreListeners implements Listener {
         }, 20L);
     }
 
-
     private void sendSpecMessage(UHCPlayer uhcPlayer) {
         uhcPlayer.sendClassicMessage("§e§lMODE SPECTATEUR");
         uhcPlayer.sendMessage("");
@@ -312,7 +311,7 @@ public class CoreListeners implements Listener {
                             }
                             Bukkit.getServer().getPluginManager().callEvent(new DeathEvent(uhcPlayer, null));
                             if (uhc.getUhcConfig().isGappleOnKill()){
-                            event.getPlayer().getLocation().getWorld().dropItemNaturally(event.getPlayer().getLocation(), new ItemCreator(Material.GOLDEN_APPLE).get());
+                                event.getPlayer().getLocation().getWorld().dropItemNaturally(event.getPlayer().getLocation(), new ItemCreator(Material.GOLDEN_APPLE).get());
                             }
                             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), UHC.getInstance().getUhcManager().getGamemode()::winTester, 10L);
                             cancel();
@@ -453,8 +452,6 @@ public class CoreListeners implements Listener {
         }
     }
 
-
-
     @EventHandler
     public void onRole(RolesEvent event){
         Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
@@ -569,7 +566,6 @@ public class CoreListeners implements Listener {
             event.setCancelled(true);
         }
     }
-
 
     @EventHandler
     public void onDragInv(InventoryDragEvent event){
@@ -809,8 +805,6 @@ public class CoreListeners implements Listener {
     public void onXp(PlayerExpChangeEvent event){
         event.setAmount(event.getAmount()*uhc.getUhcConfig().getXpBoost());
     }
-
-
 
     @EventHandler
     private void onCommand(PlayerCommandPreprocessEvent event) {

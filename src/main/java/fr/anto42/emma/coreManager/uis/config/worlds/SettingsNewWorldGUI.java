@@ -41,7 +41,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createGameWorld();
+            WorldManager.createGameWorld();
         });
         this.kInventory.setElement(9, createWorld);
 
@@ -53,7 +53,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createSuperflatWorld();
+            WorldManager.createSuperflatWorld();
         });
         this.kInventory.setElement(10, superflat);
 
@@ -65,7 +65,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createAmplifiedWorld();
+            WorldManager.createAmplifiedWorld();
         });
         this.kInventory.setElement(11, amplified);
 
@@ -77,7 +77,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.NORMAL);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.NORMAL);
         });
         this.kInventory.setElement(12, cityWorld);
 
@@ -89,7 +89,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.DESTROYED);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.DESTROYED);
         });
         this.kInventory.setElement(13, destroyedCityWorld);
 
@@ -101,7 +101,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.FLOODED);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.FLOODED);
         });
         this.kInventory.setElement(14, floadedCityWorld);
 
@@ -125,7 +125,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.ASTRAL);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.ASTRAL);
         });
         this.kInventory.setElement(15, alienCityWorld);
 
@@ -137,7 +137,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.SNOWDUNES);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.SNOWDUNES);
         });
         this.kInventory.setElement(16, snowDunes);
 
@@ -149,7 +149,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.SANDDUNES);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.SANDDUNES);
         });
         this.kInventory.setElement(17, sandDunes);
 
@@ -161,7 +161,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createCityWorld(CityWorldGenerator.WorldStyle.MAZE);
+            WorldManager.createCityWorld(CityWorldGenerator.WorldStyle.MAZE);
         });
         this.kInventory.setElement(18, maze);
 
@@ -173,7 +173,7 @@ public class SettingsNewWorldGUI {
             UHC.getInstance().getUhcGame().getUhcData().setNetherPreload(false);
             UHC.getInstance().getUhcGame().getUhcData().setPreloadFinished(false);
             UHC.getInstance().getUhcGame().getUhcData().setEndPreload(false);
-            UHC.getInstance().getWorldManager().createRoofedWorld();
+            WorldManager.createRoofedWorld();
         });
         //this.kInventory.setElement(19, roofed);
 

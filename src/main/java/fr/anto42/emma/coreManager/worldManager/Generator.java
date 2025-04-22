@@ -20,13 +20,26 @@ import java.util.Queue;
 import java.util.Random;
 
 public class Generator {
+    private static final int CHUNK_SIZE = 16;
+    private static final int DEFAULT_CHUNKS_PER_TICK = 20;
+    private static final int CHUNKS_PER_TICK_LIMIT = 60;
+    private static final int PROGRESS_UPDATE_STEP = 100;
+    private static final int STABLE_TICKS_DECREASE = 30;
+    private static final int STABLE_TICKS_INCREASE = 50;
+
     private final World world;
     private final int size;
+    private final Queue<int[]> chunkQueue = new LinkedList<>();
+    private final SurgarCanePopulator sugarCanePopulator = new SurgarCanePopulator(100);
+    private final OrePopulator orePopulator = UHC.getInstance().getWorldManager().getOrePopulator();
+    private final GiantCavePopulator giantCavePopulator = new GiantCavePopulator(UHC.getInstance(), new GCConfig());
+    private final Random random = new Random();
+
     private BukkitTask task;
     private int completedChunks = 0;
     private long startTime;
-    private final SurgarCanePopulator sugarCanePopulator = new SurgarCanePopulator(100);
-    private final Queue<int[]> chunkQueue = new LinkedList<>();
+    private int chunksPerTick = DEFAULT_CHUNKS_PER_TICK;
+    private int stableTicks = 0;
 
     public Generator(World world) {
         this.size = UHC.getInstance().getUhcGame().getUhcConfig().getStartBorderSize() + 200;
@@ -34,36 +47,23 @@ public class Generator {
         world.setGameRuleValue("randomTickSpeed", "0");
         prepareQueue();
         startGeneration();
-        giantCavePopulator = new GiantCavePopulator(UHC.getInstance(), new GCConfig());
     }
 
     private void prepareQueue() {
-        for (int x = -size; x < size; x += 16) {
-            for (int z = -size; z < size; z += 16) {
+        for (int x = -size; x < size; x += CHUNK_SIZE) {
+            for (int z = -size; z < size; z += CHUNK_SIZE) {
                 chunkQueue.add(new int[]{x, z});
             }
         }
     }
-    int chunksPerTick = 20;
-    int limit = 50;
 
-    public void setChunksPerTick(int chunksPerTick) {
-        this.chunksPerTick = chunksPerTick;
+    private void adjustChunksPerTick(int delta) {
+        chunksPerTick = Math.max(1, Math.min(CHUNKS_PER_TICK_LIMIT, chunksPerTick + delta));
     }
-
-    public void addChunksPerTick() {
-        this.chunksPerTick++;
-    }
-    public void removeChunksPerTick() {
-        this.chunksPerTick--;
-    }
-
-    int stableTicks = 0;
 
     private void startGeneration() {
-        if (WorldManager.getInGeneration() != null) {
-            return;
-        }
+        if (WorldManager.getInGeneration() != null) return;
+
         UHC.getInstance().getGameSave().registerEvent(EventType.CORE, "Lancement de la prégen du monde " + world.getName());
         PlayersUtils.broadcastMessage("§8§l» §7Lancement de la prégénération du monde §a" + world.getName() + "§7...");
         PlayersUtils.broadcastMessage("§8§l» §cLe serveur peut subir des ralentissements ! Évitez de lancer la partie durant ce processus.");
@@ -74,21 +74,17 @@ public class Generator {
         this.task = Bukkit.getScheduler().runTaskTimer(UHC.getInstance(), () -> {
             double tps = MinecraftServer.getServer().recentTps[0];
 
-            if (tps < 16D && chunksPerTick > 0) {
-                if (stableTicks < 30) {
-                    stableTicks++;
-                } else {
-                    setChunksPerTick(chunksPerTick - 5);
+            if (tps < 16D && chunksPerTick > 1) {
+                stableTicks++;
+                if (stableTicks >= STABLE_TICKS_DECREASE) {
+                    adjustChunksPerTick(-5);
                     stableTicks = 0;
-                    //PlayersUtils.broadcastMessage("§8§l» §e⚠ Réduction du rythme de génération pour préserver les performances.");
                 }
-            } else if (tps > 18.5D && chunksPerTick < limit) {
-                if (stableTicks < 50) {
-                    stableTicks++;
-                } else {
+            } else if (tps > 18.5D && chunksPerTick < CHUNKS_PER_TICK_LIMIT) {
+                stableTicks++;
+                if (stableTicks >= STABLE_TICKS_INCREASE) {
+                    adjustChunksPerTick(5);
                     stableTicks = 0;
-                    setChunksPerTick(chunksPerTick + 5);
-                    //PlayersUtils.broadcastMessage("§8§l» §a✔ Augmentation du rythme de génération, serveur stable !");
                 }
             }
 
@@ -104,19 +100,17 @@ public class Generator {
             }
         }, 0L, 1L);
     }
-    OrePopulator orePopulator = UHC.getInstance().getWorldManager().getOrePopulator();
-    GiantCavePopulator giantCavePopulator;
-    Random random = new Random();
+
     private void generateChunk(int x, int z) {
         Bukkit.getScheduler().runTask(UHC.getInstance(), () -> {
             try {
                 Chunk chunk = world.getChunkAt(world.getBlockAt(x, 64, z));
                 chunk.load(true);
                 orePopulator.populate(chunk.getWorld(), random, chunk);
-                //giantCavePopulator.populate(chunk.getWorld(), new Random(), chunk);
+                //giantCavePopulator.populate(chunk.getWorld(), random, chunk);
                 chunk.load(false);
                 completedChunks++;
-                if (completedChunks % 100 == 0) {
+                if (completedChunks % PROGRESS_UPDATE_STEP == 0) {
                     updateProgress();
                 }
             } catch (Exception e) {
@@ -126,11 +120,11 @@ public class Generator {
     }
 
     private void updateProgress() {
-        int totalChunks = (size * 2 / 16) * (size * 2 / 16);
+        int totalChunks = (size * 2 / CHUNK_SIZE) * (size * 2 / CHUNK_SIZE);
         int percentage = completedChunks * 100 / totalChunks;
 
         long elapsedTime = System.currentTimeMillis() - startTime;
-        long estimatedTimeMs = (elapsedTime / completedChunks) * (totalChunks - completedChunks);
+        long estimatedTimeMs = completedChunks == 0 ? 0 : (elapsedTime / completedChunks) * (totalChunks - completedChunks);
         int minutes = (int) (estimatedTimeMs / 1000 / 60);
         int seconds = (int) (estimatedTimeMs / 1000 % 60);
 

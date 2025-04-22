@@ -42,10 +42,6 @@ public class UHCTeam {
         return prefix;
     }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
     public String getColor() {
         return color;
     }

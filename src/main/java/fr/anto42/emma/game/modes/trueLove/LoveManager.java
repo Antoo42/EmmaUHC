@@ -5,6 +5,7 @@ import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.game.GameState;
+import fr.anto42.emma.utils.gameSaves.EventType;
 import org.bukkit.GameMode;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -30,6 +31,7 @@ public class LoveManager extends BukkitRunnable {
                         uhcPlayers.joinTeam(uhcTeam);
                         uhcPlayer.sendClassicMessage("§7Vous êtes tombé amoureux(se) de §d§l" + uhcPlayers.getName() + " §7!");
                         uhcPlayers.sendClassicMessage("§7Vous êtes tombé amoureux(se) de §d§l" + uhcPlayer.getName() + " §7!");
+                        UHC.getInstance().getGameSave().registerEvent(EventType.MODULE, uhcPlayer.getName() + " et " + uhcPlayers.getName() + " tombent amoureux l'un de l'autre.");
                         UHC.getInstance().getUhcManager().getGamemode().winTester();
                     }
                 });

@@ -133,6 +133,11 @@ public class ScenariosConfigGUI {
                 } else if (kInventoryClickContext.getClickType().isRightClick() && uhcScenario.isConfigurable()) {
                     uhcScenario.getkInventory().open(player);
                 }
+                kItem.setItem(new ItemCreator(uhcScenario.getItemStack())
+                        .name("§8┃ §f" + (!uhcScenario.isAvaible() ? "§c" : "") + uhcScenario.getName())
+                        .lore("", "§8§l» §fStatut: " + (uhcScenario.isActivated() ? "§aactivé" : "§cdésactivé"), "", uhcScenario.getDesc(), "",
+                                "§8§l» §fType: §6" + uhcScenario.getScenarioType().getTypeName(), "", (uhcScenario.isAvaible() ? "§8§l» §6Clique-gauche §fpour sélectionner." : "§8§l» §cCe scénario n'est pas disponible pour le moment."), (uhcScenario.isConfigurable() ? "§8§l» §6Clique-droit §fpour configurer." : ""))
+                        .get());
             });
 
             this.kInventory.setElement(slot++, kItem);
