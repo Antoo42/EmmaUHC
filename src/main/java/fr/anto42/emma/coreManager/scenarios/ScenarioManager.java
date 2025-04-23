@@ -73,6 +73,15 @@ public class ScenarioManager {
         getInitialScenarioList().add(new NoAbso(this));
         getInitialScenarioList().add(new DoubleJump(this));
         getInitialScenarioList().add(new BookCeption(this));
+        getInitialScenarioList().add(new ExplodingOres(this));
+        getInitialScenarioList().add(new MidasTouch(this));
+        getInitialScenarioList().add(new KnockbackMadness(this));
+        getInitialScenarioList().add(new InventoryRoulette(this));
+        getInitialScenarioList().add(new ZombiePlayer(this));
+        getInitialScenarioList().add(new CompressedOres(this));
+        getInitialScenarioList().add(new Overcook(this));
+        getInitialScenarioList().add(new Netheribus(this));
+        getInitialScenarioList().add(new ExpDrain(this));
         UHC.getInstance().getUhcGame().getUhcConfig().getScenarios().forEach(s -> {
             for (UHCScenario uhcScenario : getInitialScenarioList()) {
                 if (uhcScenario.getName().equalsIgnoreCase(s))

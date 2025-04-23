@@ -82,7 +82,7 @@ public class SaveCommand extends Command {
         uhcPlayer.sendClassicMessage(" §aL'inventaire de départ a été modifié avec succès !");
 
         uhcPlayer.getBukkitPlayer().setGameMode(GameMode.SURVIVAL);
-        uhcPlayer.getBukkitPlayer().teleport(UHC.getInstance().getWorldManager().getSpawnLocation());
+        uhcPlayer.getBukkitPlayer().teleport(WorldManager.getSpawnLocation());
 
         uhcPlayer.getBukkitPlayer().getInventory().clear();
         uhcPlayer.getBukkitPlayer().getInventory().setHelmet(null);

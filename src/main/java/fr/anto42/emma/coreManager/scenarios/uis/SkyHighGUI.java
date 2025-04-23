@@ -59,7 +59,7 @@ public class SkyHighGUI {
             }
             layer.setItem(new ItemCreator(SkullList.ORANGE_BALL.getItemStack()).name("§8┃ §fCouche limite").lore("", "§8§l» §fStatut: §c" + skyHigh.getyLayer(), "", "§8┃ §6Configurez §fla couche §eY§f limite", "§8┃ §fsous laquelle les joueurs prendront des dégâts", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit §fpour enlever 1.").get());
         });
-        this.kInventory.setElement(13, layer);
+        this.kInventory.setElement(20, layer);
 
         KItem ping = new KItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fLatence entre chaque dégâts").lore("", "§8§l» §fStatut: §c" + skyHigh.getDelay() + "§f secondes", "", "§8┃ §6Configurez §fle temps entre chaque dégâts", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit §fpour enlever 1.").get());
         ping.addCallback((kInventoryRepresentation, itemStack, player, kInventoryClickContext) -> {
@@ -74,7 +74,7 @@ public class SkyHighGUI {
             }
             ping.setItem(new ItemCreator(SkullList.RED_BALL.getItemStack()).name("§8┃ §fLatence entre chaque dégâts").lore("", "§8§l» §fStatut: §c" + skyHigh.getDelay() + "§f secondes", "", "§8┃ §6Configurez §fle temps entre chaque dégâts", "", "§8§l» §6Clique-gauche §fpour ajouter 1.", "§8§l» §6Clique-droit §fpour enlever 1.").get());
         });
-        this.kInventory.setElement(15, ping);
+        this.kInventory.setElement(24, ping);
     }
 
     public KInventory getkInventory() {
