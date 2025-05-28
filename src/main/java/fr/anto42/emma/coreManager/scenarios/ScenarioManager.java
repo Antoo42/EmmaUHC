@@ -82,6 +82,7 @@ public class ScenarioManager {
         getInitialScenarioList().add(new Overcook(this));
         getInitialScenarioList().add(new Netheribus(this));
         getInitialScenarioList().add(new ExpDrain(this));
+        getInitialScenarioList().add(new Microwave(this));
         UHC.getInstance().getUhcGame().getUhcConfig().getScenarios().forEach(s -> {
             for (UHCScenario uhcScenario : getInitialScenarioList()) {
                 if (uhcScenario.getName().equalsIgnoreCase(s))

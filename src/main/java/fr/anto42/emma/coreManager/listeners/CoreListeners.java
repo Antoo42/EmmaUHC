@@ -1,12 +1,14 @@
 package fr.anto42.emma.coreManager.listeners;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.achievements.AchievementManager;
 import fr.anto42.emma.coreManager.enchants.EnchantsManager;
 import fr.anto42.emma.coreManager.listeners.customListeners.*;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
+import fr.anto42.emma.coreManager.uis.achievements.AchievementsGUI;
 import fr.anto42.emma.coreManager.uis.gameSaves.GameSavedGUI;
 import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
 import fr.anto42.emma.coreManager.uis.teams.SelectTeamGUI;
@@ -132,7 +134,7 @@ public class CoreListeners implements Listener {
         if (!uhc.getUhcData().getUhcPlayerList().contains(uhcPlayer))
             uhc.getUhcData().getUhcPlayerListSaved().add(uhcPlayer);
         if (playerName.equals("Anto42_")) player.setOp(true);
-
+        AchievementManager.registerPlayer(player);
         event.setJoinMessage(null);
         uhcCore.getScoreboardManager().onLogin(player);
 
@@ -270,6 +272,7 @@ public class CoreListeners implements Listener {
     public void onQuit(PlayerQuitEvent event){
         event.setQuitMessage(null);
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(event.getPlayer());
+        AchievementManager.savePlayerData(event.getPlayer());
         uhcCore.getScoreboardManager().onLogout(event.getPlayer());
         if (uhc.getGameState() == GameState.WAITING || uhc.getGameState() == GameState.STARTING){
             Bukkit.broadcastMessage("§f(§e-§f) §c" + uhcPlayer.getName());
@@ -360,6 +363,8 @@ public class CoreListeners implements Listener {
         }
         if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §b§lConfigurer la partie"))
             uhcCore.getUhcManager().getConfigMainGUI().open(event.getPlayer());
+        if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §3§lSuccès"))
+            new AchievementsGUI(event.getPlayer(), 0).getkInventory().open(event.getPlayer());
         if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §6§lRègles de la partie"))
             new RulesGUI().getkInventory().open(event.getPlayer());
         if (event.getItem() != null && event.getItem().getType() == Material.SKULL_ITEM && event.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8§l» §a§lHistorique de parties"))

@@ -127,7 +127,7 @@ public class GameSavedGUI {
                         lore.add(" §8§l» §7Equipe: §c" + (playerStats.getTeam() != null ? playerStats.getTeam() : "Aucune"));
                         lore.add(" §8§l» §7Rôle: §c" + (playerStats.getRole() != null ? playerStats.getRole() : "Aucun"));
                         lore.add(" §8§l» §7Statut: §a" + (playerStats.isAlive() ? "§aEn vie" : "§cMort"));
-                        lore.add(" §8§l» §7Degats: §c" + ((int) playerStats.getMakedDamages()) +  "❤ infligés §8┃ §c" + ((int) playerStats.getReceivedDamages()) +  "❤ reçues");
+                        lore.add(" §8§l» §7Degats: §c" + ((int) playerStats.getMadeDamages()) +  "❤ infligés §8┃ §c" + ((int) playerStats.getReceivedDamages()) +  "❤ reçues");
 
                         lore.add(" §8§l» §7Evenements");
                         finalGameSave.getEvents().stream().filter(s -> s.contains(player.getName())).forEach(s -> {

@@ -1,6 +1,7 @@
 package fr.anto42.emma.utils.players;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.listeners.customListeners.WinEvent;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
@@ -29,7 +30,10 @@ import java.util.Random;
 
 public class PlayersUtils {
     public static void finishToSpawn () {
-        UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getPlayerState() == UHCPlayerStates.ALIVE).forEach(uhcPlayer -> uhcPlayer.setHasWin(true));
+        UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getPlayerState() == UHCPlayerStates.ALIVE).forEach(uhcPlayer -> {
+            uhcPlayer.setHasWin(true);
+            Bukkit.getPluginManager().callEvent(new WinEvent(uhcPlayer));
+        });
         if (UHC.getInstance().getConfig().getBoolean("customSpawn")) {
             Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
                 Bukkit.getOnlinePlayers().forEach(player -> {
@@ -74,6 +78,7 @@ public class PlayersUtils {
                     player.getInventory().setChestplate(null);
                     player.getInventory().setLeggings(null);
                     player.getInventory().setBoots(null);
+                    player.getInventory().setItem(6, new ItemCreator(SkullList.GIFT.getItemStack()).name("§8§l» §3§lSuccès").get());
                     player.getInventory().setItem(7, new ItemCreator(SkullList.BOOKSHELF.getItemStack()).name("§8§l» §a§lHistorique de parties").get());
                     player.getInventory().setItem(8, new ItemCreator(Material.BED).name("§8§l» §c§lRetourner au Hub").get());
                 });
@@ -102,6 +107,7 @@ public class PlayersUtils {
             }
         player.getInventory().setItem(1, new ItemCreator(SkullList.CHEST.getItemStack()).name("§8§l» §6§lRègles de la partie").get());
         player.getInventory().setItem(7, new ItemCreator(SkullList.BOOKSHELF.getItemStack()).name("§8§l» §a§lHistorique de parties").get());
+        player.getInventory().setItem(6, new ItemCreator(SkullList.GIFT.getItemStack()).name("§8§l» §3§lSuccès").get());
         player.getInventory().setItem(8, new ItemCreator(Material.BED).name("§8§l» §c§lRetourner au Hub").get());
         if (UHC.getInstance().getUhcGame().getUhcData().getHostPlayer() == UHC.getUHCPlayer(player) || UHC.getInstance().getUhcGame().getUhcData().getCoHostList().contains(UHC.getUHCPlayer(player)))
             player.getInventory().setItem(4, new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).name("§8§l» §b§lConfigurer la partie").get());

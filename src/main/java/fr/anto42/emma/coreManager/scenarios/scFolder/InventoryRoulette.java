@@ -18,7 +18,6 @@ import java.util.List;
 
 public class InventoryRoulette extends UHCScenario {
     private BukkitRunnable task;
-    private final int SHUFFLE_INTERVAL = 2400;
 
     public InventoryRoulette(ScenarioManager scenarioManager) {
         super("InventoryRoulette", new ItemStack(Material.CHEST), scenarioManager);
@@ -49,6 +48,7 @@ public class InventoryRoulette extends UHCScenario {
                 PlayersUtils.broadcastMessage("§cInventaires mélangés !");
             }
         };
+        int SHUFFLE_INTERVAL = 2400;
         task.runTaskTimer(UHC.getInstance(), SHUFFLE_INTERVAL, SHUFFLE_INTERVAL);
     }
 

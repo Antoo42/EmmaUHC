@@ -2,6 +2,8 @@ package fr.anto42.emma;
 
 
 import fr.anto42.emma.coreManager.UHCManager;
+import fr.anto42.emma.coreManager.achievements.Achievement;
+import fr.anto42.emma.coreManager.achievements.AchievementManager;
 import fr.anto42.emma.coreManager.commands.*;
 import fr.anto42.emma.coreManager.enchants.EnchantsManager;
 import fr.anto42.emma.coreManager.enchants.config.EnchantConfiguration;
@@ -143,6 +145,9 @@ public final class UHC extends JavaPlugin {
 
         gameSave = new GameSave();
         getLogger().info("§aGameSave initialisé.");
+
+        AchievementManager.init(this);
+        getLogger().info("§aAchievementManager initialisé.");
 
         Bukkit.getScheduler().runTaskTimer(this, this::updateTabList, 2L, 2L);
         getLogger().info("§aMise à jour du TabList programmée.");

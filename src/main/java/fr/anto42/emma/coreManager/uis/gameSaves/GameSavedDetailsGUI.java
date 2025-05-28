@@ -2,7 +2,6 @@ package fr.anto42.emma.coreManager.uis.gameSaves;
 
 import fr.anto42.emma.UHC;
 import fr.anto42.emma.coreManager.players.PlayerStats;
-import fr.anto42.emma.coreManager.uis.rules.RulesGUI;
 import fr.anto42.emma.utils.gameSaves.GameSave;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
@@ -58,7 +57,7 @@ public class GameSavedDetailsGUI {
                 lore.add(" §8§l» §7Equipe: §c" + (playerStats.getTeam() != null ? playerStats.getTeam() : "Aucune"));
                 lore.add(" §8§l» §7Rôle: §c" + (playerStats.getRole() != null ? playerStats.getRole() : "Aucun"));
                 lore.add(" §8§l» §7Statut: §a" + (playerStats.isAlive() ? "§aEn vie" : "§cMort"));
-                lore.add(" §8§l» §7Degats: §c" + ((int) playerStats.getMakedDamages()) +  "❤ infligés §8┃ §c" + ((int) playerStats.getReceivedDamages()) +  "❤ reçues");
+                lore.add(" §8§l» §7Degats: §c" + ((int) playerStats.getMadeDamages()) +  "❤ infligés §8┃ §c" + ((int) playerStats.getReceivedDamages()) +  "❤ reçues");
                 lore.add("");
                 lore.add(" §8§l» §7Evenements");
                 gameSave.getEvents().stream().filter(s -> s.contains(player.getName())).forEach(s -> {

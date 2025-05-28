@@ -6,7 +6,6 @@ import fr.anto42.emma.utils.gameSaves.GameSave;
 import fr.anto42.emma.utils.materials.ItemCreator;
 import fr.anto42.emma.utils.saves.SaveSerializationManager;
 import fr.anto42.emma.utils.skulls.SkullList;
-import fr.anto42.emma.utils.skulls.SkullUtils;
 import fr.blendman974.kinventory.inventories.KInventory;
 import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
@@ -67,7 +66,7 @@ public class GameSavedPlayerListGUI {
                 lore.add(" §8§l» §7Equipe: §c" + (playerStats.getTeam() != null ? playerStats.getTeam() : "Aucune"));
                 lore.add(" §8§l» §7Rôle: §c" + (playerStats.getRole() != null ? playerStats.getRole() : "Aucun"));
                 lore.add(" §8§l» §7Statut: " + (playerStats.isAlive() ? "§aEn vie" : "§cMort"));
-                lore.add(" §8§l» §7Dégâts: §c" + ((int) playerStats.getMakedDamages()) + "❤ infligés §8┃ §c" + ((int) playerStats.getReceivedDamages()) + "❤ reçus");
+                lore.add(" §8§l» §7Dégâts: §c" + ((int) playerStats.getMadeDamages()) + "❤ infligés §8┃ §c" + ((int) playerStats.getReceivedDamages()) + "❤ reçus");
                 lore.add("");
                 lore.add(" §8§l» §7Événements");
                 gameSave.getEvents().stream()

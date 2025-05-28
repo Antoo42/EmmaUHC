@@ -30,7 +30,7 @@ public class Tracking extends BukkitRunnable {
         Vector dirVel = this.arrow.getVelocity().clone().normalize();
         Vector dirTarget = to.clone().normalize();
         double ang = dirVel.angle(dirTarget);
-        double speed_ = 0.9D * speed + 0.13999999999999999D;
+        double speed_ = 0.9D * speed + 0.14D;
         if (this.target instanceof Player && this.arrow.getLocation().distance(this.target.getLocation()) < 8.0D) {
             Player player = (Player)this.target;
             if (player.isBlocking())

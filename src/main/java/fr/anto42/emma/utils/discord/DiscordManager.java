@@ -1,6 +1,7 @@
 package fr.anto42.emma.utils.discord;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.listeners.customListeners.WinEvent;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.roles.Camp;
 import fr.anto42.emma.coreManager.players.roles.Role;
@@ -118,7 +119,6 @@ public class DiscordManager {
         } else if (object instanceof Camp) {
             winner = ((Camp) object).getName();
         }
-
         new GameSaveCreator(winner);
 
         TextChannel channel = discordBot.getTextChannelById(winChannelId);
