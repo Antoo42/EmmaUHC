@@ -11,6 +11,7 @@ import fr.blendman974.kinventory.inventories.KItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -56,7 +57,7 @@ public class AchievementsGUI {
 
     public AchievementsGUI(Player player, int page, FilterType filter) {
         this.currentFilter = filter;
-        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + "§6§lSuccès UHC");
+        this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + " §3§lSuccès");
 
         KItem glass = new KItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 3));
         for (int i = 0; i < 9; i++) {
@@ -91,6 +92,33 @@ public class AchievementsGUI {
                     if (!completed) filteredAchievementsWithProgress.add(new AchievementWithProgress(achievement, progress));
                     break;
             }
+
+
+            int totalAchievements = achievements.size();
+            int completedAchievements = 0;
+            for (Achievement achievement1 : achievements) {
+                PlayerAchievementData.AchievementProgress progress1 = data.getProgress(achievement.getId());
+                if (progress1 != null && progress1.isCompleted()) {
+                    completedAchievements++;
+                }
+            }
+
+            double percent = completedAchievements * 100.0 / totalAchievements;
+            String progressBar = getProgressBar(completedAchievements, totalAchievements, 10, "§a", "§7");
+
+            ItemStack paper = new ItemStack(SkullList.GIFT.getItemStack());
+            ItemMeta meta = paper.getItemMeta();
+            meta.setDisplayName("§8┃ §aVos succès");
+            List<String> lore = new ArrayList<>();
+            lore.add("");
+            lore.add("§8§l» §7Succès complétés : §e" + completedAchievements + "§7/§b" + totalAchievements);
+            lore.add("§8§l» §7Pourcentage : §b" + String.format("%.2f", percent) + "%");
+            lore.add("§8§l» §7Progression : " + progressBar);
+            lore.add("");
+            meta.setLore(lore);
+            paper.setItemMeta(meta);
+
+            kInventory.setElement(4, new KItem(paper));
         }
 
         switch (filter) {
@@ -144,9 +172,11 @@ public class AchievementsGUI {
         addFilterSwitchButton(player, page);
     }
 
+
+
     private void addFilterSwitchButton(Player player, int page) {
         FilterType nextFilter = currentFilter.next();
-        KItem filterItem = new KItem(new ItemStack(Material.PAPER, 1, (byte) currentFilter.getColorData()));
+        KItem filterItem = new KItem(new ItemStack(Material.PAPER));
         filterItem.setName("§8┃ §fFiltre");
         List<String> lore = new ArrayList<>();
         lore.add("");
@@ -219,7 +249,7 @@ public class AchievementsGUI {
         List<String> lore = new ArrayList<>();
         lore.add("");
         if (progress != null) {
-            lore.add("§8§l» §7Progression : §e" + progress.getStatus() + "§7/§b" + achievement.getRequired());
+            lore.add("§8§l» §7Progression : §e" + progress.getStatus() + "§7/§b" + achievement.getRequired() + " §8┃ " + getProgressBar(progress.getStatus(), achievement.getRequired(), 10, "§a", "§7"));
             if (progress.isCompleted()) {
                 lore.add("§8§l» §7Statut: §a✔ Succès débloqué !");
                 if (progress.getCompletionDate() != null)
@@ -234,8 +264,43 @@ public class AchievementsGUI {
         lore.add("");
         lore.add("§8┃ §f" + achievement.getDescription());
         lore.add("");
+
+        int totalPlayers = AchievementManager.countAllSavedPlayers();
+        int playersWithAchievement = AchievementManager.countPlayersWithAchievementAll(achievement.getId());
+        double percentage = totalPlayers > 0 ? (playersWithAchievement * 100.0 / totalPlayers) : 0;
+
+        lore.add("§8§l» §7Débloqué par : §e" + playersWithAchievement + "§7 joueur(s)");
+        String progressBar = getProgressBar(percentage, 10, '■', "§a", "§7");
+        lore.add("§8§l» " + "§b" + String.format("%.2f", percentage) + "% §7des joueurs §8| " + progressBar);
+        lore.add("");
         achItem.setDescription(lore);
         return achItem;
+    }
+    public static String getProgressBar(double percent, int barLength, char symbol, String colorFull, String colorEmpty) {
+        int filledLength = (int) Math.round(barLength * percent / 100.0);
+        StringBuilder bar = new StringBuilder();
+        for (int i = 0; i < barLength; i++) {
+            if (i < filledLength) {
+                bar.append(colorFull).append(symbol);
+            } else {
+                bar.append(colorEmpty).append(symbol);
+            }
+        }
+        return bar.toString();
+    }
+
+    public static String getProgressBar(int current, int max, int barLength, String colorFull, String colorEmpty) {
+        double percent = max > 0 ? (double) current / max : 0;
+        int filledLength = (int) Math.round(barLength * percent);
+        StringBuilder bar = new StringBuilder();
+        for (int i = 0; i < barLength; i++) {
+            if (i < filledLength) {
+                bar.append(colorFull).append("■");
+            } else {
+                bar.append(colorEmpty).append("■");
+            }
+        }
+        return bar.toString();
     }
 
     public KInventory getkInventory() {

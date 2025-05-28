@@ -21,7 +21,12 @@ public class AchievementManager {
         if (!DATA_FOLDER.exists() && !DATA_FOLDER.mkdirs()) {
             Bukkit.getLogger().severe("Failed to create achievements data folder!");
         }
-        registerAchievements(new ProgressiveKillAchievement.OneKill(),
+        registerAchievements(
+                new ProgressiveSaveConfigAchievement.OneSave(),
+                new ProgressiveSaveConfigAchievement.ThreeSaves(),
+                new ProgressiveSaveConfigAchievement.FiveSaves(),
+                new ProgressiveSaveConfigAchievement.TenSaves(),
+                new ProgressiveKillAchievement.OneKill(),
                 new ProgressiveKillAchievement.TenKills(),
                 new ProgressiveKillAchievement.TwentyFiveKills(),
                 new ProgressiveKillAchievement.FiftyKills(),
@@ -64,6 +69,26 @@ public class AchievementManager {
                 );
     }
 
+    public static Collection<PlayerAchievementData> getAllPlayerData() {
+        return PLAYER_DATA.values();
+    }
+    public static int countPlayersWithAchievement(String achievementId) {
+        int count = 0;
+        for (PlayerAchievementData data : getAllPlayerData()) {
+            PlayerAchievementData.AchievementProgress progress = data.getProgress(achievementId);
+            if (progress != null && progress.isCompleted()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int countAllSavedPlayers() {
+        File[] files = DATA_FOLDER.listFiles((dir, name) -> name.endsWith(".json"));
+        return files != null ? files.length : 0;
+    }
+
+
     public static void registerAchievements(Achievement... achievements) {
         REGISTERED_ACHIEVEMENTS.addAll(Arrays.asList(achievements));
         REGISTERED_ACHIEVEMENTS.forEach(achievement -> Bukkit.getPluginManager().registerEvents(achievement, plugin));
@@ -74,6 +99,24 @@ public class AchievementManager {
         PLAYER_DATA.computeIfAbsent(uuid, k -> loadOrCreate(player));
         savePlayerData(player);
     }
+
+    public static int countPlayersWithAchievementAll(String achievementId) {
+        int count = 0;
+        File[] files = DATA_FOLDER.listFiles((dir, name) -> name.endsWith(".json"));
+        if (files == null) return 0;
+        for (File file : files) {
+            try (Reader reader = new FileReader(file)) {
+                PlayerAchievementData data = GSON.fromJson(reader, PlayerAchievementData.class);
+                PlayerAchievementData.AchievementProgress progress = data.getProgress(achievementId);
+                if (progress != null && progress.isCompleted()) {
+                    count++;
+                }
+            } catch (IOException ignored) {
+            }
+        }
+        return count;
+    }
+
 
     public static void savePlayerData(Player player) {
         UUID uuid = player.getUniqueId();

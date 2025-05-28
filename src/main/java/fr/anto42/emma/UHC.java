@@ -128,6 +128,7 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new WinTest());
         CommandUtils.registerCommand("uhc", new StatsCommand());
         CommandUtils.registerCommand("uhc", new BPCommand());
+        CommandUtils.registerCommand("uhc", new AchievementsCommand());
 
         getLogger().info("§aToutes les commandes ont été enregistrées avec succès.");
 

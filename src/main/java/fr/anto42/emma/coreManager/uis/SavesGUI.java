@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.uis;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.listeners.customListeners.ConfigSavedEvent;
 import fr.anto42.emma.coreManager.scenarios.ScenarioManager;
 import fr.anto42.emma.coreManager.scenarios.UHCScenario;
 import fr.anto42.emma.game.UHCGame;
@@ -86,6 +87,7 @@ public class SavesGUI {
                 String json = uhcInstance.getSaveSerializationManager().serialize(uhcConfig);
                 writer.write(json);
                 UHC.getUHCPlayer(player4).sendClassicMessage("§aSauvegarde créée avec succès !");
+                Bukkit.getPluginManager().callEvent(new ConfigSavedEvent(uhcData.getHostPlayer()));
             } catch (IOException e) {
                 UHC.getUHCPlayer(player4).sendClassicMessage("§cErreur lors de la sauvegarde !");
                 e.printStackTrace();
