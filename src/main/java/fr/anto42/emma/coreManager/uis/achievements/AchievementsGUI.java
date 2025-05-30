@@ -68,6 +68,11 @@ public class AchievementsGUI {
             this.kInventory.setElement(i, glass);
         }
 
+        KItem all = new KItem(new ItemCreator(SkullList.MASCOTTE_COMPUTER.getItemStack()).name("§8┃ §fSuccès des joueurs").lore("",
+                "§8┃ §fVisionnez les succès de vos amis", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
+        all.addCallback((kInventory1, item, player1, clickContext) -> new PlayersAchievementsGUI(player1, 0).getkInventory().open(player1));
+        kInventory.setElement(0, all);
+
         KItem back = new KItem(new ItemCreator(SkullList.LEFT_AROOW.getItemStack())
                 .name("§8┃ §cFermer le menu")
                 .lore("", "§8§l» §6Cliquez §fpour fermer.").get());
@@ -95,13 +100,7 @@ public class AchievementsGUI {
 
 
             int totalAchievements = achievements.size();
-            int completedAchievements = 0;
-            for (Achievement achievement1 : achievements) {
-                PlayerAchievementData.AchievementProgress progress1 = data.getProgress(achievement.getId());
-                if (progress1 != null && progress1.isCompleted()) {
-                    completedAchievements++;
-                }
-            }
+            int completedAchievements = getCompletedAchievementsCount(player.getUniqueId());
 
             double percent = completedAchievements * 100.0 / totalAchievements;
             String progressBar = getProgressBar(completedAchievements, totalAchievements, 10, "§a", "§7");
@@ -173,7 +172,15 @@ public class AchievementsGUI {
     }
 
 
-
+    private int getCompletedAchievementsCount(UUID uuid) {
+        PlayerAchievementData data = AchievementManager.loadPlayerAchievementData(uuid); // à adapter à ta méthode de chargement
+        int count = 0;
+        for (Achievement ach : AchievementManager.getAllAchievements()) {
+            PlayerAchievementData.AchievementProgress progress = data.getProgress(ach.getId());
+            if (progress != null && progress.isCompleted()) count++;
+        }
+        return count;
+    }
     private void addFilterSwitchButton(Player player, int page) {
         FilterType nextFilter = currentFilter.next();
         KItem filterItem = new KItem(new ItemStack(Material.PAPER));
@@ -245,7 +252,7 @@ public class AchievementsGUI {
 
     private static @NotNull KItem getkItem(PlayerAchievementData.AchievementProgress progress, Achievement achievement) {
         KItem achItem = new KItem(progress != null && progress.isCompleted() ? SkullList.GREEN_BALL.getItemStack() : SkullList.RED_BALL.getItemStack());
-        achItem.setName((progress != null && progress.isCompleted() ? "§8┃ §a" : "§8┃ §c") + achievement.getName());
+        achItem.setName((progress != null && progress.isCompleted() ? "§8┃ §a" : "§8┃ §c")  + (achievement.isSecret() && progress != null && !progress.isCompleted() ? "§k" : "") + achievement.getName());
         List<String> lore = new ArrayList<>();
         lore.add("");
         if (progress != null) {
@@ -262,7 +269,13 @@ public class AchievementsGUI {
             lore.add("§8§l» §7Statut: §c✘ Non débloqué");
         }
         lore.add("");
-        lore.add("§8┃ §f" + achievement.getDescription());
+        if (achievement.isSecret()) {
+            if (progress != null &&progress.isCompleted()) {
+                lore.add("§8┃ §f" + achievement.getDescription());
+            }
+            else lore.add("§8┃ §c§k" + achievement.getDescription());
+        }
+        else lore.add("§8┃ §f" + achievement.getDescription());
         lore.add("");
 
         int totalPlayers = AchievementManager.countAllSavedPlayers();
@@ -271,9 +284,12 @@ public class AchievementsGUI {
 
         lore.add("§8§l» §7Débloqué par : §e" + playersWithAchievement + "§7 joueur(s)");
         String progressBar = getProgressBar(percentage, 10, '■', "§a", "§7");
-        lore.add("§8§l» " + "§b" + String.format("%.2f", percentage) + "% §7des joueurs §8| " + progressBar);
+        lore.add("§8§l» " + "§b" + String.format("%.2f", percentage) + "% §7des joueurs §8┃ " + progressBar);
         lore.add("");
         achItem.setDescription(lore);
+        achItem.addCallback((kInventory1, item, player, clickContext) -> {
+            new ViewAchievementGUI(achievement, player, 0).getkInventory().open(player);
+        });
         return achItem;
     }
     public static String getProgressBar(double percent, int barLength, char symbol, String colorFull, String colorEmpty) {

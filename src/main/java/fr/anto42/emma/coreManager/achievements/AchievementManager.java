@@ -22,6 +22,14 @@ public class AchievementManager {
             Bukkit.getLogger().severe("Failed to create achievements data folder!");
         }
         registerAchievements(
+                new Revive(),
+                new Pacific(),
+                new FirstKill(),
+                new ProgressiveKillsGameAchievement.ThreeKills(),
+                new ProgressiveKillsGameAchievement.FiveKills(),
+                new ProgressiveKillsGameAchievement.TenKills(),
+                new ProgressiveKillsGameAchievement.FifteenKills(),
+                new ProgressiveKillsGameAchievement.TwentyKills(),
                 new ProgressiveSaveConfigAchievement.OneSave(),
                 new ProgressiveSaveConfigAchievement.ThreeSaves(),
                 new ProgressiveSaveConfigAchievement.FiveSaves(),
@@ -82,6 +90,21 @@ public class AchievementManager {
         }
         return count;
     }
+
+
+    public static PlayerAchievementData loadPlayerAchievementData(UUID uuid) {
+        File file = new File("plugins/UHC/achievements/", uuid.toString() + ".json");
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                return GSON.fromJson(reader, PlayerAchievementData.class);
+            } catch (IOException e) {
+                Bukkit.getLogger().severe("Erreur lors du chargement des succès pour " + uuid + " : " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return new PlayerAchievementData(uuid);
+    }
+
 
     public static int countAllSavedPlayers() {
         File[] files = DATA_FOLDER.listFiles((dir, name) -> name.endsWith(".json"));

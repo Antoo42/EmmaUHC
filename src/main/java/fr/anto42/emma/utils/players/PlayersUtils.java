@@ -1,6 +1,7 @@
 package fr.anto42.emma.utils.players;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.coreManager.listeners.customListeners.EndGameEvent;
 import fr.anto42.emma.coreManager.listeners.customListeners.WinEvent;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.UHCPlayerStates;
@@ -30,6 +31,7 @@ import java.util.Random;
 
 public class PlayersUtils {
     public static void finishToSpawn () {
+        Bukkit.getPluginManager().callEvent(new EndGameEvent());
         UHC.getInstance().getUhcGame().getUhcData().getUhcPlayerList().stream().filter(uhcPlayer -> uhcPlayer.getPlayerState() == UHCPlayerStates.ALIVE).forEach(uhcPlayer -> {
             uhcPlayer.setHasWin(true);
             Bukkit.getPluginManager().callEvent(new WinEvent(uhcPlayer));

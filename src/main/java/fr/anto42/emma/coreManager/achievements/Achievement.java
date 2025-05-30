@@ -1,6 +1,7 @@
 package fr.anto42.emma.coreManager.achievements;
 
 import fr.anto42.emma.UHC;
+import fr.anto42.emma.utils.gameSaves.EventType;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -10,6 +11,7 @@ public abstract class Achievement implements Listener {
     private final String name;
     private final String description;
     private final int required;
+    private boolean secret = false;
 
     public Achievement(String id, String name, String description, int required) {
         this.id = id;
@@ -24,7 +26,19 @@ public abstract class Achievement implements Listener {
     public int getRequired() { return required; }
 
     public void notifyAchievement(Player player) {
+        UHC.getInstance().getGameSave().registerEvent(EventType.ACHIVEMENT, player.getDisplayName() + " a terminé le succès: " + getId());
         UHC.getUHCPlayer(player).sendClassicMessage("§7Vous avez terminé le succès §a" + this.name + "§7 !");
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 1.0f);
+    }
+
+    public void setSecret(boolean secret) {
+        this.secret = secret;
+    }
+
+    public boolean isSecret() {
+        return secret;
+    }
+    public void makeSecret(){
+        this.secret = true;
     }
 }
