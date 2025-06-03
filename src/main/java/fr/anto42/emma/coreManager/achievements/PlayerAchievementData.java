@@ -29,6 +29,9 @@ public class PlayerAchievementData {
             }
         }
     }
+    public void resetProgress(String achievementId) {
+        progressMap.remove(achievementId);
+    }
 
     public AchievementProgress getProgress(String achievementId) {
         return progressMap.getOrDefault(achievementId, new AchievementProgress());

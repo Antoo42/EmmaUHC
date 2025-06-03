@@ -21,6 +21,15 @@ public class UHCConfig {
         return UHCName;
     }
 
+    private boolean official = false;
+
+    public boolean isOfficial() {
+        return official;
+    }
+
+    public void setOfficial(boolean official) {
+        this.official = official;
+    }
 
     private int boostMultiplier = 150;
 

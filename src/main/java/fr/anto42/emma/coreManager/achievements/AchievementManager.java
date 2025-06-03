@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.anto42.emma.coreManager.achievements.succes.*;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import java.io.*;
@@ -22,6 +23,7 @@ public class AchievementManager {
             Bukkit.getLogger().severe("Failed to create achievements data folder!");
         }
         registerAchievements(
+                new BingoWinner(),
                 new Revive(),
                 new Pacific(),
                 new FirstKill(),
@@ -138,6 +140,42 @@ public class AchievementManager {
             }
         }
         return count;
+    }
+    public static void removeAchievementFromPlayer(String playerName, String achievementId) {
+        UUID targetUUID = null;
+        for (OfflinePlayer offlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (offlinePlayer.getName() != null && offlinePlayer.getName().equalsIgnoreCase(playerName)) {
+                targetUUID = offlinePlayer.getUniqueId();
+                break;
+            }
+        }
+        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+            if (offlinePlayer.getName() != null && offlinePlayer.getName().equalsIgnoreCase(playerName)) {
+                targetUUID = offlinePlayer.getUniqueId();
+                break;
+            }
+        }
+        if (targetUUID == null)
+            return;
+
+        removeAchievementFromPlayer(targetUUID, achievementId);
+    }
+
+
+    public static void removeAchievementFromPlayer(UUID playerUUID, String achievementId) {
+        PlayerAchievementData data = PLAYER_DATA.containsKey(playerUUID)
+                ? PLAYER_DATA.get(playerUUID)
+                : loadPlayerAchievementData(playerUUID);
+
+        PlayerAchievementData.AchievementProgress progress = data.getProgress(achievementId);
+        if (progress == null || !progress.isCompleted()) {
+            return;
+        }
+
+        data.resetProgress(achievementId);
+
+        PLAYER_DATA.put(playerUUID, data);
+        savePlayerData(playerUUID);
     }
 
 

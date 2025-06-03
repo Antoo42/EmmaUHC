@@ -70,7 +70,7 @@ public class AchievementsGUI {
 
         KItem all = new KItem(new ItemCreator(SkullList.MASCOTTE_COMPUTER.getItemStack()).name("§8┃ §fSuccès des joueurs").lore("",
                 "§8┃ §fVisionnez les succès de vos amis", "", "§8§l» §6Cliquez §fpour ouvrir.").get());
-        all.addCallback((kInventory1, item, player1, clickContext) -> new PlayersAchievementsGUI(player1, 0).getkInventory().open(player1));
+        all.addCallback((kInventory1, item, player1, clickContext) -> new PlayersListAchievementsGUI(player1, 0).getkInventory().open(player1));
         kInventory.setElement(0, all);
 
         KItem back = new KItem(new ItemCreator(SkullList.LEFT_AROOW.getItemStack())

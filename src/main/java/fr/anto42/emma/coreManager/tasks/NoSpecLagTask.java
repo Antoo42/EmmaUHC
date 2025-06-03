@@ -14,7 +14,7 @@ public class NoSpecLagTask extends BukkitRunnable {
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             GameMode mode = onlinePlayer.getGameMode();
-            if (mode != GameMode.SPECTATOR) {
+            if (mode != GameMode.SPECTATOR || UHC.getInstance().getUhcGame().getUhcData().getSpecList().contains(UHC.getUHCPlayer(onlinePlayer))) {
                 continue;
             }
 

@@ -58,7 +58,7 @@ public class SpecInfoGUI {
         lore.add(" §8§l» §7Statut: §a" + (uhcPlayer.isAlive() ? "§aEn vie" : "§cMort"));
         lore.add(" §8§l» §7Degats: §c" + ((int) uhcPlayer.getMakeDamages()) +  "❤ infligés §8┃ §c" + ((int) uhcPlayer.getReceivedDamages()) +  "❤ reçues");
         lore.add("");
-        lore.add(" §8§l» §7Evenements");
+        lore.add(" §8§l» §7Evenements liés");
         UHC.getInstance().getGameSave().getEvents().stream().filter(s -> s.contains(uhcPlayer.getName())).forEach(s -> {
             lore.add("  §8§l» §e" + SaveSerializationManager.fromEventString(s).getTimer() + "§f: " + SaveSerializationManager.fromEventString(s).getString());
         });

@@ -19,10 +19,9 @@ public abstract class ProgressiveKillAchievement extends Achievement {
     public void onKill(DeathEvent event) {
         if (!UHC.getInstance().getUhcGame().getGameState().equals(requiredState))
             return;
-
-        Player killer = (Player) event.getKiller();
-        if (killer == null) return;
-
+        if (event.getKiller() == null)
+            return;
+        Player killer = event.getKiller().getBukkitPlayer();
         AchievementManager.getPlayerData(killer).updateProgress(getId(), 1);
     }
 

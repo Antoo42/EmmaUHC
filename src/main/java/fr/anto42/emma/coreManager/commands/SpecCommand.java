@@ -6,6 +6,7 @@ import fr.anto42.emma.coreManager.listeners.customListeners.DeathEvent;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.teams.UHCTeam;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
+import fr.anto42.emma.coreManager.uis.FightsGUI;
 import fr.anto42.emma.coreManager.uis.PlayerInvSeeGUI;
 import fr.anto42.emma.coreManager.uis.SpecInfoGUI;
 import fr.anto42.emma.game.GameState;
@@ -21,25 +22,33 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SpecCommand extends Command {
+
+    private static final Map<UUID, UUID> followingMap = new ConcurrentHashMap<>(); // spectateur -> joueur suivi
+    private static final Map<UUID, BukkitTask> followTasks = new ConcurrentHashMap<>();
+    private static final Map<UUID, Double> followDistances = new ConcurrentHashMap<>();
+    private static final double DEFAULT_FOLLOW_DISTANCE = 5.0;
+    private static final double MIN_FOLLOW_DISTANCE = 2.0;
+    private static final double MAX_FOLLOW_DISTANCE = 20.0;
+
     public SpecCommand() {
         super("spec");
         super.getAliases().add("mod");
     }
 
-
     private final UHCGame uhc = UHC.getInstance().getUhcGame();
     private final UHCManager uhcManager = UHC.getInstance().getUhcManager();
 
     UHCTeam uhcTeam = null;
+
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
         UHCPlayer uhcPlayer = UHC.getUHCPlayer(((Player) sender));
@@ -47,6 +56,7 @@ public class SpecCommand extends Command {
             uhcPlayer.sendModMessage("§cVous ne pouvez pas faire ça !");
             return true;
         }
+
         if(args.length == 0 || args[0].equalsIgnoreCase("help")){
             uhcPlayer.sendModMessage("§7Liste des commandes disponibles:");
             uhcPlayer.sendMessage("");
@@ -66,6 +76,12 @@ public class SpecCommand extends Command {
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec tp <Player>§7: Téléportez-vous au joueur souhaiter.");
             uhcPlayer.sendMessage("");
+            uhcPlayer.sendMessage("§8§l» §c/spec fights§7: Ouvrez le menu de gestion des fights.");
+            uhcPlayer.sendMessage("");
+            uhcPlayer.sendMessage("§8§l» §c/spec follow <Player> [distance]§7: Suivez automatiquement un joueur.");
+            uhcPlayer.sendMessage("");
+            uhcPlayer.sendMessage("§8§l» §c/spec unfollow§7: Arrêtez de suivre le joueur actuel.");
+            uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec kill <Player>§7: Tuez le joueur indiquer.");
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/spec info <Player>§7: Ouvrez le menu de modération du joueur.");
@@ -78,7 +94,60 @@ public class SpecCommand extends Command {
             uhcPlayer.sendMessage("");
             uhcPlayer.sendMessage("§8§l» §c/god§7: Devenez opérateur de la partie.");
             uhcPlayer.sendMessage("");
-        }else if (args[0].equalsIgnoreCase("add")){
+        }
+        else if (args[0].equalsIgnoreCase("follow")) {
+            if (!uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
+                uhcPlayer.sendModMessage("§cSeuls les spectateurs peuvent utiliser cette commande !");
+                return true;
+            }
+
+            if (args.length == 1) {
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur. §3(/spec follow <Player> [distance])");
+                return true;
+            }
+
+            Player target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                uhcPlayer.sendModMessage("§cMerci de préciser un joueur connecté.");
+                return true;
+            }
+
+            UHCPlayer uhcTarget = UHC.getUHCPlayer(target);
+            if (uhc.getUhcData().getSpecList().contains(uhcTarget)) {
+                uhcPlayer.sendModMessage("§cVous ne pouvez pas suivre un autre spectateur !");
+                return true;
+            }
+
+            double distance = DEFAULT_FOLLOW_DISTANCE;
+            if (args.length >= 3) {
+                try {
+                    distance = Double.parseDouble(args[2]);
+                    if (distance < MIN_FOLLOW_DISTANCE || distance > MAX_FOLLOW_DISTANCE) {
+                        uhcPlayer.sendModMessage("§cLa distance doit être entre " + MIN_FOLLOW_DISTANCE + " et " + MAX_FOLLOW_DISTANCE + " blocs.");
+                        return true;
+                    }
+                } catch (NumberFormatException e) {
+                    uhcPlayer.sendModMessage("§cDistance invalide. Utilisez un nombre entre " + MIN_FOLLOW_DISTANCE + " et " + MAX_FOLLOW_DISTANCE + ".");
+                    return true;
+                }
+            }
+
+            startFollowing(uhcPlayer.getBukkitPlayer(), target, distance);
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("fights")) {
+            new FightsGUI(uhcPlayer.getBukkitPlayer()).getkInventory().open(uhcPlayer.getBukkitPlayer());
+        }
+        else if (args[0].equalsIgnoreCase("unfollow") || args[0].equalsIgnoreCase("stopfollow")) {
+            if (!uhc.getUhcData().getSpecList().contains(uhcPlayer)) {
+                uhcPlayer.sendModMessage("§cSeuls les spectateurs peuvent utiliser cette commande !");
+                return true;
+            }
+
+            stopFollowing(uhcPlayer.getBukkitPlayer());
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("add")){
             if (uhcPlayer.getBukkitPlayer().hasPermission("emma.manageSpec") || uhcPlayer.isHost()){
                 if (args.length == 1){
                     uhcPlayer.sendModMessage("§cMerci de préciser un joueur.");
@@ -104,10 +173,7 @@ public class SpecCommand extends Command {
             UHC.getInstance().getGameSave().getEvents().forEach(s1 -> {
                 uhcPlayer.sendMessage("§7-§e" + SaveSerializationManager.fromEventString(s1).getTimer() + " §8§l» §f" + SaveSerializationManager.fromEventString(s1).getString());
             });
-        }
-
-
-        else if (args[0].equalsIgnoreCase("remove")){
+        } else if (args[0].equalsIgnoreCase("remove")){
             if (uhcPlayer.getBukkitPlayer().hasPermission("emma.manageSpec") || uhc.getUhcData().getHostPlayer() == uhcPlayer || uhc.getUhcData().getCoHostList().contains(uhcPlayer)){
                 if (args.length == 1){
                     uhcPlayer.sendModMessage("§cMerci de préciser un joueur.");
@@ -121,6 +187,9 @@ public class SpecCommand extends Command {
                 UHCPlayer uhctarget = UHC.getUHCPlayer(target);
                 if (!uhc.getUhcData().getSpecList().contains(uhctarget))
                     return true;
+
+                stopFollowing(target);
+
                 uhc.getUhcData().getSpecList().remove(uhctarget);
                 uhc.getUhcData().getUhcPlayerList().add(uhctarget);
                 uhcPlayer.sendModMessage("§7Vous avez retiré §a" + uhctarget.getName() + " §7de la liste des spectateurs.");
@@ -137,7 +206,16 @@ public class SpecCommand extends Command {
                 uhcPlayer.sendModMessage("§cAucun spectateur n'est présent.");
             uhcPlayer.sendModMessage("§7Voici la liste des spectateurs de la partie:");
             uhc.getUhcData().getSpecList().forEach(uhcPlayer1 -> {
-                uhcPlayer.sendMessage("§8§l» §e" + uhcPlayer1.getName() + " §3(" + uhcPlayer1.getUuid() + ")" + (Bukkit.getPlayer(uhcPlayer1.getUuid()).isOnline() ? "§aConnecté" : "§cHors-ligne"));
+                String followInfo = "";
+                UUID specUuid = uhcPlayer1.getUuid();
+                if (followingMap.containsKey(specUuid)) {
+                    UUID followedUuid = followingMap.get(specUuid);
+                    Player followedPlayer = Bukkit.getPlayer(followedUuid);
+                    if (followedPlayer != null) {
+                        followInfo = " §7(suit §e" + followedPlayer.getName() + "§7)";
+                    }
+                }
+                uhcPlayer.sendMessage("§8§l» §e" + uhcPlayer1.getName() + " §3(" + uhcPlayer1.getUuid() + ")" + (Bukkit.getPlayer(uhcPlayer1.getUuid()).isOnline() ? "§aConnecté" : "§cHors-ligne") + followInfo);
             });
         }
         else if (args[0].equalsIgnoreCase("config")){
@@ -219,7 +297,6 @@ public class SpecCommand extends Command {
                         stringBuilder.append("§8┃ §f").append(uhcPlayer1.getName());
                     });
                     new InteractiveMessage().add(new InteractiveMessageBuilder("§8§l» §a" + uhcTeam.getDisplayName() + " §8┃ §3" + uhcTeam.getUuid()).setHoverMessage(stringBuilder.toString()).build()).sendMessage(uhcPlayer.getBukkitPlayer());
-                    //uhcPlayer.sendMessage("§8§l» §a" + uhcTeam.getDisplayName() + " §8┃ §3" + uhcTeam.getUuid());
                 });
             }else if (args[1].equalsIgnoreCase("move") || args[1].equalsIgnoreCase("put")){
                 uhcTeam = null;
@@ -282,10 +359,9 @@ public class SpecCommand extends Command {
                 return true;
             }
             String name = args[1];
-            AtomicReference<UHCPlayer> target = null;
+            AtomicReference<UHCPlayer> target = new AtomicReference<>();
             uhc.getUhcData().getUhcPlayerList().stream().filter(uhcPlayer1 -> uhcPlayer1.getBukkitPlayer() == null).forEach(uhcPlayer1 -> {
                 if (name.equals(uhcPlayer1.getName())){
-                    target.set(uhcPlayer1);
                     target.set(uhcPlayer1);
                 }
             });
@@ -344,7 +420,6 @@ public class SpecCommand extends Command {
             uhcTarget.getBukkitPlayer().setWalkSpeed(0.2F);
             uhcPlayer.sendModMessage("§cVous avez §b§lunfreeze §a" + uhcTarget.getName() + "§c.");
         } else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("profile")) {
-            //uhcPlayer.sendModMessage("§cCette foncionnalité est en cours de développement !");
             if(args.length == 1) {
                 uhcPlayer.sendModMessage("§cVeuillez indiquez un joueur connecté ! §3(/spec info <Player>)");
                 return true;
@@ -360,6 +435,100 @@ public class SpecCommand extends Command {
     }
 
 
+    private void startFollowing(Player spectator, Player target, double distance) {
+        UUID specUuid = spectator.getUniqueId();
+        UUID targetUuid = target.getUniqueId();
+
+        stopFollowing(spectator);
+
+        followingMap.put(specUuid, targetUuid);
+        followDistances.put(specUuid, distance);
+
+        spectator.teleport(target.getLocation().add(0, 2, distance));
+
+        BukkitTask followTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                Player currentTarget = Bukkit.getPlayer(targetUuid);
+                Player currentSpectator = Bukkit.getPlayer(specUuid);
+
+                if (currentTarget == null || currentSpectator == null || !currentTarget.isOnline() || !currentSpectator.isOnline()) {
+                    stopFollowing(spectator);
+                    return;
+                }
+
+                UHCPlayer uhcSpec = UHC.getUHCPlayer(currentSpectator);
+                if (!uhc.getUhcData().getSpecList().contains(uhcSpec)) {
+                    stopFollowing(spectator);
+                    return;
+                }
+
+                double currentDistance = followDistances.get(specUuid);
+                org.bukkit.Location targetLoc = currentTarget.getLocation();
+                org.bukkit.Location specLoc = currentSpectator.getLocation();
+
+                if (specLoc.distance(targetLoc) > currentDistance + 10) {
+                    org.bukkit.Location newLoc = targetLoc.clone().add(0, 2, currentDistance);
+                    currentSpectator.teleport(newLoc);
+                } else {
+                    org.bukkit.util.Vector direction = targetLoc.toVector().subtract(specLoc.toVector()).normalize();
+                    org.bukkit.Location newLoc = specLoc.add(direction.multiply(0.5));
+                    newLoc.setY(targetLoc.getY() + 2);
+                    currentSpectator.teleport(newLoc);
+                }
+
+                org.bukkit.util.Vector lookDirection = targetLoc.toVector().subtract(currentSpectator.getLocation().toVector()).normalize();
+                org.bukkit.Location lookLoc = currentSpectator.getLocation().setDirection(lookDirection);
+                currentSpectator.teleport(lookLoc);
+            }
+        }.runTaskTimer(UHC.getInstance(), 0L, 10L); // Toutes les 0.5 secondes
+
+        followTasks.put(specUuid, followTask);
+
+        UHCPlayer uhcSpectator = UHC.getUHCPlayer(spectator);
+        uhcSpectator.sendModMessage("§aVous suivez maintenant §e" + target.getName() + " §aà une distance de §e" + distance + " blocs§a.");
+        uhcSpectator.sendModMessage("§7Utilisez §e/spec unfollow §7pour arrêter de le suivre.");
+
+        InteractiveMessage distanceMessage = new InteractiveMessage();
+        distanceMessage.add("§8§l» §7Distance: ");
+        distanceMessage.add(new InteractiveMessageBuilder("§c[-]")
+                .setHoverMessage("§cDiminuer la distance", "§7Distance actuelle: " + distance)
+                .setClickAction(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/spec follow " + target.getName() + " " + Math.max(MIN_FOLLOW_DISTANCE, distance - 1))
+                .build());
+        distanceMessage.add(" §e" + distance + " ");
+        distanceMessage.add(new InteractiveMessageBuilder("§a[+]")
+                .setHoverMessage("§aAugmenter la distance", "§7Distance actuelle: " + distance)
+                .setClickAction(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/spec follow " + target.getName() + " " + Math.min(MAX_FOLLOW_DISTANCE, distance + 1))
+                .build());
+        distanceMessage.sendMessage(spectator);
+    }
+
+    private void stopFollowing(Player spectator) {
+        UUID specUuid = spectator.getUniqueId();
+
+        // Arrêter la tâche de suivi
+        BukkitTask task = followTasks.remove(specUuid);
+        if (task != null) {
+            task.cancel();
+        }
+
+        // Supprimer les données de suivi
+        UUID followedUuid = followingMap.remove(specUuid);
+        followDistances.remove(specUuid);
+
+        // Message de confirmation
+        if (followedUuid != null) {
+            Player followedPlayer = Bukkit.getPlayer(followedUuid);
+            String followedName = followedPlayer != null ? followedPlayer.getName() : "joueur déconnecté";
+
+            UHCPlayer uhcSpectator = UHC.getUHCPlayer(spectator);
+            uhcSpectator.sendModMessage("§7Vous ne suivez plus §e" + followedName + "§7.");
+        } else {
+            UHCPlayer uhcSpectator = UHC.getUHCPlayer(spectator);
+            uhcSpectator.sendModMessage("§cVous ne suiviez aucun joueur.");
+        }
+    }
+
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
         List<String> completions = new ArrayList<>();
@@ -367,20 +536,30 @@ public class SpecCommand extends Command {
         if (!(sender instanceof Player)) {
             return completions;
         }
+
         if (args.length == 1) {
             List<String> subCommands = Arrays.asList(
                     "add", "remove", "list", "config", "chat", "inv", "role", "spy", "teams",
-                    "tp", "kill", "viewoffline", "killoffline", "recap", "events", "info", "profil"
+                    "tp", "kill", "viewoffline", "killoffline", "recap", "events", "info", "profile",
+                    "follow", "unfollow", "freeze", "unfreeze", "alerts", "fights"
             );
             StringUtil.copyPartialMatches(args[0], subCommands, completions);
         } else if (args.length == 2) {
-            List<String> playerCommands = Arrays.asList("inv", "role", "tp", "kill", "killoffline");
+            List<String> playerCommands = Arrays.asList("inv", "role", "tp", "kill", "killoffline", "follow", "freeze", "unfreeze", "info", "profile");
 
             if (playerCommands.contains(args[0].toLowerCase())) {
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     completions.add(onlinePlayer.getName());
                 }
+            } else if (args[0].equalsIgnoreCase("alerts")) {
+                completions.add("on");
+                completions.add("off");
             }
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("follow")) {
+            completions.add("2");
+            completions.add("5");
+            completions.add("10");
+            completions.add("15");
         }
 
         Collections.sort(completions);

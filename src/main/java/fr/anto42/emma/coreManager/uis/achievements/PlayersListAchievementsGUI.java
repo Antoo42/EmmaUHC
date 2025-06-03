@@ -20,10 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayersAchievementsGUI{
+public class PlayersListAchievementsGUI {
     private final KInventory kInventory;
 
-    public PlayersAchievementsGUI(Player viewer, int page) {
+    public PlayersListAchievementsGUI(Player viewer, int page) {
         this.kInventory = new KInventory(54, UHC.getInstance().getPrefix() + "§3§lSuccès des joueurs");
         int slot = 9;
         int perPage = 27;
@@ -55,13 +55,13 @@ public class PlayersAchievementsGUI{
         if (page > 0) {
             KItem prev = new KItem(new ItemStack(Material.ARROW));
             prev.setName("§8┃ §6Page précédente");
-            prev.addCallback((inv, item, p, ctx) -> new PlayersAchievementsGUI(viewer, page - 1).getkInventory().open(viewer));
+            prev.addCallback((inv, item, p, ctx) -> new PlayersListAchievementsGUI(viewer, page - 1).getkInventory().open(viewer));
             kInventory.setElement(45, prev);
         }
         if (page < totalPages - 1) {
             KItem next = new KItem(new ItemStack(Material.ARROW));
             next.setName("§8┃ §6Page suivante");
-            next.addCallback((inv, item, p, ctx) -> new PlayersAchievementsGUI(viewer, page + 1).getkInventory().open(viewer));
+            next.addCallback((inv, item, p, ctx) -> new PlayersListAchievementsGUI(viewer, page + 1).getkInventory().open(viewer));
             kInventory.setElement(53, next);
         }
 

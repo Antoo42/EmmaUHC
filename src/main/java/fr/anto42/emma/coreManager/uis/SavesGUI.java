@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SavesGUI {
@@ -69,6 +70,7 @@ public class SavesGUI {
         KItem save = new KItem(new ItemCreator(SkullList.LIME_BALL.getItemStack()).name("§8┃ §aCréer une nouvelle sauvegarde").lore("", "§8┃ §6Cliquez §fpour ajouter une nouvelle sauvegarde", "§8┃ §fet ainsi vous §aépargner du temps §fde configuration", "", "§8§l» §6Cliquez §fpour sauvegarder.").get());
         save.addCallback((kInventoryRepresentation, itemStack, player4, kInventoryClickContext) -> {
             String uuid = RandomStringUtils.random(5, true, false) + "-" + RandomStringUtils.random(5, false, true);
+            uhcConfig.setOfficial(false);
             uhcConfig.setCreator(uhcData.getHostName());
             uhcConfig.getScenarios().clear();
             uhcInstance.getUhcManager().getScenarioManager().getActivatedScenarios().forEach(uhcScenario -> {
@@ -99,6 +101,18 @@ public class SavesGUI {
         File folder = new File(SAVE_FOLDER);
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
 
+        if (files != null) {
+            Arrays.sort(files, (f1, f2) -> {
+                try {
+                    String configName1 = extractConfigNameFromFile(f1);
+                    String configName2 = extractConfigNameFromFile(f2);
+                    return configName1.compareToIgnoreCase(configName2);
+                } catch (Exception e) {
+                    return f1.getName().compareToIgnoreCase(f2.getName());
+                }
+            });
+        }
+
         int maxPerPage = 27;
         assert files != null;
         int totalPages = (files.length + maxPerPage - 1) / maxPerPage;
@@ -116,7 +130,7 @@ public class SavesGUI {
                 String[] strings = file.getName().split(" - ");
                 String creator = strings[0];
                 String tempName = strings[1];
-                if (priv && !creator.contains(player.getName())) return;
+                if (priv && !creator.contains(player.getName())) continue;
                 try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                     String json = reader.lines().reduce("", (a, b) -> a + b);
                     uhcConfig1 = uhcInstance.getSaveSerializationManager().deserialize(json);
@@ -124,9 +138,8 @@ public class SavesGUI {
                     e.printStackTrace();
                 }
                 UHCConfig finalUhcConfig = uhcConfig1;
-                KItem saveItem = new KItem(new ItemCreator(SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).get());
-
-                saveItem.setName("§8┃ §6" + tempName);
+                KItem saveItem = new KItem(new ItemCreator(finalUhcConfig.isOfficial() ? SkullList.BLOCK_COMMANDBLOCK_GREEN.getItemStack() : SkullList.BLOCK_COMMANDBLOCK_DEFAULT.getItemStack()).get());
+                saveItem.setName("§8┃ §6" + tempName + (finalUhcConfig.isOfficial() ? " §7(officielle)" : ""));
 
                 saveItem.setDescription(player1 -> {
                     List<String> lore = new ArrayList<>();
@@ -147,7 +160,6 @@ public class SavesGUI {
                     for (String scenario : finalUhcConfig.getScenarios()) {
                         lore.add("  §8§l» §a" + scenario);
                     }
-
                     lore.add("");
                     lore.add("§8§l» §6Cliquez §fpour charger.");
                     lore.add("§8§l» §6Jetez §fpour supprimer.");
@@ -155,19 +167,21 @@ public class SavesGUI {
                     return lore;
                 });
 
-
-
                 saveItem.addCallback((kInventoryRepresentation, itemStack, player3, kInventoryClickContext) -> {
                     if (kInventoryClickContext.getInventoryAction().name().contains("DROP")) {
+                        if (finalUhcConfig.isOfficial()) return;
                         if (!Bukkit.getPlayer(player3.getName()).isOp()) return;
                         new DeleteFileGUI(file, getkInventory()).getkInventory().open(player);
                     } else {
                         uhcGame.setUhcConfig(finalUhcConfig);
                         uhcInstance.getUhcManager().getScenarioManager().resetScenarios();
-                        finalUhcConfig.getScenarios().forEach(s -> {
-                            uhcInstance.getUhcManager().getScenarioManager().activateScenerio(uhcInstance.getUhcManager().getScenarioManager().getScenario(s));
-                        });
-                        UHC.getUHCPlayer(player3).sendClassicMessage("§aConfiguration chargée !");
+                        Bukkit.getScheduler().runTaskLater(UHC.getInstance(), () -> {
+                            finalUhcConfig.getScenarios().forEach(s -> {
+                                uhcInstance.getUhcManager().getScenarioManager().activateScenerio(uhcInstance.getUhcManager().getScenarioManager().getScenario(s));
+                            });
+                            UHC.getUHCPlayer(player3).sendClassicMessage("§aConfiguration chargée !");
+                        }, 10L);
+
                     }
                 });
                 this.kInventory.setElement(slot++, saveItem);
@@ -184,6 +198,14 @@ public class SavesGUI {
             KItem nextPage = new KItem(new ItemCreator(Material.ARROW).name("§8┃ §6Page suivante").get());
             nextPage.addCallback((kInventoryRepresentation, itemStack, player2, kInventoryClickContext) -> new SavesGUI(player2, priv, type, page + 1).getkInventory().open(player2));
             this.kInventory.setElement(5, nextPage);
+        }
+    }
+
+    private String extractConfigNameFromFile(File file) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String json = reader.lines().reduce("", (a, b) -> a + b);
+            UHCConfig config = UHC.getInstance().getSaveSerializationManager().deserialize(json);
+            return config.getUHCName();
         }
     }
 

@@ -39,6 +39,7 @@ public class WorldManager {
         createGameWorld();
     }
 
+
     // ====== WORLD CREATION METHODS ======
     public static void createGameWorld() {
         resetWorlds();
@@ -188,6 +189,7 @@ public class WorldManager {
             setSpawnLocation(new Location(gameWorld, 0.5, 201, 0.5, 0F, 0F));
             generateWorldBorder(gameWorld);
         }
+
     }
 
     private static void setGameRules(World world) {

@@ -38,7 +38,6 @@ public class UHCTimer extends BukkitRunnable {
 
         uhc.getUhcData().setTimer(uhc.getUhcData().getTimer() + 1);
 
-        // PvP activation
         if (uhc.getUhcConfig().getPvp() * 60 == uhc.getUhcData().getTimer() && !uhc.getUhcData().isPvp()) {
             uhc.getUhcData().setPvp(true);
             Bukkit.broadcastMessage(UHC.getInstance().getPrefix() + " §7Le PvP est désormais §aactif§7 !");
@@ -46,13 +45,11 @@ public class UHCTimer extends BukkitRunnable {
             Bukkit.getServer().getPluginManager().callEvent(new PvPEvent());
         }
 
-        // Role distribution
         if (uhc.getUhcConfig().getRoles() * 60 == uhc.getUhcData().getTimer() && !uhc.getUhcData().isRoles()) {
             uhc.getUhcData().setRoles(true);
             Bukkit.getServer().getPluginManager().callEvent(new RolesEvent());
         }
 
-        // Border movement + Bedrock visual border
         if (uhc.getUhcConfig().getTimerBorder() * 60 == uhc.getUhcData().getTimer() && !uhc.getUhcData().isBorderMove()) {
             uhc.getUhcData().setBorderMove(true);
             long time = (long) ((uhc.getUhcConfig().getStartBorderSize() - uhc.getUhcConfig().getFinalBorderSize())

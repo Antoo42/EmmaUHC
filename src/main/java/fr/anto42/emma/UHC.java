@@ -11,6 +11,7 @@ import fr.anto42.emma.coreManager.listeners.CoreListeners;
 import fr.anto42.emma.coreManager.players.UHCPlayer;
 import fr.anto42.emma.coreManager.players.messages.MessageManager;
 import fr.anto42.emma.coreManager.scoreboard.ScoreboardManager;
+import fr.anto42.emma.coreManager.spec.SpecManager;
 import fr.anto42.emma.coreManager.teams.UHCTeamManager;
 import fr.anto42.emma.coreManager.worldManager.BiomeChanger;
 import fr.anto42.emma.coreManager.worldManager.WorldManager;
@@ -57,6 +58,8 @@ public final class UHC extends JavaPlugin {
     private String prefix;
 
     private CityWorld cityWorldPlugin;
+
+    private SpecManager specManager;
 
     private GameSave gameSave;
     private String ip;
@@ -129,6 +132,8 @@ public final class UHC extends JavaPlugin {
         CommandUtils.registerCommand("uhc", new StatsCommand());
         CommandUtils.registerCommand("uhc", new BPCommand());
         CommandUtils.registerCommand("uhc", new AchievementsCommand());
+        CommandUtils.registerCommand("uhc", new ManageAchievementsCommand());
+        CommandUtils.registerCommand("uhc", new ObservationCommand());
 
         getLogger().info("§aToutes les commandes ont été enregistrées avec succès.");
 
@@ -149,6 +154,9 @@ public final class UHC extends JavaPlugin {
 
         AchievementManager.init(this);
         getLogger().info("§aAchievementManager initialisé.");
+
+        specManager = new SpecManager();
+        getLogger().info("§aSpecManager initialisé.");
 
         Bukkit.getScheduler().runTaskTimer(this, this::updateTabList, 2L, 2L);
         getLogger().info("§aMise à jour du TabList programmée.");
@@ -244,6 +252,10 @@ public final class UHC extends JavaPlugin {
 
     public static UHCPlayer getUHCPlayer(Player player) {
         return uhcPlayerMap.get(player.getUniqueId());
+    }
+
+    public SpecManager getSpecManager() {
+        return specManager;
     }
 
     public ScoreboardManager getScoreboardManager() {

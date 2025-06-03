@@ -19,8 +19,6 @@ public class CreditsCommand extends Command {
         uhcPlayer.sendMessage("");
         uhcPlayer.sendMessage("§8§l» §7Développé par: §bAnto42_");
         uhcPlayer.sendMessage("");
-        uhcPlayer.sendMessage("§8§l» §7Contributeur: §bUrToBad");
-        uhcPlayer.sendMessage("");
         uhcPlayer.sendMessage("§8§l» §7Librairies open-source utilisés:");
         uhcPlayer.sendMessage("  §8§l» §7KInventory par §b@Blendman974");
         uhcPlayer.sendMessage("  §8§l» §7Cityworld par §b@echurchill");

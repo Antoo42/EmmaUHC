@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameSavedGUI {
@@ -63,9 +64,21 @@ public class GameSavedGUI {
         });
         this.kInventory.setElement(7, filter);
 
-
         File folder = new File(SAVE_FOLDER);
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
+
+        // Tri des fichiers par date (plus récent en premier)
+        if (files != null) {
+            Arrays.sort(files, (f1, f2) -> {
+                try {
+                    GameSave save1 = extractGameSaveFromFile(f1, uhcInstance);
+                    GameSave save2 = extractGameSaveFromFile(f2, uhcInstance);
+                    return save2.getDate().compareTo(save1.getDate());
+                } catch (Exception e) {
+                    return 0;
+                }
+            });
+        }
 
         int maxPerPage = 27;
         assert files != null;
@@ -85,8 +98,9 @@ public class GameSavedGUI {
                 try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                     String json = reader.lines().reduce("", (a, b) -> a + b);
                     gameSave = uhcInstance.getSaveSerializationManager().deserializeGame(json);
-                    if (gameSave.getUhcPlayerList().contains(player.getName()) && priv)
-                        return;
+                    if (priv && !gameSave.getUhcPlayerList().contains(player.getName())) {
+                        continue;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -138,15 +152,12 @@ public class GameSavedGUI {
                     }
                     lore.add("");
                     lore.add("§8§l» §6§lCliquez§f pour ouvrir.");
-
-
                     return lore;
                 });
                 saveItem.addCallback((kInventory1, item, player1, clickContext) -> {
                     new GameSavedDetailsGUI(player1, finalGameSave, getkInventory()).getkInventory().open(player1);
                 });
                 this.kInventory.setElement(slot++, saveItem);
-
             }
         }
 
@@ -160,6 +171,13 @@ public class GameSavedGUI {
             KItem nextPage = new KItem(new ItemCreator(Material.ARROW).name("§8┃ §6Page suivante").get());
             nextPage.addCallback((kInventoryRepresentation, itemStack, player2, kInventoryClickContext) -> new SavesGUI(player2, priv, type, page + 1).getkInventory().open(player2));
             this.kInventory.setElement(5, nextPage);
+        }
+    }
+
+    private GameSave extractGameSaveFromFile(File file, UHC uhcInstance) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String json = reader.lines().reduce("", (a, b) -> a + b);
+            return uhcInstance.getSaveSerializationManager().deserializeGame(json);
         }
     }
 

@@ -61,7 +61,7 @@ public class PlayerAchievementsGUI {
 
         KItem back = new KItem(new ItemStack(SkullList.LEFT_AROOW.getItemStack()));
         back.setName("§8┃ §6Retour à la liste");
-        back.addCallback((inv, item, p, ctx) -> new PlayersAchievementsGUI(viewer, 0).getkInventory().open(viewer));
+        back.addCallback((inv, item, p, ctx) -> new PlayersListAchievementsGUI(viewer, 0).getkInventory().open(viewer));
         kInventory.setElement(49, back);
     }
 
@@ -72,7 +72,7 @@ public class PlayerAchievementsGUI {
     private static KItem getkItem(PlayerAchievementData.AchievementProgress progress, Achievement achievement, PlayerAchievementData.AchievementProgress viewerAchievement) {
         KItem achItem = new KItem(progress != null && progress.isCompleted() ?
                 SkullList.GREEN_BALL.getItemStack() : SkullList.RED_BALL.getItemStack());
-        achItem.setName((progress != null && progress.isCompleted() ? "§8┃ §a" : "§8┃ §c")  + (achievement.isSecret() && progress != null || !Objects.requireNonNull(progress).isCompleted() && achievement.isSecret() ? "§k" : "") + achievement.getName());
+        achItem.setName((progress != null && progress.isCompleted() ? "§8┃ §a" : "§8┃ §c")  + (achievement.isSecret() && progress != null && !viewerAchievement.isCompleted() || !Objects.requireNonNull(progress).isCompleted() && achievement.isSecret() && !viewerAchievement.isCompleted() ? "§k" : "") + achievement.getName());
         List<String> lore = new ArrayList<>();
         lore.add("");
         if (progress != null) {
